@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 
 import pandas as pd
 
@@ -152,6 +153,74 @@ def _scatter(valid: pd.DataFrame) -> None:
     print(f"\nwrote {path}")
 
 
+def run_full_cmd(models: list[str], efforts: list[str]) -> int:
+    from dotenv import load_dotenv
+    from contestbench.eval import runner
+    from contestbench.eval.cache import DiskCache
+    from contestbench.eval.groq_adapter import groq_query
+
+    load_dotenv(dotenv_path=config.ROOT / ".env")
+    corpus_df = pd.read_parquet(config.CORPUS_PARQUET)
+
+    specs = []
+    for m in models:
+        slug = m if "/" in m else f"openai/{m}"
+        for e in efforts:
+            specs.append({"label": f"{slug.split('/')[-1]}:{e}", "model": slug,
+                          "params": {"reasoning_effort": e, "temperature": 0.0}})
+
+    print(f"running {len(specs)} spec(s) x {len(corpus_df)} cases (full corpus, cached)...")
+    cache = DiskCache(config.DATA_DIR / "cache")
+    responses = runner.run(corpus_df, specs, groq_query, cache)
+
+    tag = "_".join(s["label"].replace(":", "-") for s in specs)[:60]
+    out = config.DATA_DIR / f"responses_full_{tag}.parquet"
+    responses.to_parquet(out, index=False)
+    _report_sweep(responses)
+    print(f"\nwrote {out}")
+    return 0
+
+
+def score_cmd(responses_path: str) -> int:
+    import numpy as np
+    from contestbench.metrics import pad, stats, ece
+
+    df = pd.read_parquet(responses_path).dropna(subset=["confidence"]).copy()
+    df["pi_agree"] = stats.agreement_rate(df["pi"].values)
+
+    lines = ["| model | n | r(c,pi) [95% CI] | PAD [95% CI] | signed PAD | "
+             "signed PAD (high/cont/amb) | ECE\\* |",
+             "|---|--:|---|---|--:|---|--:|"]
+    for label, g in df.groupby("label"):
+        c, pi = g["confidence"].values, g["pi_agree"].values
+        r, rlo, rhi, p = stats.pearson_ci(pi, c, n_boot=2000)
+        pv, plo, phi = stats.mean_ci(np.abs(c - pi), n_boot=2000)
+        sgn = {t: pad.pad_signed(g[g.tier == t]["confidence"], g[g.tier == t]["pi_agree"])
+               for t in ["high", "contested", "ambiguous"]}
+        # ECE on non-ambiguous cases only (ambiguous has no majority -> degenerate)
+        nz = g[g["pi"] != 0.5]
+        correct = (nz["answer"] == "malignant").values == (nz["pi"] > 0.5).values
+        ece_val = ece.ece(nz["confidence"].values, correct.astype(float), n_bins=10)
+        lines.append(
+            f"| {label} | {len(g)} | {r:.3f} [{rlo:.3f}, {rhi:.3f}] | "
+            f"{pv:.3f} [{plo:.3f}, {phi:.3f}] | {pad.pad_signed(c, pi):+.3f} | "
+            f"{sgn['high']:+.2f} / {sgn['contested']:+.2f} / {sgn['ambiguous']:+.2f} | "
+            f"{ece_val:.3f} |")
+    table = "\n".join(lines)
+    n_amb = int((df["pi"] == 0.5).sum())
+    note = (f"\n\\* ECE computed on non-ambiguous cases only; {n_amb} ambiguous "
+            f"(pi=0.5) cases have no majority outcome and are undefined for ECE -- "
+            f"the motivation for PAD.")
+    print(table + note)
+
+    tdir = config.RESULTS_DIR / "tables"
+    tdir.mkdir(parents=True, exist_ok=True)
+    out = tdir / (Path(responses_path).stem + "_metrics.md")
+    out.write_text(table + note + "\n", encoding="utf-8")
+    print(f"\nwrote {out}")
+    return 0
+
+
 def export_batch_cmd(chunk_size: int) -> int:
     from contestbench.eval import batch
     df = pd.read_parquet(config.CORPUS_PARQUET)
@@ -193,22 +262,32 @@ def main(argv: list[str] | None = None) -> int:
     sweep = sub.add_parser("run-sweep", help="run the 50-case reasoning_effort sweep")
     sweep.add_argument("--efforts", nargs="+", choices=["low", "medium", "high"],
                        help="restrict to these reasoning efforts (default: all)")
+    full = sub.add_parser("run-full", help="run model(s) x effort(s) over the FULL corpus")
+    full.add_argument("--models", nargs="+", default=["gpt-oss-20b"])
+    full.add_argument("--efforts", nargs="+", choices=["low", "medium", "high"],
+                      default=["low"])
     exp = sub.add_parser("export-batch", help="export prompt file(s) for file-in/out platform")
     exp.add_argument("--chunk-size", type=int, default=500,
                      help="cases per file (0 = single file). default 500")
     imp = sub.add_parser("import-batch", help="parse returned answer file(s)")
     imp.add_argument("answers", nargs="+", help="returned answer file paths")
     imp.add_argument("--label", default="gemini-3.5-flash")
+    sc = sub.add_parser("score", help="metrics table (PAD family, CIs, ECE) for a responses file")
+    sc.add_argument("responses", help="path to a responses parquet")
 
     args = parser.parse_args(argv)
     if args.cmd == "build-corpus":
         return build_corpus_cmd()
     if args.cmd == "run-sweep":
         return run_sweep_cmd(efforts=args.efforts)
+    if args.cmd == "run-full":
+        return run_full_cmd(args.models, args.efforts)
     if args.cmd == "export-batch":
         return export_batch_cmd(args.chunk_size)
     if args.cmd == "import-batch":
         return import_batch_cmd(args.answers, args.label)
+    if args.cmd == "score":
+        return score_cmd(args.responses)
     parser.error(f"unknown command {args.cmd}")
     return 2
 
