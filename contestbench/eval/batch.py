@@ -38,18 +38,18 @@ def format_case(row) -> str:
             f"spiculation {row['spiculation']:.2f} | margin {row['margin']:.2f}")
 
 
-def write_batch_files(corpus: pd.DataFrame, out_dir, chunk_size: int = 300) -> list[Path]:
+def write_batch_files(corpus: pd.DataFrame, out_dir, chunk_size: int = 300,
+                      prefix: str = "batch") -> list[Path]:
     """Write prompt file(s). chunk_size=0 -> a single file."""
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    rows = list(corpus.itertuples(index=False))
-    n = len(rows)
+    n = len(corpus)
     size = n if chunk_size in (0, None) else chunk_size
     paths: list[Path] = []
     for ci, start in enumerate(range(0, n, size), 1):
         chunk = corpus.iloc[start:start + size]
         body = "\n".join(format_case(r) for _, r in chunk.iterrows())
-        path = out_dir / f"batch_{ci:03d}.txt"
+        path = out_dir / f"{prefix}_{ci:03d}.txt"
         path.write_text(HEADER + body + "\n", encoding="utf-8")
         paths.append(path)
     return paths

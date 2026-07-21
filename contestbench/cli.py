@@ -153,7 +153,7 @@ def _scatter(valid: pd.DataFrame) -> None:
     print(f"\nwrote {path}")
 
 
-def run_full_cmd(models: list[str], efforts: list[str]) -> int:
+def run_full_cmd(models: list[str], efforts: list[str], n: int | None = None) -> int:
     from dotenv import load_dotenv
     from contestbench.eval import runner
     from contestbench.eval.cache import DiskCache
@@ -161,6 +161,14 @@ def run_full_cmd(models: list[str], efforts: list[str]) -> int:
 
     load_dotenv(dotenv_path=config.ROOT / ".env")
     corpus_df = pd.read_parquet(config.CORPUS_PARQUET)
+
+    if n:
+        # proportional stratified subset (preserves tier weights)
+        frac = corpus_df["tier"].value_counts(normalize=True)
+        targets = {t: max(1, round(frac[t] * n)) for t in frac.index}
+        corpus_df = corpus.sample_per_tier(corpus_df, targets, seed=config.RANDOM_SEED)
+        print(f"subset {len(corpus_df)} cases (proportional): "
+              f"{dict(corpus_df['tier'].value_counts())}")
 
     specs = []
     for m in models:
@@ -221,16 +229,21 @@ def score_cmd(responses_path: str) -> int:
     return 0
 
 
-def export_batch_cmd(chunk_size: int) -> int:
+def export_batch_cmd(chunk_size: int, n: int | None = None) -> int:
     from contestbench.eval import batch
     df = pd.read_parquet(config.CORPUS_PARQUET)
+    prefix = "batch"
+    if n:
+        frac = df["tier"].value_counts(normalize=True)
+        targets = {t: max(1, round(frac[t] * n)) for t in frac.index}
+        df = corpus.sample_per_tier(df, targets, seed=config.RANDOM_SEED)
+        prefix = "claim3"
+        print(f"subset {len(df)} cases (proportional): {dict(df['tier'].value_counts())}")
     out_dir = config.RESULTS_DIR / "batch_prompts"
-    paths = batch.write_batch_files(df, out_dir, chunk_size=chunk_size)
+    paths = batch.write_batch_files(df, out_dir, chunk_size=chunk_size, prefix=prefix)
     print(f"exported {len(df)} cases into {len(paths)} file(s) in {out_dir}:")
     for p in paths:
         print(f"  {p.name}")
-    print("\nFeed each file to the platform; save each returned answer file, then run:")
-    print("  python -m contestbench.cli import-batch results/batch_answers/*.txt")
     return 0
 
 
@@ -244,10 +257,10 @@ def import_batch_cmd(answer_paths: list[str], label: str) -> int:
     merged = corpus_df.merge(answers, on="id", how="left")
     merged["label"] = label
     n_ans = merged["confidence"].notna().sum()
-    print(f"parsed answers for {n_ans}/{len(corpus_df)} corpus cases "
-          f"({len(corpus_df) - n_ans} missing)")
+    print(f"parsed answers for {n_ans} cases (label={label})")
 
-    out = config.DATA_DIR / "responses_gemini.parquet"
+    safe = label.replace(":", "-").replace("/", "-").replace(".", "")
+    out = config.DATA_DIR / f"responses_{safe}.parquet"
     scored = merged.dropna(subset=["confidence"])
     scored.to_parquet(out, index=False)
     _report_sweep(scored)
@@ -266,9 +279,13 @@ def main(argv: list[str] | None = None) -> int:
     full.add_argument("--models", nargs="+", default=["gpt-oss-20b"])
     full.add_argument("--efforts", nargs="+", choices=["low", "medium", "high"],
                       default=["low"])
+    full.add_argument("--n", type=int, default=None,
+                      help="proportional stratified subset size (default: full corpus)")
     exp = sub.add_parser("export-batch", help="export prompt file(s) for file-in/out platform")
     exp.add_argument("--chunk-size", type=int, default=500,
                      help="cases per file (0 = single file). default 500")
+    exp.add_argument("--n", type=int, default=None,
+                     help="proportional stratified subset (e.g. 150 for claim-3)")
     imp = sub.add_parser("import-batch", help="parse returned answer file(s)")
     imp.add_argument("answers", nargs="+", help="returned answer file paths")
     imp.add_argument("--label", default="gemini-3.5-flash")
@@ -281,9 +298,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "run-sweep":
         return run_sweep_cmd(efforts=args.efforts)
     if args.cmd == "run-full":
-        return run_full_cmd(args.models, args.efforts)
+        return run_full_cmd(args.models, args.efforts, args.n)
     if args.cmd == "export-batch":
-        return export_batch_cmd(args.chunk_size)
+        return export_batch_cmd(args.chunk_size, args.n)
     if args.cmd == "import-batch":
         return import_batch_cmd(args.answers, args.label)
     if args.cmd == "score":
