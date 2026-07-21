@@ -229,6 +229,27 @@ def score_cmd(responses_path: str) -> int:
     return 0
 
 
+def figures_cmd() -> int:
+    from contestbench.analysis import figures
+    D = config.DATA_DIR
+    models = {
+        "gemini-3.5-flash": D / "responses_gemini.parquet",
+        "gpt-oss-20b": D / "responses_full_gpt-oss-20b-low.parquet",
+        "opus:standard": D / "responses_opus-standard.parquet",
+        "opus:thinking": D / "responses_opus-thinking.parquet",
+    }
+    present = {k: str(v) for k, v in models.items() if v.exists()}
+
+    if models["gemini-3.5-flash"].exists():
+        print("wrote", figures.decoupling_scatter(str(models["gemini-3.5-flash"])))
+        stats_, path = figures.ece_degeneracy(str(models["gemini-3.5-flash"]))
+        print(f"wrote {path}  (ECE CI width {stats_['ece_ci_width']:.2f} vs "
+              f"PAD {stats_['pad']:.3f} on {stats_['n_ambiguous']} ambiguous cases)")
+    if len(present) >= 2:
+        print("wrote", figures.multimodel_signed_pad(present))
+    return 0
+
+
 def export_batch_cmd(chunk_size: int, n: int | None = None) -> int:
     from contestbench.eval import batch
     df = pd.read_parquet(config.CORPUS_PARQUET)
@@ -291,6 +312,7 @@ def main(argv: list[str] | None = None) -> int:
     imp.add_argument("--label", default="gemini-3.5-flash")
     sc = sub.add_parser("score", help="metrics table (PAD family, CIs, ECE) for a responses file")
     sc.add_argument("responses", help="path to a responses parquet")
+    sub.add_parser("figures", help="regenerate all paper figures from responses")
 
     args = parser.parse_args(argv)
     if args.cmd == "build-corpus":
@@ -305,6 +327,8 @@ def main(argv: list[str] | None = None) -> int:
         return import_batch_cmd(args.answers, args.label)
     if args.cmd == "score":
         return score_cmd(args.responses)
+    if args.cmd == "figures":
+        return figures_cmd()
     parser.error(f"unknown command {args.cmd}")
     return 2
 
