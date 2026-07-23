@@ -65,6 +65,7 @@ def build_records(
                 continue
             pi = compute_pi(group.malignancies)
             x, y, z = group.centroid
+            maligs = group.malignancies
             records.append({
                 "id": f"{scan_idx}:{grp_idx}",
                 "scan_idx": scan_idx,
@@ -74,6 +75,10 @@ def build_records(
                 "subtlety": _mean_feature(group, "subtlety"),
                 "spiculation": _mean_feature(group, "spiculation"),
                 "margin": _mean_feature(group, "margin"),
+                "extent": _mean_feature(group, "extent"),
+                "mean_malignancy": sum(maligs) / len(maligs),
+                # how far from the 'uncertain' midpoint raters sat, on average
+                "malignancy_extremity": sum(abs(m - 3) for m in maligs) / len(maligs),
                 "centroid_x": x,
                 "centroid_y": y,
                 "centroid_z": z,

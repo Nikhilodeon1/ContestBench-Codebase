@@ -92,6 +92,63 @@ def ece_degeneracy(responses_path, n_draws: int = 2000, seed: int = 20260720,
     return {"ece_ci_width": float(hi - lo), "pad": pad_val, "n_ambiguous": int(len(conf))}, path
 
 
+def baseline_floor(panel: dict, c_star: float = 0.75,
+                   out: str = "baseline_floor_all.png") -> Path:
+    """Every config's PAD against the case-blind constant floor (headline figure)."""
+    from contestbench.metrics import pad as padmod
+    labels, pads = [], []
+    for label, d in panel.items():
+        labels.append(label)
+        pads.append(padmod.pad(d["confidence"].values, d["pi_agree"].values))
+    any_pi = next(iter(panel.values()))["pi_agree"].values
+    floor = float(np.abs(c_star - any_pi).mean())
+    fam = {}
+    for lb in labels:
+        fam.setdefault(lb.split(":")[0], len(fam))
+    cmap = plt.get_cmap("tab10")
+    colors = [cmap(fam[lb.split(":")[0]] % 10) for lb in labels]
+
+    fig, ax = plt.subplots(figsize=(9, 5))
+    ax.bar(range(len(labels)), pads, color=colors)
+    ax.axhline(floor, color="red", lw=2, ls="--",
+               label=f"case-blind constant floor (PAD={floor:.3f})")
+    ax.set_xticks(range(len(labels)))
+    ax.set_xticklabels(labels, rotation=35, ha="right", fontsize=8)
+    ax.set_ylabel("PAD (lower = better)")
+    ax.set_title(f"No model beats a case-blind constant\n{len(labels)} configs, full corpus")
+    ax.legend(); ax.grid(axis="y", alpha=0.3)
+    return _save(fig, out)
+
+
+def capability_inversion(panel: dict, ranks: dict[str, int],
+                         out: str = "capability_inversion.png") -> Path:
+    """Signed-PAD on ambiguous cases vs capability rank, per reasoning setting."""
+    fig, ax = plt.subplots(figsize=(7, 5))
+    for setting, color in [("standard", "#4477aa"), ("thinking", "#aa3377")]:
+        xs, ys = [], []
+        for fam, rank in sorted(ranks.items(), key=lambda kv: kv[1]):
+            d = panel.get(f"{fam}:{setting}")
+            if d is None:
+                continue
+            amb = d[d["pi"] == 0.5]
+            xs.append(rank); ys.append((amb["confidence"] - 0.5).mean())
+        if len(xs) < 2:
+            continue
+        ax.scatter(xs, ys, s=90, color=color, zorder=5, label=setting)
+        s, i = np.polyfit(xs, ys, 1)
+        gx = np.array([min(xs) - 0.2, max(xs) + 0.2])
+        ax.plot(gx, s * gx + i, color=color, lw=1.5, alpha=0.7)
+        ax.annotate(f"slope {s:+.3f}", (max(xs) + 0.05, ys[-1]), color=color, fontsize=8)
+    ax.axhline(0, color="k", lw=0.8, ls=":")
+    order = sorted(ranks.items(), key=lambda kv: kv[1])
+    ax.set_xticks([r for _, r in order]); ax.set_xticklabels([f for f, _ in order])
+    ax.set_xlabel("capability (same-family rank)")
+    ax.set_ylabel("signed PAD on ambiguous tier (overconfidence)")
+    ax.set_title("Overconfidence on contested cases vs capability")
+    ax.legend(); ax.grid(alpha=0.3)
+    return _save(fig, out)
+
+
 def _save(fig, name) -> Path:
     FIGDIR.mkdir(parents=True, exist_ok=True)
     fig.tight_layout()

@@ -26,12 +26,13 @@ echo "== model responses =="
 #   $PY import-batch <reply> --label opus:thinking
 echo "(model runs are manual/API — see comments above; responses cached in data/)"
 
-echo "== score each responses file =="
-for f in data/responses_*.parquet; do
-  [ -e "$f" ] && echo "--- $f ---" && $PY score "$f"
-done
-
-echo "== figures =="
-$PY figures
+echo "== full results: panel table, reasoning effect, capability trend, mechanism, figures =="
+$PY report
 
 echo "== done: results/figures/, results/tables/ =="
+# `report` regenerates every number and figure in the paper from data/responses_*.parquet:
+#   results/tables/panel_metrics.csv      per-config r, PAD, gap vs case-blind constant
+#   results/tables/reasoning_effect.csv   thinking - standard PAD per family
+#   results/tables/mechanism.csv          confidence vs locked feature set
+#   results/tables/cross_model_corr.csv   do models covary with each other
+#   results/figures/*.png                 baseline floor, capability trend, scatter, ECE degeneracy

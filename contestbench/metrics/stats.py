@@ -27,6 +27,20 @@ def pearson_ci(x, y, n_boot: int = 5000, seed: int = 20260719):
     return float(r), float(lo), float(hi), float(p)
 
 
+def slope_ci(x, y, n_boot: int = 5000, seed: int = 20260720):
+    """OLS slope of y on x with a bootstrap 95% CI (capability-inversion trend)."""
+    x, y = np.asarray(x, float), np.asarray(y, float)
+    slope = float(np.polyfit(x, y, 1)[0])
+    rng = np.random.default_rng(seed)
+    n = len(x)
+    boots = np.empty(n_boot)
+    for i in range(n_boot):
+        idx = rng.integers(0, n, n)
+        boots[i] = np.polyfit(x[idx], y[idx], 1)[0]
+    lo, hi = np.percentile(boots, [2.5, 97.5])
+    return slope, float(lo), float(hi)
+
+
 def mean_ci(values, n_boot: int = 5000, seed: int = 20260719):
     """Return (mean, ci_lo, ci_hi) with a bootstrap 95% CI."""
     values = np.asarray(values, float)

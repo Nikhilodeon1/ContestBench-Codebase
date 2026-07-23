@@ -33,3 +33,26 @@ ROBUSTNESS_PANEL = [
     {"label": "llama-3.3-70b", "model": "llama-3.3-70b-versatile",
      "params": {"temperature": 0.0}},
 ]
+
+# Primary panel (Fix 3): Claude family, capability x reasoning. Same lab/training
+# pipeline so capability isn't confounded with cross-vendor calibration choices.
+# capability_rank: Haiku < Sonnet < Opus (release-generation/size ordering).
+CLAUDE_MODELS = [
+    ("haiku", "claude-haiku-4-5-20251001", 1),
+    ("sonnet", "claude-sonnet-5", 2),
+    ("opus", "claude-opus-4-8", 3),
+]
+
+
+def claude_panel(thinking_budget: int = 2000) -> list[dict]:
+    specs = []
+    for short, model, rank in CLAUDE_MODELS:
+        specs.append({"label": f"{short}:standard", "model": model,
+                      "capability_rank": rank,
+                      "params": {"thinking": False, "temperature": 0.0,
+                                 "reasoning_effort": "standard"}})
+        specs.append({"label": f"{short}:thinking", "model": model,
+                      "capability_rank": rank,
+                      "params": {"thinking": True, "thinking_budget": thinking_budget,
+                                 "temperature": 1.0, "reasoning_effort": "thinking"}})
+    return specs

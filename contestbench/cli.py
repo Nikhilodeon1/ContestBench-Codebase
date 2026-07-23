@@ -229,6 +229,107 @@ def score_cmd(responses_path: str) -> int:
     return 0
 
 
+def run_claude_cmd(n: int | None, models: list[str] | None) -> int:
+    from dotenv import load_dotenv
+    from contestbench.eval import registry, runner
+    from contestbench.eval.cache import DiskCache
+    from contestbench.eval.anthropic_adapter import anthropic_query
+
+    load_dotenv(dotenv_path=config.ROOT / ".env")
+    corpus_df = pd.read_parquet(config.CORPUS_PARQUET)
+    if n:
+        frac = corpus_df["tier"].value_counts(normalize=True)
+        targets = {t: max(1, round(frac[t] * n)) for t in frac.index}
+        corpus_df = corpus.sample_per_tier(corpus_df, targets, seed=config.RANDOM_SEED)
+        print(f"subset {len(corpus_df)}: {dict(corpus_df['tier'].value_counts())}")
+
+    specs = registry.claude_panel()
+    if models:
+        specs = [s for s in specs if s["label"].split(":")[0] in models]
+    print(f"running {len(specs)} Claude config(s) x {len(corpus_df)} cases (cached)...")
+    cache = DiskCache(config.DATA_DIR / "cache")
+    responses = runner.run(corpus_df, specs, anthropic_query, cache)
+
+    out = config.DATA_DIR / "responses_claude_panel.parquet"
+    responses.to_parquet(out, index=False)
+    _report_sweep(responses)
+    print(f"\nwrote {out}")
+    return 0
+
+
+def report_cmd() -> int:
+    """Regenerate every results table and figure from the responses on disk."""
+    import numpy as np
+
+    from contestbench.analysis import figures, mechanism, panel as P
+
+    data = P.load_panel()
+    if not data:
+        print("no panel responses found in data/ — run/import models first")
+        return 1
+    tdir = config.RESULTS_DIR / "tables"
+    tdir.mkdir(parents=True, exist_ok=True)
+
+    # 1. main panel table
+    tbl = P.panel_table(data)
+    tbl.to_csv(tdir / "panel_metrics.csv", index=False)
+    print("=== PANEL (n, conf, r, PAD, gap vs case-blind constant) ===")
+    for _, r in tbl.iterrows():
+        print(f"{r['config']:20}{int(r['n']):>6}{r['conf_mean']:>6.2f}{r['r']:>8.3f}"
+              f"{r['PAD']:>8.3f}   gap {r['gap']:+.3f} [{r['gap_lo']:+.3f},{r['gap_hi']:+.3f}]"
+              f"   {r['signed_high']:+.2f}/{r['signed_contested']:+.2f}/{r['signed_ambiguous']:+.2f}")
+    worse = int((tbl["gap_lo"] > 0).sum())
+    print(f"\nconfigs significantly WORSE than the case-blind constant: {worse}/{len(tbl)}")
+
+    # 2. reasoning effect (the null)
+    eff = P.reasoning_effect(dict(zip(tbl["config"], tbl["PAD"])))
+    print("\n=== reasoning effect (thinking - standard PAD) ===")
+    for fam, delta in eff.items():
+        print(f"  {fam:12}{delta:+.3f}")
+    pd.DataFrame(sorted(eff.items()), columns=["family", "delta_PAD"]).to_csv(
+        tdir / "reasoning_effect.csv", index=False)
+
+    # 3. capability trend
+    print("\n=== capability trend (signed PAD on ambiguous vs rank) ===")
+    for setting in ["standard", "thinking"]:
+        per_rank, ids = {}, None
+        for fam, rank in P.CAPABILITY_RANK.items():
+            d = data.get(f"{fam}:{setting}")
+            if d is None:
+                continue
+            amb = d[d["pi"] == 0.5].set_index("id")["confidence"] - 0.5
+            ids = sorted(set(amb.index) if ids is None else set(ids) & set(amb.index))
+            per_rank[rank] = amb
+        if len(per_rank) >= 2:
+            aligned = {r: s.reindex(ids).values for r, s in per_rank.items()}
+            s, lo, hi = P.capability_slope(aligned)
+            print(f"  {setting:10} slope {s:+.4f} [{lo:+.4f}, {hi:+.4f}]  (n_amb={len(ids)})")
+
+    # 4. mechanism
+    mech = mechanism.mechanism_table(data)
+    mech.to_csv(tdir / "mechanism.csv", index=False)
+    print("\n=== mechanism: R2 of confidence on locked feature set ===")
+    for _, r in mech.iterrows():
+        print(f"  {r['config']:20}R2={r['R2_all']:.3f}")
+    xm = mechanism.cross_model_confidence_corr(data)
+    xm.to_csv(tdir / "cross_model_corr.csv")
+    off = xm.values[~np.eye(len(xm), dtype=bool)]
+    print(f"\ncross-model confidence corr: mean {off.mean():+.2f}, "
+          f"range [{off.min():+.2f}, {off.max():+.2f}]")
+
+    # 5. figures
+    print()
+    print("wrote", figures.baseline_floor(data))
+    print("wrote", figures.capability_inversion(data, P.CAPABILITY_RANK))
+    first = next(iter(P.PANEL.values()))
+    print("wrote", figures.decoupling_scatter(config.DATA_DIR / f"{first}.parquet",
+                                              out="decoupling_scatter.png"))
+    st, path = figures.ece_degeneracy(config.DATA_DIR / f"{first}.parquet")
+    print(f"wrote {path} (ECE band width {st['ece_ci_width']:.2f} vs PAD {st['pad']:.3f})")
+    print(f"\ntables -> {tdir}")
+    return 0
+
+
 def figures_cmd() -> int:
     from contestbench.analysis import figures
     D = config.DATA_DIR
@@ -312,7 +413,12 @@ def main(argv: list[str] | None = None) -> int:
     imp.add_argument("--label", default="gemini-3.5-flash")
     sc = sub.add_parser("score", help="metrics table (PAD family, CIs, ECE) for a responses file")
     sc.add_argument("responses", help="path to a responses parquet")
+    cl = sub.add_parser("run-claude", help="run the Claude capability x reasoning panel")
+    cl.add_argument("--n", type=int, default=None, help="proportional subset size")
+    cl.add_argument("--models", nargs="+", choices=["haiku", "sonnet", "opus"],
+                    help="restrict to these Claude tiers (default: all)")
     sub.add_parser("figures", help="regenerate all paper figures from responses")
+    sub.add_parser("report", help="regenerate ALL results tables + figures")
 
     args = parser.parse_args(argv)
     if args.cmd == "build-corpus":
@@ -327,8 +433,12 @@ def main(argv: list[str] | None = None) -> int:
         return import_batch_cmd(args.answers, args.label)
     if args.cmd == "score":
         return score_cmd(args.responses)
+    if args.cmd == "run-claude":
+        return run_claude_cmd(args.n, args.models)
     if args.cmd == "figures":
         return figures_cmd()
+    if args.cmd == "report":
+        return report_cmd()
     parser.error(f"unknown command {args.cmd}")
     return 2
 

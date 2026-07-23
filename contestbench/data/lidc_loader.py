@@ -22,6 +22,7 @@ class ReaderNodule:
     subtlety: int | None = None
     spiculation: int | None = None
     margin: int | None = None
+    extent: float = 0.0   # in-plane bounding-box diagonal (nodule size proxy)
 
 
 @dataclass
@@ -67,6 +68,7 @@ def _parse_nodule(nod) -> tuple[ReaderNodule | None, str | None]:
         return int(v) if v is not None else None
 
     nid = _text(nod, "noduleID") or ""
+    extent = ((max(xs) - min(xs)) ** 2 + (max(ys) - min(ys)) ** 2) ** 0.5
     centroid = ReaderNodule(
         nodule_id=nid,
         x=sum(xs) / len(xs),
@@ -76,6 +78,7 @@ def _parse_nodule(nod) -> tuple[ReaderNodule | None, str | None]:
         subtlety=_feat("subtlety"),
         spiculation=_feat("spiculation"),
         margin=_feat("margin"),
+        extent=extent,
     )
     return centroid, None
 
