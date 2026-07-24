@@ -261,7 +261,7 @@ def report_cmd() -> int:
     """Regenerate every results table and figure from the responses on disk."""
     import numpy as np
 
-    from contestbench.analysis import figures, mechanism, oracle, panel as P
+    from contestbench.analysis import figures, mechanism, oracle, recalibration, panel as P
 
     data = P.load_panel()
     if not data:
@@ -333,6 +333,18 @@ def report_cmd() -> int:
     for _, r in odf.iterrows():
         print(f"  {r['baseline']:22}PAD={r['PAD']:.3f}   (constant {r['constant_PAD']:.3f}, "
               f"best LLM {best_llm:.3f})")
+
+    # 4c. post-hoc recalibrator (Fix H): the proposed intervention
+    orc_ri = odf.iloc[1]["PAD"]  # rating-independent oracle
+    recal = recalibration.evaluate_panel(data, oracle_pad=orc_ri)
+    recal.to_csv(tdir / "recalibration.csv", index=False)
+    print("\n=== RECALIBRATION (per-config, out-of-fold): PAD before -> after ===")
+    for _, r in recal.iterrows():
+        print(f"  {r['config']:22}{r['pad_before']:.3f} -> {r['pad_after']:.3f}"
+              f"   (gap to oracle closed {r['gap_closed_frac']*100:.0f}%)")
+    print(f"  mean recalibrated PAD {recal['pad_after'].mean():.3f} "
+          f"vs feature-only oracle {orc_ri:.3f} "
+          f"(confidence adds {orc_ri - recal['pad_after'].mean():+.3f})")
 
     # 5. figures
     print()
