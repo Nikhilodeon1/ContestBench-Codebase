@@ -12,6 +12,8 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from sklearn.inspection import permutation_importance
+from sklearn.model_selection import KFold
 
 from contestbench.analysis import oracle
 from contestbench.metrics import stats
@@ -42,6 +44,42 @@ def evaluate(df: pd.DataFrame, features: list[str], oracle_pad: float,
         "oracle_pad": oracle_pad,
         "gap_closed_frac": closed,
     }
+
+
+def confidence_importance(df: pd.DataFrame, features: list[str],
+                          target: str = "pi_agree", k: int = 5,
+                          seed: int = 20260723) -> dict:
+    """Importance of the 'confidence' feature (impurity + held-out permutation).
+
+    Answers: does model confidence carry independent signal, or is the GBT just
+    pruning it in favor of the cleaner features? Permutation importance on the
+    held-out fold is the honest test (impurity can reward overfit splits).
+    """
+    ci = features.index("confidence")
+    X = df[features].to_numpy(float)
+    y = df[target].to_numpy(float)
+    kf = KFold(n_splits=k, shuffle=True, random_state=seed)
+    impurity, perm = [], []
+    for tr, te in kf.split(X):
+        model = oracle._make_model(seed).fit(X[tr], y[tr])
+        impurity.append(model.feature_importances_[ci])
+        pi = permutation_importance(model, X[te], y[te], n_repeats=5, random_state=seed)
+        perm.append(pi.importances_mean[ci])
+    return {"impurity": float(np.mean(impurity)),
+            "permutation": float(np.mean(perm)),
+            "permutation_std": float(np.std(perm))}
+
+
+def importance_panel(panel: dict[str, pd.DataFrame],
+                     features: list[str] | None = None) -> pd.DataFrame:
+    feats = features or RECAL_FEATURES
+    corpus = oracle.load_corpus_with_target()[["id"] + oracle.RATING_INDEPENDENT_FEATURES]
+    rows = []
+    for label, d in panel.items():
+        m = d.merge(corpus, on="id")
+        m["pi_agree"] = stats.agreement_rate(m["pi"].values)
+        rows.append({"config": label, **confidence_importance(m, feats)})
+    return pd.DataFrame(rows)
 
 
 def evaluate_panel(panel: dict[str, pd.DataFrame], oracle_pad: float,

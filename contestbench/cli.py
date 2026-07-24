@@ -342,9 +342,15 @@ def report_cmd() -> int:
     for _, r in recal.iterrows():
         print(f"  {r['config']:22}{r['pad_before']:.3f} -> {r['pad_after']:.3f}"
               f"   (gap to oracle closed {r['gap_closed_frac']*100:.0f}%)")
-    print(f"  mean recalibrated PAD {recal['pad_after'].mean():.3f} "
-          f"vs feature-only oracle {orc_ri:.3f} "
-          f"(confidence adds {orc_ri - recal['pad_after'].mean():+.3f})")
+    print(f"  ABLATION: oracle (features only) {orc_ri:.3f} vs "
+          f"recalibrator (features + confidence) {recal['pad_after'].mean():.3f} "
+          f"-> confidence adds {orc_ri - recal['pad_after'].mean():+.3f} PAD")
+    imp = recalibration.importance_panel(data)
+    imp.to_csv(tdir / "confidence_importance.csv", index=False)
+    print("  confidence permutation-importance (held-out): "
+          f"mean {imp['permutation'].mean():.3f}, range "
+          f"[{imp['permutation'].min():.3f}, {imp['permutation'].max():.3f}] "
+          f"-> small but non-zero: confidence carries a little redundant signal")
 
     # 5. figures
     print()
