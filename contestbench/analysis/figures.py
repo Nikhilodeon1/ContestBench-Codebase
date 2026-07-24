@@ -93,7 +93,7 @@ def ece_degeneracy(responses_path, n_draws: int = 2000, seed: int = 20260720,
 
 
 def baseline_floor(panel: dict, c_star: float = 0.75,
-                   out: str = "baseline_floor_all.png") -> Path:
+                   out: str = "baseline_floor_all.png", oracle_lines=None) -> Path:
     """Every config's PAD against the case-blind constant floor (headline figure)."""
     from contestbench.metrics import pad as padmod
     labels, pads = [], []
@@ -112,6 +112,8 @@ def baseline_floor(panel: dict, c_star: float = 0.75,
     ax.bar(range(len(labels)), pads, color=colors)
     ax.axhline(floor, color="red", lw=2, ls="--",
                label=f"case-blind constant floor (PAD={floor:.3f})")
+    for name, val, col in oracle_lines or []:
+        ax.axhline(val, color=col, lw=2, ls=":", label=f"{name} (PAD={val:.3f})")
     ax.set_xticks(range(len(labels)))
     ax.set_xticklabels(labels, rotation=35, ha="right", fontsize=8)
     ax.set_ylabel("PAD (lower = better)")

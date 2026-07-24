@@ -261,7 +261,7 @@ def report_cmd() -> int:
     """Regenerate every results table and figure from the responses on disk."""
     import numpy as np
 
-    from contestbench.analysis import figures, mechanism, panel as P
+    from contestbench.analysis import figures, mechanism, oracle, panel as P
 
     data = P.load_panel()
     if not data:
@@ -317,9 +317,27 @@ def report_cmd() -> int:
     print(f"\ncross-model confidence corr: mean {off.mean():+.2f}, "
           f"range [{off.min():+.2f}, {off.max():+.2f}]")
 
+    # 4b. oracle / upper-bound baseline (predict agreement from cheap features)
+    ocorp = oracle.load_corpus_with_target()
+    orows = []
+    for name, feats in [("oracle:all-features", oracle.ALL_FEATURES),
+                        ("oracle:imaging-only", oracle.IMAGING_FEATURES)]:
+        e = oracle.evaluate(ocorp, feats)
+        orows.append({"baseline": name, "PAD": e["oracle_pad"],
+                      "constant_PAD": e["constant_pad"]})
+    odf = pd.DataFrame(orows)
+    odf.to_csv(tdir / "oracle.csv", index=False)
+    best_llm = tbl["PAD"].min()
+    print("\n=== ORACLE / upper-bound baseline (5-fold CV, out-of-fold) ===")
+    for _, r in odf.iterrows():
+        print(f"  {r['baseline']:22}PAD={r['PAD']:.3f}   (constant {r['constant_PAD']:.3f}, "
+              f"best LLM {best_llm:.3f})")
+
     # 5. figures
     print()
-    print("wrote", figures.baseline_floor(data))
+    oracle_lines = [("oracle (all feats)", odf.iloc[0]["PAD"], "#228833"),
+                    ("oracle (imaging only)", odf.iloc[1]["PAD"], "#aa7733")]
+    print("wrote", figures.baseline_floor(data, oracle_lines=oracle_lines))
     print("wrote", figures.capability_inversion(data, P.CAPABILITY_RANK))
     first = next(iter(P.PANEL.values()))
     print("wrote", figures.decoupling_scatter(config.DATA_DIR / f"{first}.parquet",
