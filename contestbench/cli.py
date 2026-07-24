@@ -321,7 +321,8 @@ def report_cmd() -> int:
     ocorp = oracle.load_corpus_with_target()
     orows = []
     for name, feats in [("oracle:all-features", oracle.ALL_FEATURES),
-                        ("oracle:imaging-only", oracle.IMAGING_FEATURES)]:
+                        ("oracle:rating-independent", oracle.RATING_INDEPENDENT_FEATURES),
+                        ("oracle:geometry-only", oracle.GEOMETRY_FEATURES)]:
         e = oracle.evaluate(ocorp, feats)
         orows.append({"baseline": name, "PAD": e["oracle_pad"],
                       "constant_PAD": e["constant_pad"]})
@@ -336,7 +337,8 @@ def report_cmd() -> int:
     # 5. figures
     print()
     oracle_lines = [("oracle (all feats)", odf.iloc[0]["PAD"], "#228833"),
-                    ("oracle (imaging only)", odf.iloc[1]["PAD"], "#aa7733")]
+                    ("oracle (rating-indep)", odf.iloc[1]["PAD"], "#aa7733"),
+                    ("oracle (geometry only)", odf.iloc[2]["PAD"], "#8833aa")]
     print("wrote", figures.baseline_floor(data, oracle_lines=oracle_lines))
     print("wrote", figures.capability_inversion(data, P.CAPABILITY_RANK))
     first = next(iter(P.PANEL.values()))

@@ -27,9 +27,15 @@ from sklearn.model_selection import KFold
 from contestbench import config
 from contestbench.metrics import baselines, stats
 
-# imaging-only = fully independent of the malignancy ratings that define pi
-IMAGING_FEATURES = ["subtlety", "spiculation", "margin", "extent"]
-ALL_FEATURES = IMAGING_FEATURES + ["n_raters", "malignancy_extremity"]
+# Three levels of independence from the ratings that define pi:
+#   geometry-only : ROI-extent = pure polygon geometry, ZERO subjective input
+#                   (fully rater-independent upper bound)
+#   rating-indep. : the imaging Likert calls, independent of the MALIGNANCY rating
+#                   specifically (but still same-session reader judgments)
+#   all-features  : adds annotation-derived features that share source with pi
+GEOMETRY_FEATURES = ["extent"]
+RATING_INDEPENDENT_FEATURES = ["subtlety", "spiculation", "margin", "extent"]
+ALL_FEATURES = RATING_INDEPENDENT_FEATURES + ["n_raters", "malignancy_extremity"]
 
 
 def _make_model(seed: int) -> GradientBoostingRegressor:
