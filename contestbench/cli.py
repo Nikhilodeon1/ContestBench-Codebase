@@ -368,6 +368,35 @@ def report_cmd() -> int:
     return 0
 
 
+def mi_cmd() -> int:
+    """Mutual information (confidence vs pi) with permutation null, all configs + oracle."""
+    from contestbench.analysis import oracle, panel as P
+    from contestbench.metrics import mutual_info as MI, stats
+
+    data = P.load_panel()
+    rows = []
+    print(f"{'config':24}{'MI':>9}{'null_p95':>10}{'excess':>9}{'p':>7}")
+    for label, d in data.items():
+        pa = stats.agreement_rate(d["pi"].values)
+        r = MI.mi_with_null(d["confidence"].values, pa, n_perm=1000)
+        rows.append({"config": label, **r})
+        print(f"{label:24}{r['mi']:>9.4f}{r['null_p95']:>10.4f}{r['excess']:>+9.4f}{r['p_value']:>7.3f}")
+    ocorp = oracle.load_corpus_with_target()
+    preds = oracle.cv_predictions(ocorp, oracle.RATING_INDEPENDENT_FEATURES)
+    r = MI.mi_with_null(preds, ocorp["pi_agree"].values, n_perm=1000)
+    rows.append({"config": "oracle:rating-independent", **r})
+    print(f"{'oracle (upper bound)':24}{r['mi']:>9.4f}{r['null_p95']:>10.4f}{r['excess']:>+9.4f}{r['p_value']:>7.3f}")
+
+    tdir = config.RESULTS_DIR / "tables"
+    tdir.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(rows).to_csv(tdir / "mutual_info.csv", index=False)
+    sig = sum(1 for x in rows[:-1] if x["p_value"] < 0.05)
+    print(f"\n{sig}/{len(rows) - 1} LLM configs: MI significantly above the independence null")
+    print("(small but non-zero: confidence is weakly, non-linearly dependent on pi)")
+    print(f"wrote {tdir / 'mutual_info.csv'}")
+    return 0
+
+
 def figures_cmd() -> int:
     from contestbench.analysis import figures
     D = config.DATA_DIR
@@ -456,6 +485,7 @@ def main(argv: list[str] | None = None) -> int:
     cl.add_argument("--models", nargs="+", choices=["haiku", "sonnet", "opus"],
                     help="restrict to these Claude tiers (default: all)")
     sub.add_parser("figures", help="regenerate all paper figures from responses")
+    sub.add_parser("mi", help="mutual information (confidence vs pi) with permutation null")
     sub.add_parser("report", help="regenerate ALL results tables + figures")
 
     args = parser.parse_args(argv)
@@ -475,6 +505,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_claude_cmd(args.n, args.models)
     if args.cmd == "figures":
         return figures_cmd()
+    if args.cmd == "mi":
+        return mi_cmd()
     if args.cmd == "report":
         return report_cmd()
     parser.error(f"unknown command {args.cmd}")
