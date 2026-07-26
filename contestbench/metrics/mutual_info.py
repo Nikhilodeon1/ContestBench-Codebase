@@ -12,14 +12,16 @@ import numpy as np
 from sklearn.feature_selection import mutual_info_regression
 
 
-def mutual_information(x, y, seed: int = 20260723) -> float:
+def mutual_information(x, y, seed: int = 20260723, n_neighbors: int = 3) -> float:
     """kNN estimate of MI(x; y), both treated as continuous. Non-negative."""
     x = np.asarray(x, float).reshape(-1, 1)
     y = np.asarray(y, float)
-    return float(mutual_info_regression(x, y, random_state=seed)[0])
+    return float(mutual_info_regression(x, y, random_state=seed,
+                                        n_neighbors=n_neighbors)[0])
 
 
-def mi_with_null(x, y, n_perm: int = 1000, seed: int = 20260723) -> dict:
+def mi_with_null(x, y, n_perm: int = 1000, seed: int = 20260723,
+                 n_neighbors: int = 3) -> dict:
     """MI with a permutation null and p-value.
 
     p_value = fraction of permutations (target shuffled) with MI >= observed.
@@ -30,12 +32,12 @@ def mi_with_null(x, y, n_perm: int = 1000, seed: int = 20260723) -> dict:
     """
     x = np.asarray(x, float)
     y = np.asarray(y, float)
-    observed = mutual_information(x, y, seed)
+    observed = mutual_information(x, y, seed, n_neighbors)
 
     rng = np.random.default_rng(seed)
     null = np.empty(n_perm)
     for i in range(n_perm):
-        null[i] = mutual_information(x, rng.permutation(y), seed)
+        null[i] = mutual_information(x, rng.permutation(y), seed, n_neighbors)
     p_value = float((1 + np.sum(null >= observed)) / (n_perm + 1))
 
     return {

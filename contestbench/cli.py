@@ -374,25 +374,41 @@ def mi_cmd() -> int:
     from contestbench.metrics import mutual_info as MI, stats
 
     data = P.load_panel()
+    n_tests = len(data)
+    bonf = 0.05 / n_tests  # Bonferroni threshold across the LLM configs
     rows = []
-    print(f"{'config':24}{'MI':>9}{'null_p95':>10}{'excess':>9}{'p':>7}")
+    print(f"{'config':24}{'MI':>9}{'null_p95':>10}{'excess':>9}{'p':>7}  bonferroni(a={bonf:.4f})")
     for label, d in data.items():
         pa = stats.agreement_rate(d["pi"].values)
         r = MI.mi_with_null(d["confidence"].values, pa, n_perm=1000)
+        r["bonferroni_sig"] = bool(r["p_value"] < bonf)
         rows.append({"config": label, **r})
-        print(f"{label:24}{r['mi']:>9.4f}{r['null_p95']:>10.4f}{r['excess']:>+9.4f}{r['p_value']:>7.3f}")
+        mark = "PASS" if r["bonferroni_sig"] else "BORDERLINE"
+        print(f"{label:24}{r['mi']:>9.4f}{r['null_p95']:>10.4f}{r['excess']:>+9.4f}{r['p_value']:>7.3f}  {mark}")
     ocorp = oracle.load_corpus_with_target()
     preds = oracle.cv_predictions(ocorp, oracle.RATING_INDEPENDENT_FEATURES)
     r = MI.mi_with_null(preds, ocorp["pi_agree"].values, n_perm=1000)
+    r["bonferroni_sig"] = bool(r["p_value"] < bonf)
     rows.append({"config": "oracle:rating-independent", **r})
     print(f"{'oracle (upper bound)':24}{r['mi']:>9.4f}{r['null_p95']:>10.4f}{r['excess']:>+9.4f}{r['p_value']:>7.3f}")
 
     tdir = config.RESULTS_DIR / "tables"
     tdir.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(rows).to_csv(tdir / "mutual_info.csv", index=False)
-    sig = sum(1 for x in rows[:-1] if x["p_value"] < 0.05)
-    print(f"\n{sig}/{len(rows) - 1} LLM configs: MI significantly above the independence null")
-    print("(small but non-zero: confidence is weakly, non-linearly dependent on pi)")
+    passed = sum(1 for x in rows[:-1] if x["bonferroni_sig"])
+    border = [x["config"] for x in rows[:-1] if not x["bonferroni_sig"]]
+    print(f"\n{passed}/{n_tests} LLM configs survive Bonferroni (a={bonf:.4f}).")
+    if border:
+        print(f"borderline (does NOT survive correction): {', '.join(border)} "
+              f"-- flag explicitly in prose")
+
+    # kNN-k sensitivity cross-check (same standard as matcher/normalization checks)
+    print("\n=== MI k-sensitivity (point estimate, no artifact of one k) ===")
+    print(f"{'config':24}{'k=3':>9}{'k=5':>9}{'k=10':>9}")
+    for label in ["deepseek:standard", "opus:thinking", "sonnet:standard"]:
+        d = data[label]; pa = stats.agreement_rate(d["pi"].values)
+        vals = [MI.mutual_information(d["confidence"].values, pa, n_neighbors=k) for k in (3, 5, 10)]
+        print(f"{label:24}" + "".join(f"{v:>9.4f}" for v in vals))
     print(f"wrote {tdir / 'mutual_info.csv'}")
     return 0
 
