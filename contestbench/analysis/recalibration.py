@@ -82,6 +82,33 @@ def importance_panel(panel: dict[str, pd.DataFrame],
     return pd.DataFrame(rows)
 
 
+def ablation_gap_ci(df: pd.DataFrame, features: list[str], target: str = "pi_agree",
+                    k: int = 5, seed: int = 20260726, n_boot: int = 3000) -> dict:
+    """Bootstrap CI on how much model confidence adds over features alone.
+
+    gap = PAD(features-only oracle) - PAD(features+confidence recalibrator), both
+    out-of-fold on the SAME cases. Positive gap = confidence lowers PAD. Paired
+    bootstrap over cases (same resample applied to both) isolates confidence's
+    marginal contribution. CI bracketing 0 => confidence adds nothing significant.
+    """
+    pi = df[target].to_numpy(float)
+    feat_only = oracle.cv_predictions(df, features, target, k, seed)
+    with_conf = oracle.cv_predictions(df, ["confidence"] + features, target, k, seed)
+    e_feat = np.abs(feat_only - pi)          # per-case abs error, features only
+    e_conf = np.abs(with_conf - pi)          # per-case abs error, + confidence
+    gap = float(e_feat.mean() - e_conf.mean())
+    rng = np.random.default_rng(seed)
+    n = len(pi)
+    boots = np.empty(n_boot)
+    for i in range(n_boot):
+        idx = rng.integers(0, n, n)
+        boots[i] = e_feat[idx].mean() - e_conf[idx].mean()
+    lo, hi = np.percentile(boots, [2.5, 97.5])
+    return {"gap": gap, "lo": float(lo), "hi": float(hi),
+            "pad_features_only": float(e_feat.mean()),
+            "pad_with_confidence": float(e_conf.mean())}
+
+
 def evaluate_panel(panel: dict[str, pd.DataFrame], oracle_pad: float,
                    features: list[str] | None = None) -> pd.DataFrame:
     """Run the per-config recalibrator across the whole panel."""

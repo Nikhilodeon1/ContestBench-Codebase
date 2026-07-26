@@ -345,6 +345,18 @@ def report_cmd() -> int:
     print(f"  ABLATION: oracle (features only) {orc_ri:.3f} vs "
           f"recalibrator (features + confidence) {recal['pad_after'].mean():.3f} "
           f"-> confidence adds {orc_ri - recal['pad_after'].mean():+.3f} PAD")
+    corpus_feat = oracle.load_corpus_with_target()[["id"] + oracle.RATING_INDEPENDENT_FEATURES]
+    gap_rows = []
+    for lab, d in data.items():
+        m = d.merge(corpus_feat, on="id"); m["pi_agree"] = stats.agreement_rate(m["pi"].values)
+        g = recalibration.ablation_gap_ci(m, oracle.RATING_INDEPENDENT_FEATURES, n_boot=2000)
+        gap_rows.append({"config": lab, **g})
+    gdf = pd.DataFrame(gap_rows); gdf.to_csv(tdir / "ablation_gap.csv", index=False)
+    nsig = int(((gdf["lo"] > 0) | (gdf["hi"] < 0)).sum())
+    print(f"\nablation (features vs features+confidence): mean gap {gdf['gap'].mean():+.4f}, "
+          f"{nsig}/{len(gdf)} configs where confidence significantly changes PAD "
+          f"(all CIs bracket 0 => confidence adds nothing over cheap features)")
+
     imp = recalibration.importance_panel(data)
     imp.to_csv(tdir / "confidence_importance.csv", index=False)
     print("  confidence permutation-importance (held-out): "
