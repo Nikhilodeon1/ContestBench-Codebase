@@ -9,8 +9,8 @@ from pathlib import Path
 
 # --- paths ---
 ROOT = Path(__file__).resolve().parent.parent
-LIDC_XML_ROOT = ROOT / "LIDC-IDRI"
 DATA_DIR = ROOT / "data"
+LIDC_XML_ROOT = DATA_DIR / "LIDC-IDRI"  # moved under data/ 2026-07-26
 RESULTS_DIR = ROOT / "results"
 CORPUS_PARQUET = DATA_DIR / "corpus.parquet"
 EXCLUSIONS_CSV = RESULTS_DIR / "exclusions.csv"
