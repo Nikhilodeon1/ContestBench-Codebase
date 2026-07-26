@@ -413,6 +413,61 @@ def mi_cmd() -> int:
     return 0
 
 
+def reliance_cmd() -> int:
+    """Over-reliance simulation (Fix K): decoupled vs recalibrated vs ideal."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from contestbench.analysis import oracle, recalibration, over_reliance as orl, panel as P
+    from contestbench.metrics import stats
+
+    data = P.load_panel()
+    corpus = oracle.load_corpus_with_target()[["id"] + oracle.RATING_INDEPENDENT_FEATURES]
+    thetas, betas = [0.5, 0.6, 0.7, 0.8], [5, 10, 20]
+
+    pi_pool, conf_pool, recal_pool = [], [], []
+    per_model = []
+    for lab, d in data.items():
+        m = d.merge(corpus, on="id"); m["pi_agree"] = stats.agreement_rate(m["pi"].values)
+        m["recal"] = recalibration.recalibrate(m, recalibration.RECAL_FEATURES)
+        pi_pool.append(m["pi_agree"].values)
+        conf_pool.append(m["confidence"].values)
+        recal_pool.append(m["recal"].values)
+        orr = orl.simulate({"raw": m["confidence"].values, "recal": m["recal"].values},
+                           m["pi_agree"].values, thetas, betas)
+        per_model.append({"config": lab, "raw_conf": m["confidence"].mean(),
+                          "or_raw": orr["raw"], "or_recal": orr["recal"]})
+    pi = np.concatenate(pi_pool)
+    regimes = {"decoupled": np.concatenate(conf_pool),
+               "recalibrated": np.concatenate(recal_pool), "ideal": pi}
+    res = orl.simulate(regimes, pi, thetas, betas)
+    print("=== over-reliance (pooled across 10 configs, mean over theta x beta) ===")
+    for name, v in res.items():
+        print(f"  {name:14}{v:.4f}   ({(1 - v / res['decoupled']) * 100:+.0f}% vs decoupled)")
+
+    pm = pd.DataFrame(per_model)
+    tdir = config.RESULTS_DIR / "tables"; tdir.mkdir(parents=True, exist_ok=True)
+    pm.to_csv(tdir / "over_reliance.csv", index=False)
+    helps = (pm["or_recal"] < pm["or_raw"]).sum()
+    print(f"\nrecalibration levels all models to ~{pm['or_recal'].mean():.3f}: "
+          f"helps {helps}/10 (the over-confident), hurts the naturally-cautious")
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    order = pm.sort_values("raw_conf")
+    x = np.arange(len(order))
+    ax.plot(x, order["or_raw"], "o-", label="observed (raw)", color="#ee6677")
+    ax.plot(x, order["or_recal"], "s-", label="recalibrated (Fix H)", color="#4477aa")
+    ax.axhline(res["ideal"], color="#228833", ls="--", label=f"ideal c=pi ({res['ideal']:.3f})")
+    ax.set_xticks(x); ax.set_xticklabels(order["config"], rotation=35, ha="right", fontsize=8)
+    ax.set_ylabel("simulated over-reliance"); ax.legend()
+    ax.set_title("Recalibration levels over-reliance: helps the over-confident,\nhurts the cautious; only true c=pi reaches the floor")
+    ax.grid(axis="y", alpha=0.3); fig.tight_layout()
+    p = config.RESULTS_DIR / "figures" / "over_reliance.png"
+    fig.savefig(p, dpi=140); print(f"wrote {p}")
+    return 0
+
+
 def figures_cmd() -> int:
     from contestbench.analysis import figures
     D = config.DATA_DIR
@@ -502,6 +557,7 @@ def main(argv: list[str] | None = None) -> int:
                     help="restrict to these Claude tiers (default: all)")
     sub.add_parser("figures", help="regenerate all paper figures from responses")
     sub.add_parser("mi", help="mutual information (confidence vs pi) with permutation null")
+    sub.add_parser("reliance", help="over-reliance simulation (Fix K)")
     sub.add_parser("report", help="regenerate ALL results tables + figures")
 
     args = parser.parse_args(argv)
@@ -523,6 +579,8 @@ def main(argv: list[str] | None = None) -> int:
         return figures_cmd()
     if args.cmd == "mi":
         return mi_cmd()
+    if args.cmd == "reliance":
+        return reliance_cmd()
     if args.cmd == "report":
         return report_cmd()
     parser.error(f"unknown command {args.cmd}")
