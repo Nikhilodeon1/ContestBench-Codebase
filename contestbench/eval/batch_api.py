@@ -26,10 +26,11 @@ def _groq_batch(model: str, prompt: str, temperature: float, max_tokens: int) ->
     return resp.choices[0].message.content
 
 
-def _gemini_batch(model: str, prompt: str, temperature: float, max_tokens: int) -> str | None:
+def _gemini_batch(model: str, prompt: str, temperature: float, max_tokens: int,
+                  api_key: str | None = None) -> str | None:
     from google import genai
     from google.genai import types
-    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+    client = genai.Client(api_key=api_key or os.getenv("GEMINI_API_KEY"))
     resp = client.models.generate_content(
         model=model,
         contents=prompt,
@@ -37,6 +38,39 @@ def _gemini_batch(model: str, prompt: str, temperature: float, max_tokens: int) 
             temperature=temperature, max_output_tokens=max_tokens),
     )
     return resp.text
+
+
+def gemini_keys() -> list[str]:
+    """All GEMINI_API_KEY[_N] values present in the environment, in order."""
+    keys = []
+    for name in ["GEMINI_API_KEY", "GEMINI_API_KEY_2", "GEMINI_API_KEY_3",
+                 "GEMINI_API_KEY_4", "GEMINI_API_KEY_5"]:
+        v = os.getenv(name)
+        if v:
+            keys.append(v)
+    return keys
+
+
+def gemini_rotating(model: str, prompt: str, keys: list[str], state: dict,
+                    temperature: float, max_tokens: int) -> str | None:
+    """Call Gemini, advancing through keys on quota/rate errors.
+
+    ``state['i']`` is the current key index, carried across calls so a run keeps
+    using the last working key. Returns None only when ALL keys are exhausted.
+    """
+    n = len(keys)
+    for _ in range(n):
+        i = state["i"]
+        try:
+            return _gemini_batch(model, prompt, temperature, max_tokens, api_key=keys[i])
+        except Exception as e:  # noqa: BLE001
+            msg = str(e)
+            if any(s in msg for s in ("429", "RESOURCE_EXHAUSTED", "404", "NOT_FOUND")) or "quota" in msg.lower():
+                state["i"] = (i + 1) % n
+                print(f"  key #{i+1} unavailable ({msg[:40]}) -> key #{state['i']+1}")
+                continue
+            raise
+    return None  # all keys exhausted
 
 
 def batch_query(provider: str, model: str, prompt: str, temperature: float = 0.0,
