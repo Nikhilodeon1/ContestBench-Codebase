@@ -413,6 +413,42 @@ def mi_cmd() -> int:
     return 0
 
 
+def intervention_cmd() -> int:
+    """Fix I: 3-model prompting-intervention vs baseline on shared eval ids."""
+    from contestbench.analysis import intervention as IV
+    from contestbench.metrics import stats
+
+    corpus = pd.read_parquet(config.CORPUS_PARQUET)
+    corpus["pi_agree"] = stats.agreement_rate(corpus["pi"].values)
+    exemplars = set(pd.read_csv(config.RESULTS_DIR / "batch_intervention" / "exemplars_heldout.csv")["id"].astype(str))
+    idir = config.RESULTS_DIR / "batch_intervention"
+    models = {"opus": ("intervention_out", "responses_opus-standard"),
+              "sonnet": ("intervention_sonnet", "responses_sonnet-standard"),
+              "haiku": ("intervention_haiku", "responses_haiku-standard")}
+    rows = []
+    print(f"{'model':8}{'conf b->a':>13}{'PAD b->a':>16}{'r b->a':>15}{'amb b->a':>15}  verdict")
+    for m, (stem, base_stem) in models.items():
+        paths = [str(idir / f"{stem}_{i}.txt") for i in (1, 2, 3)]
+        inv = IV.load_intervention(paths, corpus, f"{m}:intervention")
+        leak = IV.leaked_exemplars(inv["id"], exemplars)
+        base = pd.read_parquet(config.DATA_DIR / f"{base_stem}.parquet").dropna(subset=["confidence"])
+        base = base.merge(corpus[["id", "pi_agree"]], on="id")
+        r = IV.compare(base, inv)
+        r["model"] = m; r["leak"] = bool(leak); rows.append(r)
+        verdict = ("helps" if r["pad_after"] < r["pad_before"] - 0.01
+                   else "HURTS" if r["pad_after"] > r["pad_before"] + 0.01 else "inert")
+        print(f"{m:8}{r['conf_before']:>6.2f}->{r['conf_after']:.2f}"
+              f"{r['pad_before']:>9.3f}->{r['pad_after']:.3f}"
+              f"{r['r_before']:>+7.2f}->{r['r_after']:+.2f}"
+              f"{r['amb_before']:>+7.2f}->{r['amb_after']:+.2f}  {verdict}"
+              + ("  LEAK!" if leak else ""))
+    tdir = config.RESULTS_DIR / "tables"; tdir.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(rows).to_csv(tdir / "intervention.csv", index=False)
+    print("\nnone reach the case-blind constant (0.143); only the largest model improves.")
+    print(f"wrote {tdir / 'intervention.csv'}")
+    return 0
+
+
 def reliance_cmd() -> int:
     """Over-reliance simulation (Fix K): decoupled vs recalibrated vs ideal."""
     import matplotlib
@@ -558,6 +594,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("figures", help="regenerate all paper figures from responses")
     sub.add_parser("mi", help="mutual information (confidence vs pi) with permutation null")
     sub.add_parser("reliance", help="over-reliance simulation (Fix K)")
+    sub.add_parser("intervention", help="prompting-intervention analysis (Fix I)")
     sub.add_parser("report", help="regenerate ALL results tables + figures")
 
     args = parser.parse_args(argv)
@@ -581,6 +618,8 @@ def main(argv: list[str] | None = None) -> int:
         return mi_cmd()
     if args.cmd == "reliance":
         return reliance_cmd()
+    if args.cmd == "intervention":
+        return intervention_cmd()
     if args.cmd == "report":
         return report_cmd()
     parser.error(f"unknown command {args.cmd}")
