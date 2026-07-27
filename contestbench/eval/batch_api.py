@@ -73,9 +73,28 @@ def gemini_rotating(model: str, prompt: str, keys: list[str], state: dict,
     return None  # all keys exhausted
 
 
+def _anthropic_batch(model: str, prompt: str, temperature: float, max_tokens: int,
+                     api_key: str | None = None) -> str | None:
+    import anthropic
+    client = anthropic.Anthropic(
+        api_key=api_key or os.getenv("ANTHROPIC_API_KEY") or os.getenv("ClaudeKey"))
+    # newer Claude models (sonnet-5, opus-4-8) deprecate the temperature param;
+    # omit it and use the model default (temperature is unused here anyway).
+    # disable extended thinking: newer models default it ON, which burns the whole
+    # token budget on a thinking block (no text output) and isn't the "standard"
+    # condition we want for the intervention.
+    kwargs = {"model": model, "max_tokens": max_tokens,
+              "messages": [{"role": "user", "content": prompt}]}
+    try:
+        resp = client.messages.create(thinking={"type": "disabled"}, **kwargs)
+    except Exception:  # models that don't accept the thinking param
+        resp = client.messages.create(**kwargs)
+    return "".join(b.text for b in resp.content if b.type == "text")
+
+
 def batch_query(provider: str, model: str, prompt: str, temperature: float = 0.0,
                 max_tokens: int = 16384, max_retries: int = 3) -> str | None:
-    fn = {"groq": _groq_batch, "gemini": _gemini_batch}[provider]
+    fn = {"groq": _groq_batch, "gemini": _gemini_batch, "anthropic": _anthropic_batch}[provider]
     for attempt in range(max_retries):
         try:
             return fn(model, prompt, temperature, max_tokens)

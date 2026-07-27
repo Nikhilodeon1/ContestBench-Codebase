@@ -20,9 +20,9 @@ _client: anthropic.Anthropic | None = None
 def _get_client() -> anthropic.Anthropic:
     global _client
     if _client is None:
-        key = os.getenv("ANTHROPIC_API_KEY")
+        key = os.getenv("ANTHROPIC_API_KEY") or os.getenv("ClaudeKey")
         if not key:
-            raise RuntimeError("ANTHROPIC_API_KEY not set (add it to .env)")
+            raise RuntimeError("ANTHROPIC_API_KEY / ClaudeKey not set (add it to .env)")
         _client = anthropic.Anthropic(api_key=key)
     return _client
 
