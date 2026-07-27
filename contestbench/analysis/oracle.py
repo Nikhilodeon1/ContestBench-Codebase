@@ -22,6 +22,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.model_selection import KFold
 
 from contestbench import config
@@ -38,30 +39,46 @@ RATING_INDEPENDENT_FEATURES = ["subtlety", "spiculation", "margin", "extent"]
 ALL_FEATURES = RATING_INDEPENDENT_FEATURES + ["n_raters", "malignancy_extremity"]
 
 
-def _make_model(seed: int) -> GradientBoostingRegressor:
-    return GradientBoostingRegressor(random_state=seed, n_estimators=200,
-                                     max_depth=3, learning_rate=0.05)
+def _make_model(seed: int, estimator: str = "gbt"):
+    if estimator == "gbt":
+        return GradientBoostingRegressor(random_state=seed, n_estimators=200,
+                                         max_depth=3, learning_rate=0.05)
+    if estimator == "ridge":
+        return Ridge(alpha=1.0)
+    if estimator == "linear":
+        return LinearRegression()
+    raise ValueError(f"unknown estimator {estimator}")
 
 
 def cv_predictions(df: pd.DataFrame, features: list[str], target: str = "pi_agree",
-                   k: int = 5, seed: int = 20260723) -> np.ndarray:
+                   k: int = 5, seed: int = 20260723, estimator: str = "gbt") -> np.ndarray:
     """Out-of-fold predictions of ``target`` from ``features`` (no leakage)."""
     X = df[features].to_numpy(float)
     y = df[target].to_numpy(float)
     preds = np.full(len(df), np.nan)
     kf = KFold(n_splits=k, shuffle=True, random_state=seed)
     for train_idx, test_idx in kf.split(X):
-        model = _make_model(seed)
+        model = _make_model(seed, estimator)
         model.fit(X[train_idx], y[train_idx])
         preds[test_idx] = np.clip(model.predict(X[test_idx]), 0.5, 1.0)
     return preds
 
 
+def robustness(df: pd.DataFrame, features: list[str], target: str = "pi_agree",
+               estimators: list[str] | None = None, k: int = 5,
+               seed: int = 20260723) -> dict:
+    """Oracle PAD under each estimator class -- guards against a GBT-specific artifact."""
+    estimators = estimators or ["gbt", "ridge", "linear"]
+    pi = df[target].to_numpy(float)
+    return {e: float(np.abs(cv_predictions(df, features, target, k, seed, e) - pi).mean())
+            for e in estimators}
+
+
 def evaluate(df: pd.DataFrame, features: list[str], target: str = "pi_agree",
-             k: int = 5, seed: int = 20260723) -> dict:
+             k: int = 5, seed: int = 20260723, estimator: str = "gbt") -> dict:
     """Oracle PAD (out-of-fold) vs the case-blind constant, on the same cases."""
     pi = df[target].to_numpy(float)
-    preds = cv_predictions(df, features, target, k, seed)
+    preds = cv_predictions(df, features, target, k, seed, estimator)
     c_star = baselines.optimal_constant(pi)
     return {
         "features": features,
