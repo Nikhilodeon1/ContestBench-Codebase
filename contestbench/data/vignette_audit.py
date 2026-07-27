@@ -19,6 +19,37 @@ import pandas as pd
 PRESENTED = ["subtlety", "spiculation", "margin"]
 
 
+def _bucket_key(df: pd.DataFrame, ndigits: int) -> list:
+    return [df[c].round(ndigits) for c in PRESENTED]
+
+
+def bucket_mean_pad(df: pd.DataFrame, ndigits: int = 2,
+                    leave_one_out: bool = False) -> float:
+    """PAD of the trivial no-ML predictor: pi = mean pi within identical-vignette bucket.
+
+    In-sample (default) is the vignette-optimal (L2) floor but is leaky for small
+    buckets. leave_one_out=True excludes each case from its own bucket mean (and
+    falls back to the global pi mean for singletons) -- the fair, no-leakage
+    comparator for the CV oracle.
+    """
+    d = df.copy()
+    g = d.groupby(_bucket_key(d, ndigits))["pi_agree"]
+    if not leave_one_out:
+        pred = g.transform("mean")
+    else:
+        bsum, bcnt = g.transform("sum"), g.transform("count")
+        gmean = d["pi_agree"].mean()
+        pred = np.where(bcnt > 1, (bsum - d["pi_agree"]) / (bcnt - 1), gmean)
+    return float(np.abs(np.asarray(pred) - d["pi_agree"].to_numpy()).mean())
+
+
+def non_colliding_mask(df: pd.DataFrame, ndigits: int = 2) -> pd.Series:
+    """True for cases whose vignette bucket maps to a single pi (no forced decoupling)."""
+    d = df.copy()
+    nun = d.groupby(_bucket_key(d, ndigits))["pi_agree"].transform("nunique")
+    return (nun == 1).reset_index(drop=True)
+
+
 def collision_report(df: pd.DataFrame, ndigits: int = 2) -> dict:
     d = df.copy()
     key = [f"_{c}" for c in PRESENTED]
