@@ -1,7 +1,0 @@
-{"id": "819:1", "answer": "Benign", "confidence": 73}
-{"id": "822:0", "answer": "Benign", "confidence": 95}
-{"id": "824:0", "answer": "Benign", "confidence": 75}
-{"id": "824:1", "answer": "Benign", "confidence": 87}
-{"id": "826:0", "answer": "Benign", "confidence": 90}
-{"id": "828:0", "answer": "Malignant", "confidence": 75}
-{"id": "830:

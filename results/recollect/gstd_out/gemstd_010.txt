@@ -1,7 +1,0 @@
-{"id": "256:1", "answer": "Benign", "confidence": 95}
-{"id": "259:0", "answer": "Benign", "confidence": 71}
-{"id": "259:2", "answer": "Benign", "confidence": 79}
-{"id": "261:0", "answer": "Benign", "confidence": 93}
-{"id": "261:1", "answer": "Benign", "confidence": 93}
-{"id": "261:2", "answer": "Benign", "confidence": 94}
-{"id": "261:
