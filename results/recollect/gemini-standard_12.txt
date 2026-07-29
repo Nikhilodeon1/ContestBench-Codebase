@@ -1,0 +1,13 @@
+```json
+{"id": "1083:0", "answer": "Benign", "confidence": 21}
+{"id": "1083:1", "answer": "Benign", "confidence": 27}
+{"id": "1083:2", "answer": "Malignant", "confidence": 12}
+{"id": "1083:6", "answer": "Malignant", "confidence": 38}
+{"id": "1084:0", "answer": "Malignant", "confidence": 44}
+{"id": "1086:0", "answer": "Malignant", "confidence": 44}
+{"id": "1086:2", "answer": "Benign", "confidence": 29}
+{"id": "1088:0", "answer": "Malignant", "confidence": 44}
+{"id": "1088:1", "answer": "Malignant", "confidence": 44}
+{"id": "1089:0", "answer": "Malignant", "confidence": 18}
+{"id": "1089:1", "answer": "Benign", "confidence": 24}
+{"id": "1090:0", "answer": "Benign", "confidence": 

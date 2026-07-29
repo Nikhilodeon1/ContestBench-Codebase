@@ -1,0 +1,14 @@
+```json
+{"id": "100:4", "answer": "Benign", "confidence": 91}
+{"id": "100:5", "answer": "Benign", "confidence": 84}
+{"id": "103:0", "answer": "Benign", "confidence": 76}
+{"id": "105:1", "answer": "Malignant", "confidence": 27}
+{"id": "107:0", "answer": "Benign", "confidence": 56}
+{"id": "107:1", "answer": "Benign", "confidence": 39}
+{"id": "107:3", "answer": "Benign", "confidence": 80}
+{"id": "107:4", "answer": "Malignant", "confidence": 30}
+{"id": "107:8", "answer": "Benign", "confidence": 56}
+{"id": "107:9", "answer": "Malignant", "confidence": 18}
+{"id": "107:11", "answer": "Benign", "confidence": 25}
+{"id": "107:13", "answer": "Benign", "confidence": 56}
+{"id": "109:0

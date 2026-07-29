@@ -1,0 +1,14 @@
+As a radiologist evaluating lung nodules, I will assess each case based on the provided spiculation and margin scores. Higher spiculation and irregular margins are associated with malignancy. I will assign a diagnosis of "Malignant" or "Benign" and a confidence level (0-100) for each case.
+
+My decision logic and confidence assignment will follow these general principles:
+*   **Strong Malignant Indicators:** Spiculation (S) >= 3.5 or Margin (M) >= 4.0.
+*   **Moderate Malignant Indicators:** Spiculation (S) >= 2.5 and Margin (M) >= 3.0 (or vice versa).
+*   **Strong Benign Indicators:** Spiculation (S) <= 1.5 or Margin (M) <= 2.0.
+*   **Moderate Benign Indicators:** Spiculation (S) <= 2.5 and Margin (M) <= 2.5.
+*   **Conflicting Features:** If one feature is strongly malignant and the other is strongly benign, I will generally lean towards "Malignant" due to the clinical imperative to not miss potential cancers, but with reduced confidence.
+*   **Confidence:** Confidence will be highest when both features strongly agree and are extreme (e.g., both very high for malignant, or both very low for benign). Confidence will be lower when features are borderline, in the middle range, or strongly conflicting.
+
+Here are the evaluations for each case:
+
+```json
+{"id": "

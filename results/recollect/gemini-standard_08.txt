@@ -1,0 +1,17 @@
+```json
+{"id": "744:2", "answer": "Malignant", "confidence": 54}
+{"id": "746:0", "answer": "Benign", "confidence": 59}
+{"id": "746:2", "answer": "Benign", "confidence": 64}
+{"id": "748:0", "answer": "Malignant", "confidence": 52}
+{"id": "749:3", "answer": "Benign", "confidence": 62}
+{"id": "749:4", "answer": "Malignant", "confidence": 53}
+{"id": "750:1", "answer": "Malignant", "confidence": 70}
+{"id": "750:2", "answer": "Benign", "confidence": 56}
+{"id": "751:0", "answer": "Benign", "confidence": 60}
+{"id": "751:1", "answer": "Malignant", "confidence": 50}
+{"id": "752:1", "answer": "Benign", "confidence": 70}
+{"id": "754:2", "answer": "Malignant", "confidence": 54}
+{"id": "754:3", "answer": "Malignant", "confidence": 53}
+{"id": "755:0", "answer": "Benign", "confidence": 64}
+{"id": "757:0", "answer": "Malignant", "confidence": 60}
+{"id": "
