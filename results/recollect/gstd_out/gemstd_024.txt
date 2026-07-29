@@ -1,0 +1,7 @@
+{"id": "673:3", "answer": "Benign", "confidence": 68}
+{"id": "674:0", "answer": "Malignant", "confidence": 63}
+{"id": "675:2", "answer": "Benign", "confidence": 60}
+{"id": "677:0", "answer": "Benign", "confidence": 90}
+{"id": "677:1", "answer": "Benign", "confidence": 95}
+{"id": "677:2", "answer": "Benign", "confidence": 88}
+{"id": "677:3", "answer

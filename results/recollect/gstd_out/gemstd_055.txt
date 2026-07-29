@@ -1,0 +1,10 @@
+.00 | spiculation 2.50 | margin 3.50
+- Moderately high spiculation (2.50).
+- Decision: Malignant, confidence 70%.
+
+20. `1283:4` | subtlety 4.25 | spiculation 2.00 | margin 3.50
+- Moderate spiculation (2.00), clear margin (3.50).
+- Decision: Malignant, confidence 58%.
+
+21. `1283:5` | subtlety 3.75 | spiculation 1.00 | margin 4.25
+- Minimal spiculation (1.00), sharp margin (4

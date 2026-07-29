@@ -1,0 +1,6 @@
+{"id": "1174:0", "answer": "Benign", "confidence": 78}
+{"id": "1174:1", "answer": "Benign", "confidence": 81}
+{"id": "1174:2", "answer": "Benign", "confidence": 89}
+{"id": "1174:3", "answer": "Benign", "confidence": 80}
+{"id": "1174:5", "answer": "Benign", "confidence": 83}
+{"id": "1175:0", "answer": "Benign", "confidence": 78}

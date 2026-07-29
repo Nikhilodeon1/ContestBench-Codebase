@@ -74,20 +74,23 @@ def gemini_rotating(model: str, prompt: str, keys: list[str], state: dict,
 
 
 def _anthropic_batch(model: str, prompt: str, temperature: float, max_tokens: int,
-                     api_key: str | None = None) -> str | None:
+                     api_key: str | None = None, thinking: bool = False) -> str | None:
     import anthropic
     client = anthropic.Anthropic(
         api_key=api_key or os.getenv("ANTHROPIC_API_KEY") or os.getenv("ClaudeKey"))
-    # newer Claude models (sonnet-5, opus-4-8) deprecate the temperature param;
-    # omit it and use the model default (temperature is unused here anyway).
-    # disable extended thinking: newer models default it ON, which burns the whole
-    # token budget on a thinking block (no text output) and isn't the "standard"
-    # condition we want for the intervention.
+    # newer Claude models (sonnet-5, opus-4-8) deprecate temperature; omit it.
+    # thinking: adaptive+effort = extended thinking; disabled = standard condition.
     kwargs = {"model": model, "max_tokens": max_tokens,
               "messages": [{"role": "user", "content": prompt}]}
+    if thinking:
+        kwargs["thinking"] = {"type": "adaptive"}
+        kwargs["output_config"] = {"effort": "high"}
+    else:
+        kwargs["thinking"] = {"type": "disabled"}
     try:
-        resp = client.messages.create(thinking={"type": "disabled"}, **kwargs)
-    except Exception:  # models that don't accept the thinking param
+        resp = client.messages.create(**kwargs)
+    except Exception:  # model that doesn't accept the thinking param at all
+        kwargs.pop("thinking", None); kwargs.pop("output_config", None)
         resp = client.messages.create(**kwargs)
     return "".join(b.text for b in resp.content if b.type == "text")
 

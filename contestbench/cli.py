@@ -261,6 +261,7 @@ def report_cmd() -> int:
     """Regenerate every results table and figure from the responses on disk."""
     import numpy as np
 
+    from contestbench.metrics import stats
     from contestbench.analysis import figures, mechanism, oracle, recalibration, panel as P
 
     data = P.load_panel()
