@@ -43,8 +43,7 @@ def _gemini_batch(model: str, prompt: str, temperature: float, max_tokens: int,
 def gemini_keys() -> list[str]:
     """All GEMINI_API_KEY[_N] values present in the environment, in order."""
     keys = []
-    for name in ["GEMINI_API_KEY", "GEMINI_API_KEY_2", "GEMINI_API_KEY_3",
-                 "GEMINI_API_KEY_4", "GEMINI_API_KEY_5"]:
+    for name in ["GEMINI_API_KEY"] + [f"GEMINI_API_KEY_{i}" for i in range(2, 21)]:
         v = os.getenv(name)
         if v:
             keys.append(v)
