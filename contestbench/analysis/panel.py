@@ -15,6 +15,8 @@ import pandas as pd
 from contestbench import config
 from contestbench.metrics import ece, pad, stats
 
+# gemini rows: pinned gemini-2.5-flash re-collection (supersedes the gemini-flash-latest / mixed-model
+# run kept in responses_gemini-m-*.parquet for provenance only).
 # label -> responses parquet stem. The primary panel is same-family Claude
 # (capability x reasoning); gemini/deepseek are the cross-vendor robustness panel.
 PANEL: dict[str, str] = {
@@ -24,8 +26,8 @@ PANEL: dict[str, str] = {
     "sonnet:thinking": "responses_sonnet-thinking",
     "opus:standard": "responses_opus-standard",
     "opus:thinking": "responses_opus-thinking",
-    "gemini:standard": "responses_gemini-m-standard",
-    "gemini:thinking": "responses_gemini-m-thinking",
+    "gemini:standard": "responses_gemini-pinned-standard",
+    "gemini:thinking": "responses_gemini-pinned-thinking",
     "deepseek:standard": "responses_deepseek-standard",
     "deepseek:thinking": "responses_deepseek-thinking",
 }
@@ -114,7 +116,7 @@ def panel_table(panel_data: dict[str, pd.DataFrame] | None = None) -> pd.DataFra
             "config": label, "n": len(d),
             "conf_mean": c.mean(), "conf_sd": c.std(),
             "r": r, "r_lo": rlo, "r_hi": rhi,
-            "PAD": pad.pad(c, pi),
+            "PAD": pad.pad_l1(c, pi),
             "gap": gap, "gap_lo": glo, "gap_hi": ghi,
             "signed_high": signed["high"], "signed_contested": signed["contested"],
             "signed_ambiguous": signed["ambiguous"],

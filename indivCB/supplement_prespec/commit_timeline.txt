@@ -1,0 +1,26 @@
+d648a2e | 2026-07-20 11:17:28 -0700 | ContestBench pipeline: corpus builder + eval harness + batch route
+b1ad9ec | 2026-07-20 12:00:29 -0700 | literally everything
+70d7de8 | 2026-07-20 17:37:35 -0700 | Add metrics scoring CLI, full/subset runs, and batch claim-3 export
+43c10c0 | 2026-07-20 18:25:05 -0700 | Complete architecture: normalization, psychiatry stub, figures, reproduce.sh
+4192855 | 2026-07-22 21:58:48 -0700 | Consolidate all analyses into tested modules; cross-vendor panel complete
+bdeb625 | 2026-07-23 21:57:58 -0700 | Add oracle/upper-bound baseline (predict agreement from cheap features)
+3308d6f | 2026-07-24 11:44:36 -0700 | Add geometry-only oracle variant; relabel imaging-only -> rating-independent
+2dc8361 | 2026-07-24 14:56:51 -0700 | Add post-hoc recalibrator (Fix H): the proposed intervention
+9a04add | 2026-07-24 15:44:57 -0700 | Verify recalibrator: confidence importance + pipeline sanity (reviewer check)
+c7e01f3 | 2026-07-24 17:15:56 -0700 | Add mutual information with permutation null (Fix J)
+035e9ea | 2026-07-25 17:55:26 -0700 | J robustness: Bonferroni correction + kNN-k sensitivity
+a2a53e2 | 2026-07-25 18:20:09 -0700 | Add over-reliance simulation (Fix K): Lee & See trust model
+1f95aa8 | 2026-07-26 00:13:50 -0700 | Add prompting-intervention analysis (Fix I), 3 models
+5e62318 | 2026-07-26 00:17:02 -0700 | goated
+a91e146 | 2026-07-26 10:05:14 -0700 | Point LIDC_XML_ROOT at data/LIDC-IDRI (dataset moved under data/)
+133c894 | 2026-07-26 11:49:46 -0700 | Weekend #2 accuracy-calibrated baseline + #1 consistency-confidence fn
+79b21ec | 2026-07-26 14:46:28 -0700 | Add Gemini multi-key rotation (advance on 429/404), for #1 generation
+e4d4734 | 2026-07-26 16:48:48 -0700 | Weekend #3: bootstrap CI on the H ablation gap
+2205560 | 2026-07-26 19:21:31 -0700 | Weekend #4: Anthropic batch path (thinking-disabled) for exemplar-variant test
+567e59f | 2026-07-26 19:41:24 -0700 | Weekend #5: vignette-template collision audit
+bb3e236 | 2026-07-26 19:56:16 -0700 | Weekend #6: oracle robustness across estimator classes
+a7e3bce | 2026-07-26 20:13:35 -0700 | #5 framing: bucket-mean baseline (LOO) + collision-free confirmation
+472f737 | 2026-07-28 18:33:04 -0700 | Back up raw panel outputs: manual originals + API re-collection
+c1d7f0d | 2026-07-28 19:05:53 -0700 | Provenance re-collection: API panel + gemini:std full + thinking support
+f3d92aa | 2026-07-28 19:31:07 -0700 | gemini:std refill: drop 14 partial chunks, keep clean 25-chunk (n=1024)
+e125bcc | 2026-07-28 19:52:05 -0700 | gemini:std to 96% (n=1350) via 6-key rotation; PAD 0.178 stable

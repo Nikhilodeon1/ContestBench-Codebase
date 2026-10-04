@@ -50,3 +50,42 @@ def mean_ci(values, n_boot: int = 5000, seed: int = 20260719):
     boots = np.array([values[rng.integers(0, n, n)].mean() for _ in range(n_boot)])
     lo, hi = np.percentile(boots, [2.5, 97.5])
     return m, float(lo), float(hi)
+
+
+def scan_cluster_indices(groups, n_boot: int, seed: int):
+    """Yield n_boot index arrays resampling whole scans (clusters) with replacement.
+
+    Nodules on one scan share anatomy/readers, so case-level iid resampling
+    understates uncertainty; resampling scans keeps each scan's nodules together.
+    """
+    groups = np.asarray(groups)
+    uniq, inv = np.unique(groups, return_inverse=True)
+    members = [np.flatnonzero(inv == k) for k in range(len(uniq))]
+    rng = np.random.default_rng(seed)
+    g = len(uniq)
+    for _ in range(n_boot):
+        pick = rng.integers(0, g, g)
+        yield np.concatenate([members[k] for k in pick])
+
+
+def nested_cluster_indices(calls, scans, n_boot: int, seed: int):
+    """Two-stage cluster bootstrap: resample calls (chunks) with replacement, then resample the
+    scans inside each drawn call with replacement. Captures call-level drift and scan clustering.
+    With very few calls (e.g. 3) the first stage is nearly degenerate; callers should say so.
+    """
+    calls, scans = np.asarray(calls), np.asarray(scans)
+    rng = np.random.default_rng(seed)
+    call_ids = np.unique(calls)
+    within = {}
+    for c in call_ids:
+        idx = np.flatnonzero(calls == c)
+        s = scans[idx]
+        us = np.unique(s)
+        within[c] = [idx[s == u] for u in us]
+    for _ in range(n_boot):
+        parts = []
+        for c in rng.choice(call_ids, len(call_ids)):
+            blocks = within[c]
+            pick = rng.integers(0, len(blocks), len(blocks))
+            parts.extend(blocks[j] for j in pick)
+        yield np.concatenate(parts)

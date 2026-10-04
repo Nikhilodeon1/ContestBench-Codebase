@@ -33,7 +33,7 @@ def _row(df: pd.DataFrame) -> dict:
     c, pa = df["confidence"].values, df["pi_agree"].values
     signed = {t: pad.pad_signed(df[df.tier == t]["confidence"], df[df.tier == t]["pi_agree"])
               for t in ["high", "contested", "ambiguous"]}
-    return {"conf": float(c.mean()), "pad": pad.pad(c, pa),
+    return {"conf": float(c.mean()), "pad": pad.pad_l1(c, pa),
             "r": float(pearsonr(pa, c)[0]),
             "signed_high": signed["high"], "signed_contested": signed["contested"],
             "signed_ambiguous": signed["ambiguous"]}

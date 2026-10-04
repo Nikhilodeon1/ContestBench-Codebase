@@ -77,7 +77,7 @@ def ece_degeneracy(responses_path, n_draws: int = 2000, seed: int = 20260720,
     rng = np.random.default_rng(seed)
     eces = np.array([ece.ece(conf, rng.integers(0, 2, len(conf)).astype(float), n_bins=10)
                      for _ in range(n_draws)])
-    pad_val = pad.pad(conf, amb["pi_agree"].values)
+    pad_val = pad.pad_l1(conf, amb["pi_agree"].values)
     lo, hi = np.percentile(eces, [2.5, 97.5])
 
     fig, ax = plt.subplots(figsize=(7, 4.5))
@@ -99,7 +99,7 @@ def baseline_floor(panel: dict, c_star: float = 0.75,
     labels, pads = [], []
     for label, d in panel.items():
         labels.append(label)
-        pads.append(padmod.pad(d["confidence"].values, d["pi_agree"].values))
+        pads.append(padmod.pad_l1(d["confidence"].values, d["pi_agree"].values))
     any_pi = next(iter(panel.values()))["pi_agree"].values
     floor = float(np.abs(c_star - any_pi).mean())
     fam = {}
@@ -155,6 +155,6 @@ def _save(fig, name) -> Path:
     FIGDIR.mkdir(parents=True, exist_ok=True)
     fig.tight_layout()
     p = FIGDIR / name
-    fig.savefig(p, dpi=140)
+    fig.savefig(p, dpi=300)
     plt.close(fig)
     return p

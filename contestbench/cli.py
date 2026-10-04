@@ -513,7 +513,7 @@ def reliance_cmd() -> int:
     ax.set_title("Recalibration levels over-reliance: helps the over-confident,\nhurts the cautious; only true c=pi reaches the floor")
     ax.grid(axis="y", alpha=0.3); fig.tight_layout()
     p = config.RESULTS_DIR / "figures" / "over_reliance.png"
-    fig.savefig(p, dpi=140); print(f"wrote {p}")
+    fig.savefig(p, dpi=300); print(f"wrote {p}")
     return 0
 
 
@@ -577,6 +577,84 @@ def import_batch_cmd(answer_paths: list[str], label: str) -> int:
     return 0
 
 
+def panel_b_cmd() -> int:
+    from contestbench.analysis import panel_b
+    t = panel_b.panel_table_b()
+    out = config.RESULTS_DIR / "tables" / "panel_b.csv"
+    t.to_csv(out, index=False)
+    print(f"p* (mean f, full corpus) = {t.attrs['p_star']:.4f}; "
+          f"constant PAD-B = {t.attrs['const_B_full_corpus']:.4f}")
+    print(t.round(3).to_string(index=False))
+    print(f"wrote {out}")
+    return 0
+
+
+def oracle_b_cmd() -> int:
+    from contestbench.analysis import oracle_b
+    tdir = config.RESULTS_DIR / "tables"
+    orc, rec = [], []
+    for t in (3, 4):
+        orc.append(oracle_b.oracle_table(t))
+        rec.append(oracle_b.recal_table(t))
+    orc, rec = pd.concat(orc), pd.concat(rec)
+    orc.to_csv(tdir / "oracle_b.csv", index=False)
+    rec.to_csv(tdir / "recalibration_b.csv", index=False)
+    print(orc.round(4).to_string(index=False))
+    print(f"wrote {tdir / 'oracle_b.csv'}, {tdir / 'recalibration_b.csv'}")
+    return 0
+
+
+def revision_b_cmd(which) -> int:
+    from contestbench.analysis import revision_b as R
+    tdir = config.RESULTS_DIR / "tables"
+    if "mi" in which:
+        pd.concat([R.mi_table(t) for t in R.THRESHOLDS]).to_csv(tdir / "mi_b.csv", index=False)
+    if "mech" in which:
+        mech, mp, mc, n = R.mechanism_table(3)
+        mech.to_csv(tdir / "mechanism_b.csv", index=False)
+        mp.to_csv(tdir / "cross_model_p_corr_b.csv")
+        mc.to_csv(tdir / "cross_model_c_corr_b.csv")
+    if "interv" in which:
+        pd.concat([R.intervention_table(t, n_boot=5000) for t in R.THRESHOLDS]).to_csv(tdir / "intervention_b.csv", index=False)
+        pd.concat([R.reasoning_table(t, n_boot=5000) for t in R.THRESHOLDS]).to_csv(tdir / "reasoning_b.csv", index=False)
+    if "reliance" in which:
+        pm, gr, su = [], [], []
+        for t in R.THRESHOLDS:
+            a, b, c, _ = R.reliance_tables(t)
+            pm.append(a); gr.append(b); su.append(c)
+        pd.concat(pm).to_csv(tdir / "over_reliance_b.csv", index=False)
+        pd.concat(gr).to_csv(tdir / "over_reliance_grid_b.csv", index=False)
+        pd.concat(su).to_csv(tdir / "over_reliance_contrasts_b.csv", index=False)
+    if "acccal" in which:
+        pd.concat([R.acc_cal_table(t) for t in R.THRESHOLDS]).to_csv(tdir / "acc_cal_b.csv", index=False)
+    if "excl3" in which:
+        R.excl3_table().to_csv(tdir / "excl3_b.csv", index=False)
+    if "baserate" in which:
+        pd.concat([R.base_rate_check(t) for t in R.THRESHOLDS]).to_csv(tdir / "base_rate_check_b.csv", index=False)
+    if "noise" in which:
+        ch, nf = R.noise_floor_tables()
+        ch.to_csv(tdir / "noise_floor_chunks_b.csv", index=False)
+        nf.to_csv(tdir / "noise_floor_b.csv", index=False)
+        R.chunk_heterogeneity().to_csv(tdir / "chunk_heterogeneity_b.csv", index=False)
+        pd.concat([R.answer_only_repeat_stability(t) for t in R.THRESHOLDS]).to_csv(
+            tdir / "answer_only_repeat_b.csv", index=False)
+    if "stability" in which:
+        R.stability_table().to_csv(tdir / "stability_b.csv", index=False)
+    if "confirm" in which:
+        p1, p2, p3 = R.confirmatory_analysis()
+        p1.to_csv(tdir / "confirmatory_P1_b.csv", index=False)
+        p2.to_csv(tdir / "confirmatory_P2_b.csv", index=False)
+        p3.to_csv(tdir / "confirmatory_P3_b.csv", index=False)
+        R.confirmatory_oof_shift().to_csv(tdir / "confirmatory_oof_shift_b.csv", index=False)
+    if "robust" in which:
+        sub, curve, sizes = R.robustness_tables()
+        sub.to_csv(tdir / "robust_subsets_b.csv", index=False)
+        curve.to_csv(tdir / "robust_threshold_curve_b.csv", index=False)
+        print(sizes)
+    print("done:", which)
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="contestbench")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -608,6 +686,11 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("mi", help="mutual information (confidence vs pi) with permutation null")
     sub.add_parser("reliance", help="over-reliance simulation (Fix K)")
     sub.add_parser("intervention", help="prompting-intervention analysis (Fix I)")
+    sub.add_parser("panel-b", help="ten-config panel under PAD-B (primary) + PAD-L1")
+    sub.add_parser("oracle-b", help="Phase 3-4: oracle + recalibrator + ablation under PAD-B")
+    rb = sub.add_parser("revision-b", help="Phases 5-9 under PAD-B (writes results/tables/*_b.csv)")
+    rb.add_argument("parts", nargs="*", default=["mi", "mech", "interv", "reliance", "robust", "acccal", "excl3", "baserate", "noise", "stability", "confirm"],
+                    choices=["mi", "mech", "interv", "reliance", "robust", "acccal", "excl3", "baserate", "noise", "stability", "confirm"])
     sub.add_parser("report", help="regenerate ALL results tables + figures")
 
     args = parser.parse_args(argv)
@@ -633,6 +716,12 @@ def main(argv: list[str] | None = None) -> int:
         return reliance_cmd()
     if args.cmd == "intervention":
         return intervention_cmd()
+    if args.cmd == "panel-b":
+        return panel_b_cmd()
+    if args.cmd == "oracle-b":
+        return oracle_b_cmd()
+    if args.cmd == "revision-b":
+        return revision_b_cmd(args.parts)
     if args.cmd == "report":
         return report_cmd()
     parser.error(f"unknown command {args.cmd}")
