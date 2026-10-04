@@ -24,7 +24,6 @@ jobs=(
   "-m contestbench.cli revision-b tiers"
   "-m contestbench.cli revision-b consistency"
   "-m contestbench.cli revision-b resid"
-  "-m contestbench.cli revision-b floor"
   "-m contestbench.cli revision-b disjoint"
   "-m contestbench.cli revision-b extra"
 )
@@ -39,5 +38,7 @@ for i in "${!pids[@]}"; do
   if wait "${pids[$i]}"; then echo "ok    ${names[$i]}"; else echo "FAIL  ${names[$i]} (see logs/${names[$i]}.log)"; fail=1; fi
 done
 [ $fail -eq 0 ] || { echo "some jobs failed"; exit 1; }
+# stage 2: depends on tables written by the jobs above (oracle, recalibration, base-rate, panel)
+$PY -m contestbench.cli revision-b floor
 $PY scripts_freeze_manifest.py
 echo "ALL DONE"

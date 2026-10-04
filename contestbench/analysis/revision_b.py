@@ -556,7 +556,7 @@ def _parse_probability_file(path):
             if 0 <= v <= 100:
                 seen.add(cid)
                 rows.append({"id": cid, "p_hat": v / 100.0})
-    return pd.DataFrame(rows, columns=["id", "p_hat"])
+    return pd.DataFrame(rows, columns=["id", "p_hat"]).astype({"id": str, "p_hat": float})
 
 
 def confirmatory_analysis(n_boot: int = 4000, seed: int = 20261004):
@@ -576,6 +576,7 @@ def confirmatory_analysis(n_boot: int = 4000, seed: int = 20261004):
         if not files:
             continue
         pr = pd.concat([_parse_probability_file(f) for f in files]).drop_duplicates("id")
+        pr["p_hat"] = pr["p_hat"].astype(float)
         d = corpus.merge(pr, on="id").reset_index(drop=True)
         cov = len(d) / len(corpus)
         sq = (d["p_hat"] - d["f"]).values ** 2
@@ -596,7 +597,8 @@ def confirmatory_analysis(n_boot: int = 4000, seed: int = 20261004):
         p2.append({"config": label, "features_only": base.mean(), "features+p_hat": withp.mean(),
                    "ablation_gap": ab.mean(), "lo": float(lo2), "hi": float(hi2), "P2_pass": bool(lo2 <= 0 <= hi2)})
         pc = d.groupby("call").apply(lambda x: pd.Series({"n": len(x), "corr": np.corrcoef(x["p_hat"], x["f"])[0, 1]
-                                                            if x["p_hat"].nunique() > 1 else np.nan,
+                                                            if (len(x) >= 3 and x["p_hat"].nunique() > 1
+                                                                and x["f"].nunique() > 1) else np.nan,
                                                             "mean_p_hat": x["p_hat"].mean()}))
         pc = pc[pc["n"] >= 30]
         p3.append({"config": label, "calls": len(pc), "min_call_corr": float(pc["corr"].min()),

@@ -21,3 +21,16 @@ def test_pair_splits_are_the_three_partitions():
     assert len(seen) == 3
     for a, b in F.PAIR_SPLITS:
         assert sorted(a + b) == [0, 1, 2, 3]
+
+
+def test_empty_probability_file_has_float_dtype(tmp_path):
+    import pandas as pd
+
+    from contestbench.analysis import revision_b as R
+    p = tmp_path / "refused.txt"
+    p.write_text("I'm sorry, but I can't fulfill that request.", encoding="utf-8")
+    empty = R._parse_probability_file(p)
+    ok = tmp_path / "ok.txt"
+    ok.write_text('{"id": "1:0", "probability": 40}\n{"id": "1:2", "probability": 70}', encoding="utf-8")
+    merged = pd.concat([empty, R._parse_probability_file(ok)])
+    assert merged["p_hat"].dtype == float and len(merged) == 2

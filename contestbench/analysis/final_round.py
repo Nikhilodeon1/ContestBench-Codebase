@@ -251,7 +251,8 @@ def extra_models_analysis(n_boot: int = 2000, seed: int = 20261011):
                                 "ablation_gap": float(ab.mean()), "ab_lo": float(ci_a[0]), "ab_hi": float(ci_a[1]),
                                 "P2_brackets_zero": bool(ci_a[0] <= 0 <= ci_a[1])})
                 pc = d.groupby("call").apply(lambda x: pd.Series({
-                    "n": len(x), "corr": np.corrcoef(x["p_hat"], x["f"])[0, 1] if x["p_hat"].nunique() > 1 else np.nan,
+                    "n": len(x), "corr": np.corrcoef(x["p_hat"], x["f"])[0, 1]
+        if (len(x) >= 3 and x["p_hat"].nunique() > 1 and x["f"].nunique() > 1) else np.nan,
                     "mean_p": x["p_hat"].mean()}))
                 pc = pc[pc["n"] >= 30]
                 row.update({"calls_used": len(pc), "range_call_mean_p_hat": float(pc["mean_p"].max() - pc["mean_p"].min()),
