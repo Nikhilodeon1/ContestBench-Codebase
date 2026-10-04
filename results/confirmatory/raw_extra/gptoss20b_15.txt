@@ -1,0 +1,13 @@
+{"id":"1310","probability":68}
+{"id":"1311","probability":71}
+{"id":"1312:1","probability":81}
+{"id":"1312:2","probability":83}
+{"id":"1312:3","probability":84}
+{"id":"1313:3","probability":84}
+{"id":"1313:4","probability":86}
+{"id":"1313:5","probability":77}
+{"id":"1313:6","probability":97}
+{"id":"1313:7","probability":88}
+{"id":"1314:0","probability":70}
+{"id":"1314:1","probability":82}
+{"id":"1315:1","probability":94}

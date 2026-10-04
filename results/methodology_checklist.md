@@ -1,7 +1,7 @@
 # Methodology checklist against the original 10-phase spec and later rulings
 
 Status: DONE = computed and in frozen pod tables (results/tables/*_b.csv, results/data_manifest.json);
-NEW-RERUN = code written and smoke-tested on the laptop, needs the next pod run to be frozen.
+NEW-RERUN = code written, needs a pod run to be frozen (none outstanding as of pod run 2).
 
 ## Original spec (phases 0-10)
 | Phase | Requirement | Status | Table / file |
@@ -18,7 +18,7 @@ NEW-RERUN = code written and smoke-tested on the laptop, needs the next pod run 
 | 7 | Prompting designs A/B/C and reasoning, held-out | DONE | intervention_b.csv, reasoning_b.csv (Bonferroni columns) |
 | 8 | Over-reliance with s_i, per-cell (theta,beta) check | DONE | over_reliance_*_b.csv |
 | 9 | Collision-free, threshold decomposition, threshold-free view | DONE | robust_subsets_b.csv, robust_threshold_curve_b.csv |
-| 10 | Reconciliation table | NEEDS REFRESH after next pod run | results/reconciliation.md is pre-pinned-Gemini; regenerate from frozen tables |
+| 10 | Reconciliation table | DONE (refreshed from frozen pod run 2) | results/reconciliation.md |
 
 ## Later rulings
 | Item | Status | File |
@@ -33,10 +33,18 @@ NEW-RERUN = code written and smoke-tested on the laptop, needs the next pod run 
 | Stability rule (frozen), applied | DONE | stability_rule.md, stability_b.csv |
 | Confirmatory collection, P1-P3, out-of-fold shift | DONE | results/confirmatory/, confirmatory_*_b.csv |
 | Pre-specification package | DONE | indivCB/supplement_prespec/ |
-| Call-level (nested) clustering in CIs | NEW-RERUN for reasoning, acc_cal, recalibration/ablation, robustness, excl3, tiers (panel gap and confirmatory already nested) | panel_b._boot, oracle_b._cluster_ci, revision_b |
-| ECE vs PAD-B correlation with CI + permutation p; ambiguous-tier random-label band; gpt-oss PAD-B | NEW-RERUN | ece_b.csv, ece_corr_b.csv, ece_ambiguous_band_b.csv, gptoss_supplementary_b.csv |
-| PAD-B by pi-tier | NEW-RERUN | tiers_b.csv |
-| Sample-consistency spot check under PAD-B | NEW-RERUN | consistency_b.csv |
+| Call-level (nested) clustering in CIs | DONE (pod run 2) for reasoning, acc_cal, recalibration/ablation, robustness, excl3, tiers, panel gap, confirmatory | panel_b._boot, oracle_b._cluster_ci, revision_b |
+| ECE vs PAD-B correlation with CI + permutation p; ambiguous-tier random-label band; gpt-oss PAD-B | DONE (pod run 2) | ece_b.csv, ece_corr_b.csv, ece_ambiguous_band_b.csv, gptoss_supplementary_b.csv |
+| PAD-B by pi-tier | DONE (pod run 2) | tiers_b.csv |
+| Sample-consistency spot check under PAD-B | DONE (pod run 2) | consistency_b.csv |
+
+## Final round (plan: results/analysis_plan_final.md, hash in frozen_hashes.txt)
+| Task | Status | Table |
+|---|---|---|
+| A residualized partial correlations | computed on laptop (preview); freeze on next pod run | residualized_b.csv |
+| B irreducible-noise floor + simulation + excess over floor | computed on laptop (preview); freeze on next pod run | floor_b.csv, floor_sim_b.csv, excess_over_floor_b.csv |
+| C disjoint-reader oracle (needs data/corpus_reader_features.parquet) | computed on laptop (preview); freeze on next pod run | disjoint_b.csv, disjoint_summary_b.csv, disjoint_retained_b.csv |
+| D other model families (Groq: gpt-oss-120b, qwen3.8-27b, gpt-oss-20b) | collected (45 calls, resolved ids logged); analysis computed on laptop | extra_models_b.csv |
 
 ## Known scope limits (to state in the paper)
 - Intervention CIs are scan-clustered only (the 300-case held-out set is covered by 3 calls per design).

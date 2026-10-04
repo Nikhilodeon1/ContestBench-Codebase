@@ -638,6 +638,7 @@ def revision_b_cmd(which) -> int:
         R.chunk_heterogeneity().to_csv(tdir / "chunk_heterogeneity_b.csv", index=False)
         pd.concat([R.answer_only_repeat_stability(t) for t in R.THRESHOLDS]).to_csv(
             tdir / "answer_only_repeat_b.csv", index=False)
+        R.answer_only_repeat_full().to_csv(tdir / "answer_only_repeat_full_b.csv", index=False)
     if "stability" in which:
         R.stability_table().to_csv(tdir / "stability_b.csv", index=False)
     if "confirm" in which:
@@ -656,6 +657,24 @@ def revision_b_cmd(which) -> int:
         R.tiers_table(3).to_csv(tdir / "tiers_b.csv", index=False)
     if "consistency" in which:
         R.consistency_pad_b().to_csv(tdir / "consistency_b.csv", index=False)
+    if "resid" in which:
+        from contestbench.analysis import final_round as F
+        F.residualized_table().to_csv(tdir / "residualized_b.csv", index=False)
+    if "floor" in which:
+        from contestbench.analysis import final_round as F
+        fl, sim, ex = F.floor_tables()
+        fl.to_csv(tdir / "floor_b.csv", index=False)
+        sim.to_csv(tdir / "floor_sim_b.csv", index=False)
+        ex.to_csv(tdir / "excess_over_floor_b.csv", index=False)
+    if "disjoint" in which:
+        from contestbench.analysis import final_round as F
+        det, summ, piv = F.disjoint_table()
+        det.to_csv(tdir / "disjoint_b.csv", index=False)
+        summ.to_csv(tdir / "disjoint_summary_b.csv", index=False)
+        piv.to_csv(tdir / "disjoint_retained_b.csv", index=False)
+    if "extra" in which:
+        from contestbench.analysis import final_round as F
+        F.extra_models_analysis().to_csv(tdir / "extra_models_b.csv", index=False)
     if "robust" in which:
         sub, curve, sizes = R.robustness_tables()
         sub.to_csv(tdir / "robust_subsets_b.csv", index=False)
@@ -699,8 +718,8 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("panel-b", help="ten-config panel under PAD-B (primary) + PAD-L1")
     sub.add_parser("oracle-b", help="Phase 3-4: oracle + recalibrator + ablation under PAD-B")
     rb = sub.add_parser("revision-b", help="Phases 5-9 under PAD-B (writes results/tables/*_b.csv)")
-    rb.add_argument("parts", nargs="*", default=["mi", "mech", "interv", "reliance", "robust", "acccal", "excl3", "baserate", "noise", "stability", "confirm", "ece", "tiers", "consistency"],
-                    choices=["mi", "mech", "interv", "reliance", "robust", "acccal", "excl3", "baserate", "noise", "stability", "confirm", "ece", "tiers", "consistency"])
+    rb.add_argument("parts", nargs="*", default=["mi", "mech", "interv", "reliance", "robust", "acccal", "excl3", "baserate", "noise", "stability", "confirm", "ece", "tiers", "consistency", "resid", "floor", "disjoint", "extra"],
+                    choices=["mi", "mech", "interv", "reliance", "robust", "acccal", "excl3", "baserate", "noise", "stability", "confirm", "ece", "tiers", "consistency", "resid", "floor", "disjoint", "extra"])
     sub.add_parser("report", help="regenerate ALL results tables + figures")
 
     args = parser.parse_args(argv)

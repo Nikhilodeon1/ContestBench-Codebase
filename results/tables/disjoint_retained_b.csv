@@ -1,0 +1,5 @@
+threshold,estimator,disjoint,same_pair_control,retained_fraction_R,verdict_rule
+3,gbt,-0.014949907790734964,-0.03287704132580321,0.4547218115701209,R<0.5: inflated by shared raters
+3,ridge,-0.013809962456173287,-0.0266205477878672,0.5187707843663318,R>=0.5: not driven by shared raters
+4,gbt,-0.028786610684322197,-0.046109020210673805,0.6243162520651082,R>=0.5: not driven by shared raters
+4,ridge,-0.031210024005293917,-0.04681534444547853,0.6666622744096505,R>=0.5: not driven by shared raters

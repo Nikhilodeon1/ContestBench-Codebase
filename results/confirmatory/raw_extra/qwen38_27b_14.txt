@@ -1,0 +1,247 @@
+To estimate the probability that a radiologist rates the malignancy as 3 or higher, we analyze the features provided: **Subtlety**, **Spiculation**, and **Margin**.
+
+**Reasoning Logic:**
+1.  **Spiculation** is the strongest predictor of malignancy (specifically invasive lung cancer).
+    *   Spiculation < 1.5: Low suspicion for malignancy unless other features are very high.
+    *   Spiculation 1.5 - 2.5: Moderate suspicion.
+    *   Spiculation > 2.5: High suspicion.
+2.  **Margin**: Irregular margins (high score) suggest infiltration.
+    *   Margin < 2.5: Smooth/growth pattern often benign.
+    *   Margin > 4.0: Irregular, suspicious.
+3.  **Subtlety**: Higher subtlety makes detection harder but doesn't directly correlate with malignancy as strongly as morphology. However, in the context of these datasets (likely Lung-RADS or similar), "subtlety" often correlates with how "hidden" the nodule is. A very prominent nodule with spiculation is highly suspicious. A very subtle nodule with spiculation might be hard to read, but if visible, the spiculation drives the rating.
+4.  **Target Probability**: We need P(Rating >= 3).
+    *   Rating 1: Highly unlikely. (Typical for benign granulomas, very smooth, low spiculation).
+    *   Rating 2: Moderately unlikely.
+    *   Rating 3: Indeterminate / Suspicious.
+    *   Rating 4/5: Suspicious / Highly Suspicious.
+
+    *Baseline Considerations:*
+    *   If Spiculation is ~1.0-1.3 and Margin is ~4.7-5.0: This looks like a "starry sky" or irregular border but low spiculation. Radiologists often rate these as 3 (Indeterminate) to rule out malignancy. Probability of >=3 is moderate to high (e.g., 60-80%).
+    *   If Spiculation is ~1.0-1.3 and Margin is ~2.0-3.0: Smooth, rounded. Likely benign (Rating 1 or 2). Probability of >=3 is low (e.g., 10-30%).
+    *   If Spiculation is > 2.0: Almost certainly rated >= 3, often 4 or 5. Probability is high (e.g., 80-95%).
+    *   If Spiculation is > 4.0: Highly suspicious. Probability is very high (e.g., 90-98%).
+
+Let's evaluate specific patterns:
+*   **Case 1239:0**: Spic 4.33, Margin 3.00. High spiculation. Likely Rating 5. Prob ~95%.
+*   **Case 1253:0**: Spic 3.25, Margin 4.00. High spiculation, irregular margin. Likely Rating 4/5. Prob ~90%.
+*   **Case 1224:0**: Spic 1.25, Margin 2.25. Low spiculation, smooth margin. Likely Rating 1/2. Prob ~20%.
+*   **Case 1225:0**: Spic 1.00, Margin 4.50. Low spiculation, but very irregular margin. This is a classic "suspicious feature" for indeterminate. Radiologist would likely rate 3. Prob ~70%.
+*   **Case 1268 series**: Margins drop to ~1.33-2.00. Spiculation is low (1.0-1.75). These are likely benign (Rating 1/2). Prob < 30%.
+*   **Case 1256:0**: Spic 4.25, Margin 2.50. High spiculation, but smoother margin. Still very suspicious due to spiculation. Prob ~85%.
+
+**Calibration Function (Approximate):**
+Let $S$ be Spiculation, $M$ be Margin.
+Score = $S + M$.
+*   Score < 3.5: Low prob of >=3 (10-25%).
+*   Score 3.5 - 5.0: Moderate prob of >=3 (30-60%).
+*   Score 5.0 - 6.5: High prob of >=3 (60-85%).
+*   Score > 6.5: Very High prob of >=3 (85-98%).
+
+However, Spiculation weighs more.
+*   If $S > 3.0$, force prob > 80%.
+*   If $S < 1.5$ and $M < 3.0$, force prob < 30%.
+*   If $S < 1.5$ and $M > 4.0$, prob ~ 50-70% (Indeterminate).
+
+Let's apply this to the cases:
+
+1.  **1219:0**: S=1.00, M=4.25. Sum=5.25. Low Spic, High Margin. Prob ~65%.
+2.  **1220:0**: S=2.50, M=4.75. Sum=7.25. High Spic, High Margin. Prob ~90%.
+3.  **1221:0**: S=1.50, M=4.75. Sum=6.25. Mid Spic, High Margin. Prob ~75%.
+4.  **1221:4**: S=1.67, M=4.67. Sum=6.34. Similar to above. Prob ~75%.
+5.  **1222:1**: S=1.25, M=4.25. Sum=5.50. Low Spic, High Margin. Prob ~60%.
+6.  **1224:0**: S=1.25, M=2.25. Sum=3.50. Low/Low. Prob ~20%.
+7.  **1225:0**: S=1.00, M=4.50. Sum=5.50. Very Low Spic, High Margin. Prob ~60%.
+8.  **1226:0**: S=1.00, M=3.67. Sum=4.67. Low Spic, Mid-High Margin. Prob ~45%.
+9.  **1227:1**: S=1.00, M=4.50. Similar to 1225. Prob ~60%.
+10. **1228:1**: S=1.00, M=4.75. Slightly higher margin. Prob ~65%.
+11. **1230:0**: S=1.50, M=3.75. Sum=5.25. Prob ~40%.
+12. **1231:0**: S=1.25, M=4.50. Sum=5.75. Prob ~60%.
+13. **1232:0**: S=1.33, M=4.67. Sum=6.00. Prob ~65%.
+14. **1232:1**: S=2.00, M=4.00. Sum=6.00. Higher spiculation than 1232:0. Prob ~70%.
+15. **1232:2**: S=1.67, M=4.00. Sum=5.67. Prob ~55%.
+16. **1234:0**: S=2.00, M=3.50. Sum=5.50. Prob ~50%.
+17. **1234:1**: S=2.67, M=3.33. Sum=6.00. Spic > 2.5 bump. Prob ~75%.
+18. **1235:0**: S=1.50, M=4.25. Sum=5.75. Prob ~55%.
+19. **1237:1**: S=1.00, M=5.00. Sum=6.00. Very irregular. Prob ~70%.
+20. **1239:0**: S=4.33, M=3.00. High Spic. Prob ~90%.
+21. **1241:0**: S=2.33, M=4.00. Sum=6.33. Prob ~80%.
+22. **1241:2**: S=1.25, M=5.00. Sum=6.25. Low Spic, V.High Margin. Prob ~65%.
+23. **1241:4**: S=2.33, M=3.67. Sum=6.00. Prob ~75%.
+24. **1241:5**: S=1.00, M=4.67. Sum=5.67. Prob ~60%.
+25. **1242:0**: S=1.25, M=4.75. Sum=6.00. Prob ~65%.
+26. **1242:1**: S=1.33, M=4.67. Sum=6.00. Prob ~65%.
+27. **1245:4**: S=1.00, M=5.00. Sum=6.00. Prob ~65%.
+28. **1246:0**: S=1.50, M=5.00. Sum=6.50. Prob ~70%.
+29. **1246:1**: S=4.75, M=2.25. High Spic. Prob ~85%.
+30. **1247:1**: S=1.00, M=4.75. Sum=5.75. Prob ~60%.
+31. **1248:0**: S=1.00, M=5.00. Sum=6.00. Prob ~65%.
+32. **1249:0**: S=1.33, M=4.33. Sum=5.66. Prob ~55%.
+33. **1249:1**: S=1.50, M=3.50. Sum=5.00. Prob ~40%.
+34. **1249:2**: S=1.50, M=4.50. Sum=6.00. Prob ~60%.
+35. **1250:0**: S=1.00, M=5.00. Sum=6.00. Prob ~65%.
+36. **1251:1**: S=1.00, M=3.00. Sum=4.00. Prob ~30%.
+37. **1253:0**: S=3.25, M=4.00. High Spic. Prob ~90%.
+38. **1253:1**: S=3.50, M=3.25. High Spic. Prob ~85%.
+39. **1253:2**: S=2.33, M=2.00. Sum=4.33. Low Margin. Prob ~40%.
+40. **1254:0**: S=1.00, M=4.67. Sum=5.67. Prob ~60%.
+41. **1255:0**: S=1.50, M=3.50. Sum=5.00. Prob ~40%.
+42. **1256:0**: S=4.25, M=2.50. High Spic. Prob ~85%.
+43. **1256:1**: S=3.33, M=3.00. High Spic. Prob ~85%.
+44. **1257:0**: S=2.00, M=3.67. Sum=5.67. Prob ~55%.
+45. **1258:0**: S=1.00, M=4.25. Sum=5.25. Prob ~50%.
+46. **1259:0**: S=1.00, M=4.00. Sum=5.00. Prob ~45%.
+47. **1260:0**: S=1.25, M=4.25. Sum=5.50. Prob ~55%.
+48. **1262:0**: S=1.00, M=4.67. Sum=5.67. Prob ~60%.
+49. **1266:1**: S=2.00, M=3.50. Sum=5.50. Prob ~55%.
+50. **1268:1**: S=1.75, M=2.25. Sum=4.00. Prob ~25%.
+51. **1268:2**: S=1.50, M=2.00. Sum=3.50. Prob ~20%.
+52. **1268:7**: S=1.50, M=3.50. Sum=5.00. Prob ~35%.
+53. **1268:11**: S=1.00, M=1.75. Sum=2.75. Prob ~10%.
+54. **1268:13**: S=1.00, M=2.00. Sum=3.00. Prob ~15%.
+55. **1268:14**: S=1.00, M=1.33. Sum=2.33. Prob ~5%.
+56. **1268:15**: S=1.33, M=1.33. Sum=2.66. Prob ~10%.
+57. **1268:16**: S=1.25, M=2.00. Sum=3.25. Prob ~15%.
+58. **1268:17**: S=1.67, M=1.00. Sum=2.67. Prob ~15%.
+59. **1270:0**: S=1.00, M=3.33. Sum=4.33. Prob ~30%.
+60. **1272:2**: S=2.00, M=3.00. Sum=5.00. Prob ~45%.
+61. **1273:0**: S=1.50, M=3.00. Sum=4.50. Prob ~35%.
+62. **1276:0**: S=3.00, M=4.00. High Spic. Prob ~90%.
+63. **1278:0**: S=1.25, M=4.00. Sum=5.25. Prob ~50%.
+64. **1280:0**: S=1.00, M=5.00. Sum=6.00. Prob ~65%.
+65. **1280:1**: S=1.50, M=4.50. Sum=6.00. Prob ~60%.
+66. **1281:3**: S=1.75, M=4.50. Sum=6.25. Prob ~65%.
+67. **1281:4**: S=1.25, M=4.75. Sum=6.00. Prob ~60%.
+68. **1282:0**: S=1.25, M=4.50. Sum=5.75. Prob ~55%.
+69. **1283:0**: S=2.50, M=3.50. Sum=6.00. Prob ~70%.
+70. **1283:4**: S=2.00, M=3.50. Sum=5.50. Prob ~55%.
+71. **1283:5**: S=1.00, M=4.25. Sum=5.25. Prob ~50%.
+72. **1283:6**: S=1.67, M=4.33. Sum=6.00. Prob ~60%.
+73. **1291:1**: S=1.33, M=3.33. Sum=4.66. Prob ~40%.
+74. **1291:2**: S=1.67, M=3.00. Sum=4.67. Prob ~40%.
+75. **1293:0**: S=1.67, M=4.00. Sum=5.67. Prob ~55%.
+76. **1293:2**: S=1.25, M=4.50. Sum=5.75. Prob ~60%.
+77. **1294:4**: S=2.00, M=2.00. Sum=4.00. Prob ~30%.
+78. **1294:5**: S=1.33, M=2.00. Sum=3.33. Prob ~20%.
+79. **1295:0**: S=2.00, M=4.50. Sum=6.50. Prob ~70%.
+80. **1296:0**: S=2.50, M=3.50. Sum=6.00. Prob ~70%.
+81. **1298:0**: S=2.00, M=3.67. Sum=5.67. Prob ~55%.
+82. **1298:1**: S=1.25, M=4.00. Sum=5.25. Prob ~50%.
+83. **1299:1**: S=1.25, M=4.50. Sum=5.75. Prob ~55%.
+84. **1299:2**: S=3.25, M=2.75. High Spic. Prob ~80%.
+85. **1299:3**: S=1.25, M=4.25. Sum=5.50. Prob ~55%.
+86. **1299:6**: S=1.25, M=4.50. Sum=5.75. Prob ~55%.
+87. **1299:7**: S=1.75, M=4.25. Sum=6.00. Prob ~60%.
+88. **1303:0**: S=1.00, M=4.75. Sum=5.75. Prob ~60%.
+89. **1303:2**: S=1.50, M=4.00. Sum=5.50. Prob ~50%.
+90. **1305:1**: S=1.00, M=4.67. Sum=5.67. Prob ~60%.
+91. **1305:2**: S=1.25, M=5.00. Sum=6.25. Prob ~65%.
+92. **1305:3**: S=1.25, M=5.00. Sum=6.25. Prob ~65%.
+93. **1305:4**: S=1.00, M=5.00. Sum=6.00. Prob ~65%.
+94. **1305:5**: S=1.50, M=4.75. Sum=6.25. Prob ~65%.
+95. **1305:6**: S=1.33, M=5.00. Sum=6.33. Prob ~65%.
+96. **1305:7**: S=1.50, M=5.00. Sum=6.50. Prob ~70%.
+97. **1305:8**: S=1.25, M=4.25. Sum=5.50. Prob ~55%.
+98. **1305:9**: S=1.25, M=4.75. Sum=6.00. Prob ~60%.
+99. **1306:0**: S=1.00, M=5.00. Sum=6.00. Prob ~65%.
+100. **1309:0**: S=1.00, M=4.00. Sum=5.00. Prob ~45%.
+
+{"id": "1219:0", "probability": 65}
+{"id": "1220:0", "probability": 90}
+{"id": "1221:0", "probability": 75}
+{"id": "1221:4", "probability": 75}
+{"id": "1222:1", "probability": 60}
+{"id": "1224:0", "probability": 20}
+{"id": "1225:0", "probability": 60}
+{"id": "1226:0", "probability": 45}
+{"id": "1227:1", "probability": 60}
+{"id": "1228:1", "probability": 65}
+{"id": "1230:0", "probability": 40}
+{"id": "1231:0", "probability": 60}
+{"id": "1232:0", "probability": 65}
+{"id": "1232:1", "probability": 70}
+{"id": "1232:2", "probability": 55}
+{"id": "1234:0", "probability": 50}
+{"id": "1234:1", "probability": 75}
+{"id": "1235:0", "probability": 55}
+{"id": "1237:1", "probability": 70}
+{"id": "1239:0", "probability": 90}
+{"id": "1241:0", "probability": 80}
+{"id": "1241:2", "probability": 65}
+{"id": "1241:4", "probability": 75}
+{"id": "1241:5", "probability": 60}
+{"id": "1242:0", "probability": 65}
+{"id": "1242:1", "probability": 65}
+{"id": "1245:4", "probability": 65}
+{"id": "1246:0", "probability": 70}
+{"id": "1246:1", "probability": 85}
+{"id": "1247:1", "probability": 60}
+{"id": "1248:0", "probability": 65}
+{"id": "1249:0", "probability": 55}
+{"id": "1249:1", "probability": 40}
+{"id": "1249:2", "probability": 60}
+{"id": "1250:0", "probability": 65}
+{"id": "1251:1", "probability": 30}
+{"id": "1253:0", "probability": 90}
+{"id": "1253:1", "probability": 85}
+{"id": "1253:2", "probability": 40}
+{"id": "1254:0", "probability": 60}
+{"id": "1255:0", "probability": 40}
+{"id": "1256:0", "probability": 85}
+{"id": "1256:1", "probability": 85}
+{"id": "1257:0", "probability": 55}
+{"id": "1258:0", "probability": 50}
+{"id": "1259:0", "probability": 45}
+{"id": "1260:0", "probability": 55}
+{"id": "1262:0", "probability": 60}
+{"id": "1266:1", "probability": 55}
+{"id": "1268:1", "probability": 25}
+{"id": "1268:2", "probability": 20}
+{"id": "1268:7", "probability": 35}
+{"id": "1268:11", "probability": 10}
+{"id": "1268:13", "probability": 15}
+{"id": "1268:14", "probability": 5}
+{"id": "1268:15", "probability": 10}
+{"id": "1268:16", "probability": 15}
+{"id": "1268:17", "probability": 15}
+{"id": "1270:0", "probability": 30}
+{"id": "1272:2", "probability": 45}
+{"id": "1273:0", "probability": 35}
+{"id": "1276:0", "probability": 90}
+{"id": "1278:0", "probability": 50}
+{"id": "1280:0", "probability": 65}
+{"id": "1280:1", "probability": 60}
+{"id": "1281:3", "probability": 65}
+{"id": "1281:4", "probability": 60}
+{"id": "1282:0", "probability": 55}
+{"id": "1283:0", "probability": 70}
+{"id": "1283:4", "probability": 55}
+{"id": "1283:5", "probability": 50}
+{"id": "1283:6", "probability": 60}
+{"id": "1291:1", "probability": 40}
+{"id": "1291:2", "probability": 40}
+{"id": "1293:0", "probability": 55}
+{"id": "1293:2", "probability": 60}
+{"id": "1294:4", "probability": 30}
+{"id": "1294:5", "probability": 20}
+{"id": "1295:0", "probability": 70}
+{"id": "1296:0", "probability": 70}
+{"id": "1298:0", "probability": 55}
+{"id": "1298:1", "probability": 50}
+{"id": "1299:1", "probability": 55}
+{"id": "1299:2", "probability": 80}
+{"id": "1299:3", "probability": 55}
+{"id": "1299:6", "probability": 55}
+{"id": "1299:7", "probability": 60}
+{"id": "1303:0", "probability": 60}
+{"id": "1303:2", "probability": 50}
+{"id": "1305:1", "probability": 60}
+{"id": "1305:2", "probability": 65}
+{"id": "1305:3", "probability": 65}
+{"id": "1305:4", "probability": 65}
+{"id": "1305:5", "probability": 65}
+{"id": "1305:6", "probability": 65}
+{"id": "1305:7", "probability": 70}
+{"id": "1305:8", "probability": 55}
+{"id": "1305:9", "probability": 60}
+{"id": "1306:0", "probability": 65}
+{"id": "1309:0", "probability": 45}

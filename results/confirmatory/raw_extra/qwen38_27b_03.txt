@@ -1,0 +1,215 @@
+To estimate the probability that a nodule is rated malignancy 3 or higher (Indeterminate or suspicious), we evaluate the provided features:
+1.  **Spiculation**: The strongest predictor. Values > 2.5 are highly suspicious. Values 1.5-2.5 are moderately suspicious. Values < 1.5 are less suspicious.
+2.  **Margin**: High irregularity (approaching 5.0) suggests malignancy but is less specific than spiculation.
+3.  **Subtlety**: High subtlety (>4.0) may obscure features, but in this context, combined with other features, it often correlates with higher complexity or potentially smaller but more complex nodules. However, benign nodules can also be subtle. We weigh spiculation and margin more heavily.
+
+**General Heuristic:**
+-   **Spiculation > 2.0**: Likely rating 3+ (High Risk). Probability 60-90%.
+-   **Spiculation 1.5 - 2.0**: Moderate risk. Probability 40-70%, adjusted by margin.
+-   **Spiculation < 1.5**: Low-Moderate risk. Probability 10-40%, adjusted by margin and subtlety.
+-   **Margin > 4.5**: Adds weight towards higher rating.
+-   **Margin < 3.0**: Subtracts weight (smoother margins).
+
+**Case-by-Case Analysis:**
+
+1.  **232:0**: Spic 1.00, Marg 4.50. Low spic, high margin. Prob ~35%.
+2.  **235:0**: Spic 1.00, Marg 3.67. Low spic, mid margin. Prob ~25%.
+3.  **237:0**: Spic 1.50, Marg 3.50. Mid spic. Prob ~40%.
+4.  **240:1**: Spic 3.75, Marg 4.50. High spic, high margin. Prob ~95%.
+5.  **242:0**: Spic 3.75, Marg 4.00. High spic. Prob ~90%.
+6.  **243:1**: Spic 1.00, Marg 5.00. Low spic, very high margin. Prob ~45%.
+7.  **243:2**: Spic 1.00, Marg 5.00. Same as above. Prob ~45%.
+8.  **243:3**: Spic 1.00, Marg 5.00. Same as above. Prob ~45%.
+9.  **243:5**: Spic 1.00, Marg 5.00. Same as above. Prob ~45%.
+10. **244:0**: Spic 1.50, Marg 5.00. Mid spic, high margin. Prob ~55%.
+11. **244:1**: Spic 1.00, Marg 5.00. Low spic, high margin. Prob ~40%.
+12. **247:0**: Spic 1.67, Marg 3.33. Mid spic, low margin. Prob ~45%.
+13. **247:1**: Spic 1.33, Marg 2.33. Low spic, very low margin. Prob ~15%.
+14. **248:0**: Spic 1.00, Marg 4.75. Low spic, high margin. Prob ~40%.
+15. **248:1**: Spic 1.00, Marg 5.00. Low spic, very high margin. Prob ~45%.
+16. **250:0**: Spic 1.00, Marg 4.50. Low spic, high margin. Prob ~35%.
+17. **253:0**: Spic 1.33, Marg 3.67. Low-mid spic, mid margin. Prob ~30%.
+18. **253:1**: Spic 1.25, Marg 4.75. Low-mid spic, high margin. Prob ~40%.
+19. **253:3**: Spic 1.25, Marg 4.75. Low-mid spic, high margin. Prob ~40%.
+20. **253:4**: Spic 1.33, Marg 4.67. Low-mid spic, high margin. Prob ~40%.
+21. **253:5**: Spic 1.33, Marg 4.67. Low-mid spic, high margin. Prob ~40%.
+22. **253:9**: Spic 1.33, Marg 4.67. Low-mid spic, high margin. Prob ~40%.
+23. **253:10**: Spic 1.33, Marg 4.67. Low-mid spic, high margin. Prob ~40%.
+24. **253:11**: Spic 1.25, Marg 4.75. Low-mid spic, high margin. Prob ~40%.
+25. **256:0**: Spic 1.00, Marg 4.00. Low spic, mid margin. Prob ~30%.
+26. **256:1**: Spic 1.00, Marg 4.50. Low spic, high margin. Prob ~35%.
+27. **259:0**: Spic 2.00, Marg 3.25. Mid-high spic. Prob ~60%.
+28. **259:2**: Spic 1.00, Marg 2.67. Low spic, low margin. Prob ~15%.
+29. **261:0**: Spic 1.50, Marg 5.00. Mid spic, high margin. Prob ~55%.
+30. **261:1**: Spic 1.50, Marg 5.00. Mid spic, high margin. Prob ~55%.
+31. **261:2**: Spic 1.25, Marg 4.75. Low-mid spic, high margin. Prob ~35%.
+32. **261:3**: Spic 1.33, Marg 5.00. Low-mid spic, high margin. Prob ~40%.
+33. **261:4**: Spic 1.33, Marg 5.00. Low-mid spic, high margin. Prob ~40%.
+34. **261:5**: Spic 1.75, Marg 4.75. Mid spic, high margin. Prob ~55%.
+35. **261:6**: Spic 1.00, Marg 5.00. Low spic, high margin. Prob ~40%.
+36. **261:7**: Spic 1.75, Marg 4.50. Mid spic, high margin. Prob ~50%.
+37. **261:8**: Spic 1.25, Marg 4.00. Low-mid spic, mid margin. Prob ~30%.
+38. **261:9**: Spic 1.25, Marg 5.00. Low-mid spic, high margin. Prob ~40%.
+39. **261:10**: Spic 1.00, Marg 5.00. Low spic, high margin. Prob ~40%.
+40. **261:11**: Spic 1.33, Marg 5.00. Low-mid spic, high margin. Prob ~40%.
+41. **263:0**: Spic 2.00, Marg 5.00. Mid-high spic, high margin. Prob ~70%.
+42. **263:1**: Spic 2.00, Marg 4.50. Mid-high spic, high margin. Prob ~65%.
+43. **265:0**: Spic 2.00, Marg 3.00. Mid-high spic, low margin. Prob ~55%.
+44. **267:0**: Spic 1.75, Marg 4.00. Mid spic, mid margin. Prob ~50%.
+45. **267:3**: Spic 1.25, Marg 4.75. Low-mid spic, high margin. Prob ~35%.
+46. **268:0**: Spic 1.33, Marg 4.67. Low-mid spic, high margin. Prob ~40%.
+47. **268:1**: Spic 1.00, Marg 4.75. Low spic, high margin. Prob ~35%.
+48. **271:0**: Spic 1.00, Marg 4.75. Low spic, high margin. Prob ~35%.
+49. **271:1**: Spic 1.25, Marg 4.50. Low-mid spic, high margin. Prob ~35%.
+50. **272:0**: Spic 1.00, Marg 4.50. Low spic, high margin. Prob ~35%.
+51. **272:2**: Spic 1.50, Marg 4.25. Mid spic, mid-high margin. Prob ~45%.
+52. **272:4**: Spic 1.33, Marg 3.00. Low-mid spic, low margin. Prob ~25%.
+53. **272:5**: Spic 1.25, Marg 4.25. Low-mid spic, mid-high margin. Prob ~35%.
+54. **275:1**: Spic 2.25, Marg 3.75. High spic, mid margin. Prob ~75%.
+55. **279:1**: Spic 1.67, Marg 4.33. Mid spic, mid-high margin. Prob ~50%.
+56. **279:2**: Spic 2.33, Marg 4.33. High spic, mid-high margin. Prob ~80%.
+57. **282:0**: Spic 1.00, Marg 4.75. Low spic, high margin. Prob ~35%.
+58. **283:0**: Spic 1.33, Marg 4.00. Low-mid spic, mid margin. Prob ~30%.
+59. **283:1**: Spic 1.75, Marg 3.50. Mid spic, mid margin. Prob ~50%.
+60. **283:3**: Spic 2.00, Marg 4.25. Mid-high spic, mid-high margin. Prob ~65%.
+61. **283:4**: Spic 2.33, Marg 3.33. High spic, low margin. Prob ~70%.
+62. **286:0**: Spic 1.75, Marg 4.25. Mid spic, mid-high margin. Prob ~55%.
+63. **286:1**: Spic 2.00, Marg 4.00. Mid-high spic, mid margin. Prob ~60%.
+64. **286:2**: Spic 1.00, Marg 5.00. Low spic, high margin. Prob ~45%.
+65. **290:0**: Spic 1.25, Marg 4.75. Low-mid spic, high margin. Prob ~35%.
+66. **290:1**: Spic 1.25, Marg 4.75. Low-mid spic, high margin. Prob ~35%.
+67. **290:3**: Spic 1.25, Marg 4.75. Low-mid spic, high margin. Prob ~35%.
+68. **290:4**: Spic 1.00, Marg 4.75. Low spic, high margin. Prob ~30%.
+69. **292:0**: Spic 3.00, Marg 3.75. High spic. Prob ~85%.
+70. **293:0**: Spic 1.50, Marg 4.50. Mid spic, high margin. Prob ~50%.
+71. **296:4**: Spic 1.00, Marg 4.00. Low spic, mid margin. Prob ~25%.
+72. **296:6**: Spic 1.00, Marg 4.33. Low spic, mid-high margin. Prob ~30%.
+73. **298:0**: Spic 3.50, Marg 3.75. Very high spic. Prob ~95%.
+74. **298:1**: Spic 2.25, Marg 4.00. High spic. Prob ~75%.
+75. **300:0**: Spic 1.25, Marg 4.75. Low-mid spic, high margin. Prob ~35%.
+76. **300:1**: Spic 1.25, Marg 5.00. Low-mid spic, very high margin. Prob ~40%.
+77. **300:5**: Spic 1.67, Marg 4.33. Mid spic. Prob ~50%.
+78. **303:0**: Spic 2.50, Marg 2.75. High spic, low margin. Prob ~75%.
+79. **305:0**: Spic 1.00, Marg 5.00. Low spic, very high margin. Prob ~45%.
+80. **307:0**: Spic 2.33, Marg 4.67. High spic, high margin. Prob ~85%.
+81. **307:1**: Spic 1.00, Marg 4.33. Low spic, mid-high margin. Prob ~30%.
+82. **312:0**: Spic 1.50, Marg 4.25. Mid spic. Prob ~45%.
+83. **315:0**: Spic 2.25, Marg 3.25. High spic, low margin. Prob ~70%.
+84. **315:2**: Spic 1.67, Marg 4.33. Mid spic. Prob ~50%.
+85. **318:0**: Spic 1.25, Marg 4.75. Low-mid spic, high margin. Prob ~35%.
+86. **320:0**: Spic 1.50, Marg 5.00. Mid spic, high margin. Prob ~55%.
+87. **320:1**: Spic 1.50, Marg 4.75. Mid spic, high margin. Prob ~55%.
+88. **320:2**: Spic 1.33, Marg 4.33. Low-mid spic, mid-high margin. Prob ~35%.
+89. **320:3**: Spic 1.00, Marg 5.00. Low spic, very high margin. Prob ~45%.
+90. **322:0**: Spic 1.50, Marg 4.25. Mid spic. Prob ~45%.
+91. **323:1**: Spic 1.50, Marg 3.50. Mid spic, mid margin. Prob ~40%.
+92. **325:0**: Spic 2.50, Marg 4.75. High spic, high margin. Prob ~90%.
+93. **328:0**: Spic 1.50, Marg 4.50. Mid spic, high margin. Prob ~50%.
+94. **328:1**: Spic 1.50, Marg 4.50. Mid spic, high margin. Prob ~50%.
+95. **328:2**: Spic 1.00, Marg 5.00. Low spic, very high margin. Prob ~45%.
+96. **328:3**: Spic 1.33, Marg 4.67. Low-mid spic, high margin. Prob ~40%.
+97. **328:4**: Spic 1.00, Marg 5.00. Low spic, very high margin. Prob ~45%.
+98. **328:5**: Spic 1.33, Marg 4.67. Low-mid spic, high margin. Prob ~40%.
+99. **328:6**: Spic 1.25, Marg 4.50. Low-mid spic, high margin. Prob ~35%.
+100. **328:7**: Spic 1.25, Marg 4.75. Low-mid spic, high margin. Prob ~35%.
+
+{"id": "232:0", "probability": 35}
+{"id": "235:0", "probability": 25}
+{"id": "237:0", "probability": 40}
+{"id": "240:1", "probability": 95}
+{"id": "242:0", "probability": 90}
+{"id": "243:1", "probability": 45}
+{"id": "243:2", "probability": 45}
+{"id": "243:3", "probability": 45}
+{"id": "243:5", "probability": 45}
+{"id": "244:0", "probability": 55}
+{"id": "244:1", "probability": 40}
+{"id": "247:0", "probability": 45}
+{"id": "247:1", "probability": 15}
+{"id": "248:0", "probability": 40}
+{"id": "248:1", "probability": 45}
+{"id": "250:0", "probability": 35}
+{"id": "253:0", "probability": 30}
+{"id": "253:1", "probability": 40}
+{"id": "253:3", "probability": 40}
+{"id": "253:4", "probability": 40}
+{"id": "253:5", "probability": 40}
+{"id": "253:9", "probability": 40}
+{"id": "253:10", "probability": 40}
+{"id": "253:11", "probability": 40}
+{"id": "256:0", "probability": 30}
+{"id": "256:1", "probability": 35}
+{"id": "259:0", "probability": 60}
+{"id": "259:2", "probability": 15}
+{"id": "261:0", "probability": 55}
+{"id": "261:1", "probability": 55}
+{"id": "261:2", "probability": 35}
+{"id": "261:3", "probability": 40}
+{"id": "261:4", "probability": 40}
+{"id": "261:5", "probability": 55}
+{"id": "261:6", "probability": 40}
+{"id": "261:7", "probability": 50}
+{"id": "261:8", "probability": 30}
+{"id": "261:9", "probability": 40}
+{"id": "261:10", "probability": 40}
+{"id": "261:11", "probability": 40}
+{"id": "263:0", "probability": 70}
+{"id": "263:1", "probability": 65}
+{"id": "265:0", "probability": 55}
+{"id": "267:0", "probability": 50}
+{"id": "267:3", "probability": 35}
+{"id": "268:0", "probability": 40}
+{"id": "268:1", "probability": 35}
+{"id": "271:0", "probability": 35}
+{"id": "271:1", "probability": 35}
+{"id": "272:0", "probability": 35}
+{"id": "272:2", "probability": 45}
+{"id": "272:4", "probability": 25}
+{"id": "272:5", "probability": 35}
+{"id": "275:1", "probability": 75}
+{"id": "279:1", "probability": 50}
+{"id": "279:2", "probability": 80}
+{"id": "282:0", "probability": 35}
+{"id": "283:0", "probability": 30}
+{"id": "283:1", "probability": 50}
+{"id": "283:3", "probability": 65}
+{"id": "283:4", "probability": 70}
+{"id": "286:0", "probability": 55}
+{"id": "286:1", "probability": 60}
+{"id": "286:2", "probability": 45}
+{"id": "290:0", "probability": 35}
+{"id": "290:1", "probability": 35}
+{"id": "290:3", "probability": 35}
+{"id": "290:4", "probability": 30}
+{"id": "292:0", "probability": 85}
+{"id": "293:0", "probability": 50}
+{"id": "296:4", "probability": 25}
+{"id": "296:6", "probability": 30}
+{"id": "298:0", "probability": 95}
+{"id": "298:1", "probability": 75}
+{"id": "300:0", "probability": 35}
+{"id": "300:1", "probability": 40}
+{"id": "300:5", "probability": 50}
+{"id": "303:0", "probability": 75}
+{"id": "305:0", "probability": 45}
+{"id": "307:0", "probability": 85}
+{"id": "307:1", "probability": 30}
+{"id": "312:0", "probability": 45}
+{"id": "315:0", "probability": 70}
+{"id": "315:2", "probability": 50}
+{"id": "318:0", "probability": 35}
+{"id": "320:0", "probability": 55}
+{"id": "320:1", "probability": 55}
+{"id": "320:2", "probability": 35}
+{"id": "320:3", "probability": 45}
+{"id": "322:0", "probability": 45}
+{"id": "323:1", "probability": 40}
+{"id": "325:0", "probability": 90}
+{"id": "328:0", "probability": 50}
+{"id": "328:1", "probability": 50}
+{"id": "328:2", "probability": 45}
+{"id": "328:3", "probability": 40}
+{"id": "328:4", "probability": 45}
+{"id": "328:5", "probability": 40}
+{"id": "328:6", "probability": 35}
+{"id": "328:7", "probability": 35}

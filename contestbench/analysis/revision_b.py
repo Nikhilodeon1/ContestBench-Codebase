@@ -569,8 +569,10 @@ def confirmatory_analysis(n_boot: int = 4000, seed: int = 20261004):
     corpus["f"] = rt.vote_fraction(rat.loc[corpus["id"]], 3)
     p_star = brier.optimal_constant_p(corpus["f"].values)
     p1, p2, p3 = [], [], []
-    for label in ("sonnet", "opus", "haiku", "gemini"):
-        files = sorted(glob.glob(str(CONF_DIR / "raw" / f"{label}_*.txt")))
+    sources = [(l, "raw") for l in ("sonnet", "opus", "haiku", "gemini")] + \
+              [(l, "raw_extra") for l in ("gptoss120b", "qwen38_27b", "gptoss20b")]
+    for label, sub in sources:
+        files = sorted(glob.glob(str(CONF_DIR / sub / f"{label}_*.txt")))
         if not files:
             continue
         pr = pd.concat([_parse_probability_file(f) for f in files]).drop_duplicates("id")
@@ -756,3 +758,46 @@ def consistency_pad_b() -> pd.DataFrame:
                           "r_p_f": float(pearsonr(g["p"], g["f"])[0]) if g["p"].nunique() > 1 else np.nan,
                           "PAD_B": brier.pad_b(g["p"], g["f"]), "const_B": brier.constant_pad_b(g["f"], ps),
                           "gap": gap(g), "gap_lo": lo, "gap_hi": hi}])
+
+
+def answer_only_repeat_full() -> pd.DataFrame:
+    """Repeat-to-repeat PAD-B change per call: raw folded p vs the answer-only forecast (all repeat configs).
+
+    answer-only map = mean f given the answer, fit on run-1 answers (2 parameters, ignores confidence).
+    rms_d_* is the root-mean-square per-call change between the two runs (the quantity behind the noise floor).
+    """
+    import glob
+    from contestbench.eval import batch
+    rat = rt.load_ratings().set_index("id")["ratings"]
+    rows = []
+    for label, (g1, g2) in REPEATS.items():
+        f1s, f2s = sorted(glob.glob(str(config.ROOT / g1))), sorted(glob.glob(str(config.ROOT / g2)))
+        if min(len(f1s), len(f2s)) < 10:
+            continue
+        for t in THRESHOLDS:
+            D = []
+            for a, b in zip(f1s, f2s):
+                m = batch.parse_batch_file(a).merge(batch.parse_batch_file(b), on="id", suffixes=("1", "2"))
+                if len(m) < 30:
+                    continue
+                m["f"] = rt.vote_fraction(rat.loc[m["id"]], t)
+                for r in "12":
+                    m[f"a{r}"] = brier.answer_to_binary(m[f"answer{r}"])
+                    m[f"p{r}"] = brier.fold_forecast(m[f"a{r}"], m[f"confidence{r}"])
+                D.append(m)
+            allm = pd.concat(D)
+            m1 = allm.loc[allm["a1"] == 1, "f"].mean()
+            m0 = allm.loc[allm["a1"] == 0, "f"].mean()
+            ch = []
+            for g in D:
+                ff = g["f"].values
+                raw = ((g["p2"] - ff) ** 2).mean() - ((g["p1"] - ff) ** 2).mean()
+                ao = ((np.where(g["a2"] == 1, m1, m0) - ff) ** 2).mean() - ((np.where(g["a1"] == 1, m1, m0) - ff) ** 2).mean()
+                ch.append((raw, ao))
+            ch = np.array(ch)
+            rows.append({"config": label, "t": t, "chunks": len(ch),
+                         "rms_d_raw_p": float(np.sqrt((ch[:, 0] ** 2).mean())),
+                         "rms_d_answer_only": float(np.sqrt((ch[:, 1] ** 2).mean()))})
+    out = pd.DataFrame(rows)
+    out["ratio"] = out["rms_d_raw_p"] / out["rms_d_answer_only"]
+    return out
