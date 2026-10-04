@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/jovyan/ContestBench-Codebase/contestbench/cli.py", line 761, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/contestbench/cli.py", line 753, in main
+    return revision_b_cmd(args.parts)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/contestbench/cli.py", line 665, in revision_b_cmd
+    fl, sim, ex = F.floor_tables()
+                  ^^^^^^^^^^^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/contestbench/analysis/final_round.py", line 99, in floor_tables
+    orc, rec = pd.read_csv(T / "oracle_b.csv"), pd.read_csv(T / "recalibration_b.csv")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/.venv/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/.venv/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/.venv/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/.venv/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 1904, in _make_engine
+    self.handles = get_handle(
+                   ^^^^^^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/.venv/lib/python3.12/site-packages/pandas/io/common.py", line 926, in get_handle
+    handle = open(
+             ^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/jovyan/ContestBench-Codebase/results/tables/oracle_b.csv'

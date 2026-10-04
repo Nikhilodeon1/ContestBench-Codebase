@@ -18,6 +18,7 @@ def sha(p):
 groups = {
     "inputs_data": sorted((ROOT / "data").glob("*.parquet")),
     "inputs_confirmatory_raw": sorted((ROOT / "results" / "confirmatory" / "raw").glob("*.txt")),
+    "inputs_extra_model_raw": sorted((ROOT / "results" / "confirmatory" / "raw_extra").glob("*.txt")),
     "inputs_repeat_raw": sorted(p for d in ("noise", "noise_haiku", "pinned", "pinned_repeat")
                                 for p in (ROOT / "results" / "recollect" / d).glob("*.txt")),
     "inputs_interventions": sorted((ROOT / "results" / "interv4").glob("*")),

@@ -41,10 +41,10 @@ NEW-RERUN = code written, needs a pod run to be frozen (none outstanding as of p
 ## Final round (plan: results/analysis_plan_final.md, hash in frozen_hashes.txt)
 | Task | Status | Table |
 |---|---|---|
-| A residualized partial correlations | computed on laptop (preview); freeze on next pod run | residualized_b.csv |
-| B irreducible-noise floor + simulation + excess over floor | computed on laptop (preview); freeze on next pod run | floor_b.csv, floor_sim_b.csv, excess_over_floor_b.csv |
-| C disjoint-reader oracle (needs data/corpus_reader_features.parquet) | computed on laptop (preview); freeze on next pod run | disjoint_b.csv, disjoint_summary_b.csv, disjoint_retained_b.csv |
-| D other model families (Groq: gpt-oss-120b, qwen3.8-27b, gpt-oss-20b) | collected (45 calls, resolved ids logged); analysis computed on laptop | extra_models_b.csv |
+| A residualized partial correlations | DONE (frozen from pod run 3) | residualized_b.csv |
+| B irreducible-noise floor + simulation + excess over floor | DONE (frozen from pod run 3) | floor_b.csv, floor_sim_b.csv, excess_over_floor_b.csv |
+| C disjoint-reader oracle (needs data/corpus_reader_features.parquet) | DONE (frozen from pod run 3) | disjoint_b.csv, disjoint_summary_b.csv, disjoint_retained_b.csv |
+| D other model families (Groq: gpt-oss-120b, qwen3.8-27b, gpt-oss-20b) | DONE (45 calls, resolved ids logged; frozen from pod run 3) | extra_models_b.csv |
 
 ## Known scope limits (to state in the paper)
 - Intervention CIs are scan-clustered only (the 300-case held-out set is covered by 3 calls per design).

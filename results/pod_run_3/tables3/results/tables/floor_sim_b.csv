@@ -1,0 +1,2 @@
+draws,mean_rho,mean_estimator,mean_true_noise_var,estimator_bias,naive_plugin_bias,forecaster_diff_observed,forecaster_diff_noise_free,forecaster_diff_gap
+2000000,0.645296900094131,0.030872680555555556,0.030847236027610206,2.54445279453501e-05,-0.008788049685017615,0.08467234875393961,0.08468733301977255,-1.4984265832934662e-05
