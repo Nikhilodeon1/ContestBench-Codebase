@@ -20,6 +20,9 @@ jobs=(
   "-m contestbench.cli revision-b noise"
   "-m contestbench.cli revision-b stability"
   "-m contestbench.cli revision-b confirm"
+  "-m contestbench.cli revision-b ece"
+  "-m contestbench.cli revision-b tiers"
+  "-m contestbench.cli revision-b consistency"
 )
 pids=(); names=()
 for j in "${jobs[@]}"; do

@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/jovyan/ContestBench-Codebase/contestbench/cli.py", line 732, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/contestbench/cli.py", line 724, in main
+    return revision_b_cmd(args.parts)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/contestbench/cli.py", line 638, in revision_b_cmd
+    R.chunk_heterogeneity().to_csv(tdir / "chunk_heterogeneity_b.csv", index=False)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/contestbench/analysis/revision_b.py", line 401, in chunk_heterogeneity
+    d = d.drop(columns=["scan_idx"]).merge(corpus[["id", "order", "scan_idx"] + SEEN], on="id").sort_values("order")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/.venv/lib/python3.12/site-packages/pandas/core/frame.py", line 8347, in sort_values
+    k = self._get_label_or_level_values(by[0], axis=axis)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/ContestBench-Codebase/.venv/lib/python3.12/site-packages/pandas/core/generic.py", line 1776, in _get_label_or_level_values
+    raise KeyError(key)
+KeyError: 'order'

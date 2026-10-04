@@ -646,6 +646,16 @@ def revision_b_cmd(which) -> int:
         p2.to_csv(tdir / "confirmatory_P2_b.csv", index=False)
         p3.to_csv(tdir / "confirmatory_P3_b.csv", index=False)
         R.confirmatory_oof_shift().to_csv(tdir / "confirmatory_oof_shift_b.csv", index=False)
+    if "ece" in which:
+        per, summ, band, oss = R.ece_tables()
+        per.to_csv(tdir / "ece_b.csv", index=False)
+        summ.to_csv(tdir / "ece_corr_b.csv", index=False)
+        band.to_csv(tdir / "ece_ambiguous_band_b.csv", index=False)
+        oss.to_csv(tdir / "gptoss_supplementary_b.csv", index=False)
+    if "tiers" in which:
+        R.tiers_table(3).to_csv(tdir / "tiers_b.csv", index=False)
+    if "consistency" in which:
+        R.consistency_pad_b().to_csv(tdir / "consistency_b.csv", index=False)
     if "robust" in which:
         sub, curve, sizes = R.robustness_tables()
         sub.to_csv(tdir / "robust_subsets_b.csv", index=False)
@@ -689,8 +699,8 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("panel-b", help="ten-config panel under PAD-B (primary) + PAD-L1")
     sub.add_parser("oracle-b", help="Phase 3-4: oracle + recalibrator + ablation under PAD-B")
     rb = sub.add_parser("revision-b", help="Phases 5-9 under PAD-B (writes results/tables/*_b.csv)")
-    rb.add_argument("parts", nargs="*", default=["mi", "mech", "interv", "reliance", "robust", "acccal", "excl3", "baserate", "noise", "stability", "confirm"],
-                    choices=["mi", "mech", "interv", "reliance", "robust", "acccal", "excl3", "baserate", "noise", "stability", "confirm"])
+    rb.add_argument("parts", nargs="*", default=["mi", "mech", "interv", "reliance", "robust", "acccal", "excl3", "baserate", "noise", "stability", "confirm", "ece", "tiers", "consistency"],
+                    choices=["mi", "mech", "interv", "reliance", "robust", "acccal", "excl3", "baserate", "noise", "stability", "confirm", "ece", "tiers", "consistency"])
     sub.add_parser("report", help="regenerate ALL results tables + figures")
 
     args = parser.parse_args(argv)

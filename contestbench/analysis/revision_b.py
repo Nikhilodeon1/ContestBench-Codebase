@@ -135,9 +135,9 @@ def reasoning_table(threshold: int, n_boot: int = BOOT) -> pd.DataFrame:
     rows = []
     for fam in ("haiku", "sonnet", "opus", "gemini", "deepseek"):
         s, t = data[f"{fam}:standard"], data[f"{fam}:thinking"]
-        d = s[["id", "f", "p", "scan_idx"]].merge(t[["id", "p"]], on="id", suffixes=("_std", "_think"))
+        d = s[["id", "f", "p", "scan_idx", "chunk"]].merge(t[["id", "p"]], on="id", suffixes=("_std", "_think"))
         e = ((d["p_think"] - d["f"]) ** 2 - (d["p_std"] - d["f"]) ** 2).values
-        v = [e[i].mean() for i in stats.scan_cluster_indices(d["scan_idx"].values, n_boot, 13)]
+        v = [e[i].mean() for i in stats.nested_cluster_indices(d["chunk"].values, d["scan_idx"].values, n_boot, 13)]
         rows.append({"threshold": threshold, "family": fam, "n": len(d),
                      "delta_PAD_B": e.mean(), "lo": float(np.percentile(v, 2.5)),
                      "hi": float(np.percentile(v, 97.5)),
@@ -289,8 +289,8 @@ def acc_cal_table(threshold: int, n_boot: int = BOOT, k: int = 5, seed: int = 20
             sq_c = (p_star - d["f"].values) ** 2
             g = d["scan_idx"].values
             delta = sq_new - sq_old
-            v = [delta[i].mean() for i in stats.scan_cluster_indices(g, n_boot, 31)]
-            v2 = [(sq_new - sq_c)[i].mean() for i in stats.scan_cluster_indices(g, n_boot, 32)]
+            v = [delta[i].mean() for i in stats.nested_cluster_indices(d["chunk"].values, g, n_boot, 31)]
+            v2 = [(sq_new - sq_c)[i].mean() for i in stats.nested_cluster_indices(d["chunk"].values, g, n_boot, 32)]
             rows.append({"threshold": threshold, "config": label, "variant": variant, "n": len(d),
                          "hit_rate": float(correct[labelled].mean()),
                          "PAD_B_raw": sq_old.mean(), "PAD_B_acc_cal": sq_new.mean(),
@@ -638,3 +638,121 @@ def confirmatory_oof_shift(n_boot: int = 4000, seed: int = 20261005, k: int = 5)
             rows.append({"config": label, "map": name, "PAD_B": e.mean(), "const_B": e_const.mean(),
                          "gap": gap.mean(), "gap_lo": float(np.percentile(v, 2.5)), "gap_hi": float(np.percentile(v, 97.5))})
     return pd.DataFrame(rows)
+
+
+# ---------------- ECE vs PAD-B, ambiguous-tier degeneracy, gpt-oss (supplementary) ----------------
+def ece_tables(n_perm: int = 10000, n_boot_cfg: int = 5000, n_draw: int = 2000, seed: int = 20261006):
+    """(per-config ECE+PAD-B, correlation summary, ambiguous-tier random-label band, gpt-oss row).
+
+    ECE uses the usual binary label 'answer matches the physician majority side' on cases with
+    f != 0.5 (undefined at f == 0.5). Correlations are across configs (n = 10, so wide CIs).
+    """
+    from contestbench.metrics import ece as ece_mod
+    rng = np.random.default_rng(seed)
+    per, summ, band = [], [], []
+    for t in THRESHOLDS:
+        data = panel_b.load_panel_t(t)
+        rows = []
+        for label, d in data.items():
+            nz = d[d["f"] != 0.5]
+            correct = ((nz["a"] == 1) == (nz["f"] > 0.5)).astype(float).values
+            rows.append({"threshold": t, "config": label, "n": len(d), "n_labelled": len(nz),
+                         "ECE": ece_mod.ece(nz["confidence"].values, correct, n_bins=10),
+                         "hit_rate": float(correct.mean()), "mean_conf": float(nz["confidence"].mean()),
+                         "PAD_B": brier.pad_b(d["p"], d["f"])})
+            if t == 3:
+                amb = d[d["f"] == 0.5]
+                draws = [ece_mod.ece(amb["confidence"].values, rng.integers(0, 2, len(amb)).astype(float))
+                         for _ in range(n_draw)]
+                lo, hi = np.percentile(draws, [2.5, 97.5])
+                band.append({"config": label, "n_ambiguous": len(amb), "ece_band_lo": float(lo),
+                             "ece_band_hi": float(hi), "band_width": float(hi - lo)})
+        r = pd.DataFrame(rows)
+        per.append(r)
+        x, y = r["ECE"].values, r["PAD_B"].values
+        pear, spear = pearsonr(x, y)[0], spearmanr(x, y)[0]
+        boots = []
+        for _ in range(n_boot_cfg):
+            i = rng.integers(0, len(r), len(r))
+            if np.std(x[i]) > 0 and np.std(y[i]) > 0:
+                boots.append(pearsonr(x[i], y[i])[0])
+        perm = np.array([spearmanr(x, rng.permutation(y))[0] for _ in range(n_perm)])
+        summ.append({"threshold": t, "n_configs": len(r), "pearson": pear,
+                     "pearson_lo": float(np.percentile(boots, 2.5)), "pearson_hi": float(np.percentile(boots, 97.5)),
+                     "spearman": spear,
+                     "spearman_perm_p": float((1 + (np.abs(perm) >= abs(spear)).sum()) / (n_perm + 1))})
+    # gpt-oss-20b: supplementary single-call-per-case model, same 3-feature prompt wording, JSON output
+    g = pd.read_parquet(config.DATA_DIR / "responses_full_gpt-oss-20b-low.parquet").dropna(subset=["confidence"])
+    corpus = pd.read_parquet(config.CORPUS_PARQUET)[["id", "scan_idx"]]
+    rat = rt.load_ratings().set_index("id")["ratings"]
+    g = g.drop(columns=["pi"], errors="ignore").merge(corpus, on="id")
+    g["f"] = rt.vote_fraction(rat.loc[g["id"]], 3)
+    g["a"] = brier.answer_to_binary(g["answer"])
+    g["p"] = brier.fold_forecast(g["a"], g["confidence"])
+    ps = brier.optimal_constant_p(rt.vote_fraction(rat, 3))
+    gap = lambda x: brier.pad_b(x["p"], x["f"]) - brier.constant_pad_b(x["f"], ps)
+    lo, hi = panel_b._boot(g, gap, 1000, seed)  # no call id: scan-only CI
+    nz = g[g["f"] != 0.5]
+    corr = ((nz["a"] == 1) == (nz["f"] > 0.5)).astype(float).values
+    oss = pd.DataFrame([{"config": "gpt-oss-20b (supplementary)", "n": len(g), "PAD_B": brier.pad_b(g["p"], g["f"]),
+                         "const_B": brier.constant_pad_b(g["f"], ps), "gap": gap(g), "gap_lo": lo, "gap_hi": hi,
+                         "ECE": ece_mod.ece(nz["confidence"].values, corr, 10),
+                         "frac_answer_malignant": float(g["a"].mean())}])
+    return pd.concat(per), pd.DataFrame(summ), pd.DataFrame(band), oss
+
+
+# ---------------- PAD-B by pi-tier (descriptive stratification) ----------------
+def tiers_table(threshold: int = 3) -> pd.DataFrame:
+    """Tiers stay defined on pi (case difficulty); scoring stays on f. Descriptive, nested-bootstrap CIs."""
+    p_star = brier.optimal_constant_p(rt.vote_fraction(rt.load_ratings().set_index("id")["ratings"], threshold))
+    rows = []
+    for label, d in panel_b.load_panel_t(threshold).items():  # frames already carry the pi-based 'tier'
+        for tier in ("high", "contested", "ambiguous"):
+            x = d[d["tier"] == tier]
+            lo, hi = panel_b._boot(x, lambda g: brier.pad_b(g["p"], g["f"]), 500, 51)
+            nz = x[x["f"] != 0.5]
+            rows.append({"threshold": threshold, "config": label, "tier": tier, "n": len(x),
+                         "PAD_B": brier.pad_b(x["p"], x["f"]), "PAD_B_lo": lo, "PAD_B_hi": hi,
+                         "const_B_tier": brier.constant_pad_b(x["f"], p_star),
+                         "signed_p_minus_f": float((x["p"] - x["f"]).mean()),
+                         "match_majority": float((nz["a"] == (nz["f"] > 0.5)).mean()) if len(nz) else np.nan})
+    return pd.DataFrame(rows)
+
+
+# ---------------- Sample-consistency spot check re-scored under PAD-B (descriptive appendix) ----------------
+def consistency_pad_b() -> pd.DataFrame:
+    """Gemini 10-sample (T=0.8) answers: confidence = share agreeing with the modal answer; fold into p
+    and score against f. Tiny, partial, free-tier spot check: descriptive only."""
+    import glob
+    import json
+    import re
+    recs = []
+    for fpath in sorted(glob.glob(str(config.RESULTS_DIR / "consistency" / "gemini_r*_c*.txt"))):
+        run = re.search(r"_r(\d+)_", fpath).group(1)
+        for m in re.finditer(r"\{[^{}]*\}", Path(fpath).read_text(encoding="utf-8")):
+            try:
+                o = json.loads(m.group(0))
+            except ValueError:
+                continue
+            ans = str(o.get("answer", "")).lower()
+            if o.get("id") and ans in ("malignant", "benign"):
+                recs.append({"id": str(o["id"]), "run": run, "mal": float(ans == "malignant")})
+    s = pd.DataFrame(recs).drop_duplicates(["id", "run"])
+    g = s.groupby("id")["mal"].agg(["mean", "count"]).reset_index()
+    g = g[g["count"] >= 5].copy()
+    g["a"] = (g["mean"] >= 0.5).astype(float)
+    g["c"] = np.where(g["a"] == 1, g["mean"], 1 - g["mean"])
+    g["p"] = brier.fold_forecast(g["a"], g["c"])
+    rat = rt.load_ratings().set_index("id")["ratings"]
+    g["f"] = rt.vote_fraction(rat.loc[g["id"]], 3)
+    g["pi"] = stats.agreement_rate(g["f"].values)
+    ps = brier.optimal_constant_p(rt.vote_fraction(rat, 3))
+    g["scan_idx"] = pd.read_parquet(config.CORPUS_PARQUET).set_index("id").loc[g["id"], "scan_idx"].values
+    gap = lambda x: brier.pad_b(x["p"], x["f"]) - brier.constant_pad_b(x["f"], ps)
+    lo, hi = panel_b._boot(g, gap, 1000, 61)
+    return pd.DataFrame([{"n_cases": len(g), "median_samples_per_case": float(g["count"].median()),
+                          "mean_agreement_c": float(g["c"].mean()), "frac_c_ge_0.9": float((g["c"] >= 0.9).mean()),
+                          "r_c_pi": float(pearsonr(g["c"], g["pi"])[0]),
+                          "r_p_f": float(pearsonr(g["p"], g["f"])[0]) if g["p"].nunique() > 1 else np.nan,
+                          "PAD_B": brier.pad_b(g["p"], g["f"]), "const_B": brier.constant_pad_b(g["f"], ps),
+                          "gap": gap(g), "gap_lo": lo, "gap_hi": hi}])

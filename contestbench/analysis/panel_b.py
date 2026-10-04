@@ -42,8 +42,13 @@ def majority_match(d: pd.DataFrame) -> dict:
 
 
 def _boot(d: pd.DataFrame, stat, n_boot: int, seed: int):
-    vals = np.array([stat(d.iloc[idx]) for idx in
-                     stats.scan_cluster_indices(d["scan_idx"].values, n_boot, seed)])
+    """95% CI. Two-stage (call -> scan) cluster bootstrap when the frame carries a call id ('chunk'),
+    scan-only otherwise."""
+    if "chunk" in d.columns:
+        gen = stats.nested_cluster_indices(d["chunk"].values, d["scan_idx"].values, n_boot, seed)
+    else:
+        gen = stats.scan_cluster_indices(d["scan_idx"].values, n_boot, seed)
+    vals = np.array([stat(d.iloc[idx]) for idx in gen])
     return float(np.percentile(vals, 2.5)), float(np.percentile(vals, 97.5))
 
 

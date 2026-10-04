@@ -69,8 +69,10 @@ def corpus_with_f(threshold: int) -> pd.DataFrame:
     return c
 
 
-def _cluster_ci(arr_fn, groups, n_boot, seed):
-    vals = np.array([arr_fn(idx) for idx in stats.scan_cluster_indices(groups, n_boot, seed)])
+def _cluster_ci(arr_fn, groups, n_boot, seed, calls=None):
+    gen = (stats.nested_cluster_indices(calls, groups, n_boot, seed) if calls is not None
+           else stats.scan_cluster_indices(groups, n_boot, seed))
+    vals = np.array([arr_fn(idx) for idx in gen])
     return float(np.percentile(vals, 2.5)), float(np.percentile(vals, 97.5))
 
 
@@ -112,9 +114,9 @@ def recal_table(threshold: int, n_boot: int = 1000, estimators=("gbt", "ridge"))
                 sq["features+p"] = (cv_predict(d[feats + ["p"]].values, f, g, est) - f) ** 2
                 sq["p_only"] = (cv_predict(d[["p"]].values, f, g, est) - f) ** 2
                 gap = sq["features_only"] - sq["features+p"]
-                glo, ghi = _cluster_ci(lambda i: gap[i].mean(), g, n_boot, 2)
+                glo, ghi = _cluster_ci(lambda i: gap[i].mean(), g, n_boot, 2, calls=d["chunk"].values)
                 red = sq_raw - sq["features+p"]
-                rlo, rhi = _cluster_ci(lambda i: red[i].mean(), g, n_boot, 3)
+                rlo, rhi = _cluster_ci(lambda i: red[i].mean(), g, n_boot, 3, calls=d["chunk"].values)
                 before, oracle_pad = sq_raw.mean(), sq["features_only"].mean()
                 rows.append({"threshold": threshold, "config": label, "feature_set": fs_name,
                              "estimator": est, "n": len(d),
