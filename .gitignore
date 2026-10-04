@@ -3,7 +3,7 @@
 #tests/
 venv/
 #results/
-data/
+#data/
 .claude/
 LIDC-IDRI/
 docs/
