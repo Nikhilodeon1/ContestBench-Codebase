@@ -398,7 +398,8 @@ def chunk_heterogeneity(n_perm: int = 500, seed: int = 20261002) -> pd.DataFrame
     rng = np.random.default_rng(seed)
     rows = []
     for label, d in panel_b.load_panel_t(3).items():
-        d = d.drop(columns=["scan_idx"]).merge(corpus[["id", "order", "scan_idx"] + SEEN], on="id").sort_values("order")
+        d = d.drop(columns=["scan_idx", "order", "chunk"], errors="ignore").merge(
+            corpus[["id", "order", "scan_idx"] + SEEN], on="id").sort_values("order")
         d = d.reset_index(drop=True)
         size = CHUNK_SIZE.get(label, 100)
         d["chunk"] = d["order"] // size
