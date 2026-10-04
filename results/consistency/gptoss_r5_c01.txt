@@ -1,0 +1,30 @@
+{"id":"5:0","answer":"Benign","rationale":"Subtlety and margin scores are below malignant thresholds."}
+{"id":"5:1","answer":"Benign","rationale":"Margin is low and subtlety below malignant range."}
+{"id":"16:0","answer":"Malignant","rationale":"High subtlety and spiculation scores strongly suggest malignancy."}
+{"id":"20:1","answer":"Benign","rationale":"Subtlety and spiculation are low despite a high margin."}
+{"id":"38:0","answer":"Malignant","rationale":"Subtlety exceeds 4.5 and margin is high, indicating malignancy."}
+{"id":"42:2","answer":"Benign","rationale":"All scores are below malignant thresholds."}
+{"id":"57:2","answer":"Benign","rationale":"Spiculation is low and margin is borderline, favoring benign."}
+{"id":"71:1","answer":"Benign","rationale":"Low subtlety and spiculation make malignancy unlikely."}
+{"id":"88:1","answer":"Benign","rationale":"Scores do not reach malignant thresholds."}
+{"id":"96:0","answer":"Malignant","rationale":"High subtlety, spiculation, and margin indicate malignancy."}
+{"id":"98:8","answer":"Malignant","rationale":"Spiculation and subtlety are high, pointing to malignancy."}
+{"id":"107:0","answer":"Benign","rationale":"Subtlety is below malignant range, making benign more likely."}
+{"id":"107:3","answer":"Benign","rationale":"All scores are below malignancy thresholds."}
+{"id":"118:6","answer":"Benign","rationale":"Low subtlety, spiculation, and margin suggest benign."}
+{"id":"132:0","answer":"Malignant","rationale":"High subtlety, spiculation, and margin support malignancy."}
+{"id":"159:0","answer":"Malignant","rationale":"Very high subtlety and spiculation strongly indicate malignancy."}
+{"id":"164:0","answer":"Benign","rationale":"Subtlety is low and margin just meets threshold, favoring benign."}
+{"id":"178:1","answer":"Benign","rationale":"Low subtlety and spiculation keep malignancy unlikely."}
+{"id":"195:0","answer":"Malignant","rationale":"Subtlety above 4.0 and high margin suggest malignancy."}
+{"id":"247:1","answer":"Benign","rationale":"All scores are below malignant thresholds."}
+{"id":"253:0","answer":"Benign","rationale":"Subtlety and spiculation are low, margin borderline."}
+{"id":"261:1","answer":"Malignant","rationale":"High subtlety, spiculation, and margin strongly suggest malignancy."}
+{"id":"261:3","answer":"Benign","rationale":"Subtlety and spiculation are low despite high margin."}
+{"id":"271:0","answer":"Malignant","rationale":"Subtlety and margin are high, indicating malignancy."}
+{"id":"320:2","answer":"Benign","rationale":"All scores are below malignant thresholds."}
+{"id":"328:5","answer":"Malignant","rationale":"High subtlety and margin support malignancy."}
+{"id":"357:2","answer":"Benign","rationale":"Low subtlety, spiculation, and margin point to benign."}
+{"id":"428:0","answer":"Malignant","rationale":"High subtlety and margin indicate malignancy."}
+{"id":"493:0","answer":"Malignant","rationale":"Subtlety, spiculation, and margin are all above benign thresholds."}
+{"id":"514:0","answer":"Malignant","rationale":"All scores are high, consistent with malignancy."}

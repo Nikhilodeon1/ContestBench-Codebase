@@ -1,0 +1,16 @@
+{"id":"5:0","answer":"Benign","rationale":"Subtlety and spiculation are below malignant thresholds and margin is moderate."}  
+{"id":"5:1","answer":"Benign","rationale":"All metrics are below malignant thresholds."}  
+{"id":"16:0","answer":"Malignant","rationale":"Both subtlety and spiculation exceed malignant thresholds."}  
+{"id":"20:1","answer":"Malignant","rationale":"Margin exceeds malignant threshold."}  
+{"id":"38:0","answer":"Malignant","rationale":"Subtlety and margin reach malignant thresholds."}  
+{"id":"42:2","answer":"Benign","rationale":"All metrics are below malignant thresholds."}  
+{"id":"57:2","answer":"Benign","rationale":"All metrics are below malignant thresholds."}  
+{"id":"71:1","answer":"Malignant","rationale":"Margin reaches malignant threshold."}  
+{"id":"88:1","answer":"Benign","rationale":"All metrics are below malignant thresholds."}  
+{"id":"96:0","answer":"Malignant","rationale":"Subtlety and spiculation exceed malignant thresholds."}  
+{"id":"98:8","answer":"Malignant","rationale":"Spiculation exceeds malignant threshold."}  
+{"id":"107:0","answer":"Benign","rationale":"All metrics are below malignant thresholds."}  
+{"id":"107:3","answer":"Benign","rationale":"All metrics are below malignant thresholds."}  
+{"id":"118:6","answer":"Benign","rationale":"All metrics are below malignant thresholds."}  
+{"id":"132:0","answer":"Malignant","rationale":"Subtlety and spiculation exceed malignant thresholds."}  
+{"id":"159:0","answer":"Malignant","rationale":"Subtlety and spiculation exceed malignant

@@ -1,0 +1,25 @@
+{"id":"1000:0","answer":"Benign","rationale":"The average score (3.44) is below the malignant threshold and spiculation is moderate."}
+{"id":"1026:0","answer":"Benign","rationale":"Low spiculation and a moderate average score (3.17) suggest a benign nodule."}
+{"id":"1028:1","answer":"Malignant","rationale":"The high average score (3.89) and strong spiculation indicate malignancy."}
+{"id":"1044:0","answer":"Benign","rationale":"An average score of 3.33 with only moderate spiculation points to a benign lesion."}
+{"id":"1045:2","answer":"Benign","rationale":"The average score (3.44) is borderline, but spiculation is high while margin is only moderate, favoring benign."}
+{"id":"1061:0","answer":"Malignant","rationale":"The average score of 3.56 with high subtlety and spiculation indicates malignancy."}
+{"id":"1079:7","answer":"Benign","rationale":"Low spiculation and a low average score (2.56) strongly suggest benign."}
+{"id":"1091:6","answer":"Benign","rationale":"The average score is low (2.89) and spiculation is minimal, indicating benign."}
+{"id":"1091:7","answer":"Benign","rationale":"A low spiculation score and moderate average (3.08) point to a benign nodule."}
+{"id":"1111:1","answer":"Benign","rationale":"Low spiculation and a moderate average (2.92) favor a benign classification."}
+{"id":"1122:3","answer":"Benign","rationale":"The average score (3.08) is below malignancy threshold and spiculation is low."}
+{"id":"1127:5","answer":"Malignant","rationale":"High average score (3.89) with moderate spiculation indicates malignancy."}
+{"id":"1143:3","answer":"Benign","rationale":"The average score (3.11) and low margin suggest a benign nodule."}
+{"id":"1172:1","answer":"Benign","rationale":"Very low scores overall (average 1.56) indicate benign."}
+{"id":"1176:5","answer":"Benign","rationale":"Low subtlety, spiculation, and margin (average 1.42) suggest benign."}
+{"id":"1177:0","answer":"Benign","rationale":"Low overall scores (average 1.67) point to a benign lesion."}
+{"id":"1177:1","answer":"Benign","rationale":"Very low scores (average 1.56) indicate benign."}
+{"id":"1184:2","answer":"Benign","rationale":"The average score (3.33) with low spiculation leans toward benign."}
+{"id":"1188:0","answer":"Malignant","rationale":"High average score (3.58) and high subtlety suggest malignancy."}
+{"id":"1198:0","answer":"Malignant","rationale":"The average score (3.72) with high subtlety indicates malignant."}
+{"id":"1254:0","answer":"Malignant","rationale":"High average score (3.78) and strong subtlety point to malignancy."}
+{"id":"1268:7","answer":"Benign","rationale":"Low spiculation and average score (2.92) suggest benign."}
+{"id":"1283:0","answer":"Benign","rationale":"Average score (3.33) with moderate spiculation indicates benign."}
+{"id":"1283:4","answer":"Benign","rationale":"Average score (3.25) and low spiculation favor benign."}
+{"id":"

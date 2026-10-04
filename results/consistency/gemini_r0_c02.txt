@@ -1,0 +1,17 @@
+1) If spiculation >= 2.25 -> Malignant.
+2) If spiculation >= 2.00 and margin <= 3.50 -> Malignant.
+3) If margin <= 2.50:
+   - if spiculation > 1.5 -> Malignant.
+   - if spiculation <= 1.5 -> Benign (subtle/GGO).
+4) Otherwise -> Benign.
+
+Let's double-check all cases systematically using this scoring concept:
+
+Score formula estimate:
+Score = 2.0 * spiculation - 1.0 * margin + 0.3 * subtlety
+
+If Score >= 0.5 (or Malignancy threshold):
+Let's test this score on a few key boundary cases:
+- 773:0: 2*1 - 4.25 + 1.5 = -0.75 -> Benign
+- 804:0: 2*3.5 - 4.0 + 1.425 = 4.425 -> Malignant
+-

@@ -1,0 +1,12 @@
+{"id":"610:1","answer":"Benign","confidence":80}
+{"id":"616:0","answer":"Benign","confidence":80}
+{"id":"616:1","answer":"Malignant","confidence":90}
+{"id":"617:3","answer":"Malignant","confidence":70}
+{"id":"619:1","answer":"Malignant","confidence":70}
+{"id":"619:3","answer":"Malignant","confidence":70}
+{"id":"619:4","answer":"Malignant","confidence":70}
+{"id":"620:1","answer":"Malignant","confidence":70}
+{"id":"620:2","answer":"Malignant","confidence":70}
+{"id":"622:1","answer":"Malignant","confidence":70}
+{"id":"623:0","answer":"Malignant","confidence":70}
+{"id":"

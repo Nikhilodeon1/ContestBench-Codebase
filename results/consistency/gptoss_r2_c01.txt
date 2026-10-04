@@ -1,0 +1,25 @@
+{"id":"5:0","answer":"Benign","rationale":"All three features are below malignant thresholds, suggesting a benign nodule."}
+{"id":"5:1","answer":"Malignant","rationale":"Spiculation exceeds 2.0, a strong indicator of malignancy."}
+{"id":"16:0","answer":"Malignant","rationale":"Both subtlety and spiculation are high, strongly favoring malignancy."}
+{"id":"20:1","answer":"Malignant","rationale":"Margin is at the malignant threshold (4.5) while other features are low."}
+{"id":"38:0","answer":"Malignant","rationale":"High subtlety and high margin together point to malignancy."}
+{"id":"42:2","answer":"Benign","rationale":"All features are low, indicating a benign nodule."}
+{"id":"57:2","answer":"Benign","rationale":"Only the margin is slightly elevated, but below malignant cutoff."}
+{"id":"71:1","answer":"Malignant","rationale":"Margin at 4.5 is a malignant indicator despite low other scores."}
+{"id":"88:1","answer":"Benign","rationale":"Margin just below 4.5 and other features low, favoring benign."}
+{"id":"96:0","answer":"Malignant","rationale":"Subtlety and spiculation are both high, strongly suggesting malignancy."}
+{"id":"98:8","answer":"Malignant","rationale":"Spiculation above 3.0 is highly suspicious for cancer."}
+{"id":"107:0","answer":"Benign","rationale":"All scores are low, indicating a benign lesion."}
+{"id":"107:3","answer":"Benign","rationale":"Only the margin is high but below 4.5, so it is likely benign."}
+{"id":"118:6","answer":"Benign","rationale":"All features are low, supporting a benign diagnosis."}
+{"id":"132:0","answer":"Malignant","rationale":"High subtlety and spiculation point to malignancy."}
+{"id":"159:0","answer":"Malignant","rationale":"Both subtlety and spiculation are high, indicating cancer."}
+{"id":"164:0","answer":"Malignant","rationale":"Spiculation above 2.0 is a malignant sign."}
+{"id":"178:1","answer":"Malignant","rationale":"Margin at 4.5 is a strong indicator of malignancy."}
+{"id":"195:0","answer":"Malignant","rationale":"High subtlety and high margin together suggest cancer."}
+{"id":"247:1","answer":"Benign","rationale":"All scores are low, indicating a benign nodule."}
+{"id":"253:0","answer":"Benign","rationale":"No feature exceeds malignant thresholds, pointing to benign."}
+{"id":"261:1","answer":"Malignant","rationale":"Both subtlety and margin are high, favoring malignancy."}
+{"id":"261:3","answer":"Malignant","rationale":"High margin alone is enough to consider malignant."}
+{"id":"271:0","answer":"Malignant","rationale":"Margin at 4.75 and subtlety near 4.0 suggest cancer."}
+{"id":"320:2","answer":"Benign","r

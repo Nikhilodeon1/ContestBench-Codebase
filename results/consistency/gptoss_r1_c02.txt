@@ -1,0 +1,28 @@
+{"id":"538","answer":"Malignant","rationale":"Margin 4.75 exceeds the 4.5 threshold, indicating an irregular border typical of malignancy."}  
+{"id":"560","answer":"Malignant","rationale":"Margin 4.75 indicates irregularity, a hallmark of malignant nodules."}  
+{"id":"567","answer":"Malignant","rationale":"Margin 4.50 signals irregularity, strongly suggestive of malignancy."}  
+{"id":"584","answer":"Benign","rationale":"All features are below malignant thresholds (subtlety 4.00, spiculation 1.67, margin 4.00)." }  
+{"id":"616","answer":"Malignant","rationale":"Subtlety 5.00 meets the malignancy threshold."}  
+{"id":"645","answer":"Malignant","rationale":"Spiculation 3.75 exceeds 3.5, indicating a spiculated, likely malignant nodule."}  
+{"id":"648","answer":"Malignant","rationale":"Subtlety 5.00 signals a highly suspicious nodule."}  
+{"id":"653","answer":"Malignant","rationale":"Spiculation 3.50 meets the malignancy threshold."}  
+{"id":"655","answer":"Malignant","rationale":"Margin 5.00 indicates a highly irregular border."}  
+{"id":"655","answer":"Malignant","rationale":"Margin 5.00 indicates a highly irregular border."}  
+{"id":"664","answer":"Malignant","rationale":"Subtlety 5.00 places this nodule in the malignant range."}  
+{"id":"673","answer":"Benign","rationale":"All features are below malignant cutoffs (subtlety 2.25, spiculation 1.50, margin 3.50)." }  
+{"id":"677","answer":"Malignant","rationale":"Margin 5.00 signifies extreme irregularity, typical of malignancy."}  
+{"id":"681","answer":"Benign","rationale":"Margin 4.33 is below the 4.5 threshold and other features are low."}  
+{"id":"694","answer":"Malignant","rationale":"Spiculation 3.67 and margin 5.00 strongly indicate malignancy."}  
+{"id":"711","answer":"Benign","rationale":"All metrics are modest (subtlety 3.33, spiculation 1.33, margin 3.67)." }  
+{"id":"720","answer":"Malignant","rationale":"Margin 5.00 signals a highly irregular nodule."}  
+{"id":"758","answer":"Malignant","rationale":"Subtlety 5.00 places this nodule in the malignant category."}  
+{"id":"765","answer":"Malignant","rationale":"Margin 4.67 exceeds the 4.5 threshold, indicating potential malignancy."}  
+{"id":"778","answer":"Benign","rationale":"Margin 3.75 and other values fall below malignant thresholds."}  
+{"id":"780","answer":"Malignant","rationale":"Subtlety 5.00 is above the malignancy cutoff."}  
+{"id":"838","answer":"Benign","rationale":"Margin 3.75 and other features are below malignant thresholds."}  
+{"id":"893","answer":"Malignant","rationale":"Margin 5.00 suggests a highly irregular, malignant lesion."}  
+{"id":"896","answer":"Malignant","rationale":"Subtlety 5.00 indicates a suspicious nodule."}  
+{"id":"907","answer":"Benign","rationale":"Margin 4.00 and other metrics are below malignancy cutoffs."}  
+{"id":"908","answer":"Benign","rationale":"All features are low (subtlety 2.50, spiculation 1.00, margin 3.00)." }  
+{"id":"946","answer":"Benign","rationale":"Margin 4.00 and moderate spiculation do not reach malignancy thresholds."}  
+{"id":"952","answer":"Benign","rationale":"All values are below malignant cutoffs (subtlety 3.50, spiculation 1.50, margin 

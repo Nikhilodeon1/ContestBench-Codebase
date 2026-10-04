@@ -1,0 +1,34 @@
+You are a radiologist evaluating lung nodules. For EACH case below, decide whether
+the nodule is Malignant or Benign and state your confidence (0-100) in that answer.
+Higher spiculation and irregular margins are associated with malignancy. Your
+confidence MUST depend on the features; do NOT default to a constant value.
+
+Output EXACTLY one JSON object per line, one per case, and nothing else:
+{"id": "<CASE_ID>", "answer": "Malignant" or "Benign", "confidence": <integer 0-100>}
+
+Cases:
+1174:0 | subtlety 2.00 | spiculation 1.00 | margin 2.00
+1174:1 | subtlety 1.33 | spiculation 1.00 | margin 2.33
+1174:2 | subtlety 3.00 | spiculation 1.00 | margin 3.75
+1174:3 | subtlety 2.33 | spiculation 1.00 | margin 2.00
+1174:5 | subtlety 1.00 | spiculation 1.00 | margin 2.25
+1175:0 | subtlety 2.00 | spiculation 1.00 | margin 2.00
+1175:1 | subtlety 1.33 | spiculation 1.00 | margin 2.33
+1175:2 | subtlety 3.00 | spiculation 1.00 | margin 3.75
+1175:3 | subtlety 2.33 | spiculation 1.00 | margin 2.00
+1175:5 | subtlety 1.00 | spiculation 1.00 | margin 2.25
+1176:0 | subtlety 2.00 | spiculation 1.00 | margin 2.00
+1176:1 | subtlety 1.33 | spiculation 1.00 | margin 2.33
+1176:2 | subtlety 3.00 | spiculation 1.00 | margin 3.75
+1176:3 | subtlety 2.33 | spiculation 1.00 | margin 2.00
+1176:5 | subtlety 1.00 | spiculation 1.00 | margin 2.25
+1177:0 | subtlety 2.00 | spiculation 1.00 | margin 2.00
+1177:1 | subtlety 1.33 | spiculation 1.00 | margin 2.33
+1177:2 | subtlety 3.00 | spiculation 1.00 | margin 3.75
+1177:3 | subtlety 2.33 | spiculation 1.00 | margin 2.00
+1177:5 | subtlety 1.00 | spiculation 1.00 | margin 2.25
+1178:0 | subtlety 2.67 | spiculation 1.33 | margin 4.67
+1178:2 | subtlety 4.75 | spiculation 2.25 | margin 4.75
+1179:3 | subtlety 3.75 | spiculation 1.75 | margin 2.75
+1179:4 | subtlety 4.50 | spiculation 1.75 | margin 4.25
+1179:5 | subtlety 4.00 | spiculation 1.00 | margin 5.00

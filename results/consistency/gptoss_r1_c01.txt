@@ -1,0 +1,30 @@
+{"id":"5:0","answer":"Benign","rationale":"Low spiculation and moderate subtlety suggest a benign nodule."}  
+{"id":"5:1","answer":"Benign","rationale":"Low spiculation and moderate subtlety indicate a benign nodule."}  
+{"id":"16:0","answer":"Malignant","rationale":"High spiculation indicates a malignant nodule."}  
+{"id":"20:1","answer":"Benign","rationale":"Low spiculation and moderate subtlety suggest a benign nodule."}  
+{"id":"38:0","answer":"Malignant","rationale":"High subtlety combined with a high margin points to malignancy."}  
+{"id":"42:2","answer":"Benign","rationale":"Low spiculation and moderate subtlety indicate a benign nodule."}  
+{"id":"57:2","answer":"Benign","rationale":"Low spiculation and moderate subtlety suggest a benign nodule."}  
+{"id":"71:1","answer":"Benign","rationale":"Low spiculation and moderate subtlety indicate a benign nodule."}  
+{"id":"88:1","answer":"Benign","rationale":"Low spiculation and moderate subtlety suggest a benign nodule."}  
+{"id":"96:0","answer":"Malignant","rationale":"High spiculation indicates a malignant nodule."}  
+{"id":"98:8","answer":"Malignant","rationale":"High spiculation indicates a malignant nodule."}  
+{"id":"107:0","answer":"Benign","rationale":"Low spiculation and moderate subtlety suggest a benign nodule."}  
+{"id":"107:3","answer":"Benign","rationale":"Low spiculation and moderate subtlety indicate a benign nodule."}  
+{"id":"118:6","answer":"Benign","rationale":"Low spiculation and moderate subtlety suggest a benign nodule."}  
+{"id":"132:0","answer":"Malignant","rationale":"High spiculation indicates a malignant nodule."}  
+{"id":"159:0","answer":"Malignant","rationale":"High spiculation indicates a malignant nodule."}  
+{"id":"164:0","answer":"Malignant","rationale":"High spiculation indicates a malignant nodule."}  
+{"id":"178:1","answer":"Benign","rationale":"Low spiculation and moderate subtlety suggest a benign nodule."}  
+{"id":"195:0","answer":"Benign","rationale":"Low spiculation and moderate subtlety indicate a benign nodule."}  
+{"id":"247:1","answer":"Benign","rationale":"Low spiculation and moderate subtlety suggest a benign nodule."}  
+{"id":"253:0","answer":"Benign","rationale":"Low spiculation and moderate subtlety indicate a benign nodule."}  
+{"id":"261:1","answer":"Benign","rationale":"Low spiculation and moderate subtlety suggest a benign nodule."}  
+{"id":"261:3","answer":"Benign","rationale":"Low spiculation and moderate subtlety indicate a benign nodule."}  
+{"id":"271:0","answer":"Benign","rationale":"Low spiculation and moderate subtlety suggest a benign nodule."}  
+{"id":"320:2","answer":"Benign","rationale":"Low spiculation and moderate subtlety indicate a benign nodule."}  
+{"id":"328:5","answer":"Benign","rationale":"Low spiculation and moderate subtlety suggest a benign nodule."}  
+{"id":"357:2","answer":"Benign","rationale":"Low spiculation and moderate subtlety indicate a benign nodule."}  
+{"id":"428:0","answer":"Malignant","rationale":"High subtlety combined with a high margin points to malignancy."}  
+{"id":"493:0","answer":"Malignant","rationale":"High spiculation indicates a malignant nodule."}  
+{"id":"514:0","answer":"Malignant","rationale":"High spiculation indicates a malignant nodule."}

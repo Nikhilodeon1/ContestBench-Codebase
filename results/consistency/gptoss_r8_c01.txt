@@ -1,0 +1,15 @@
+{"id":"5:0","answer":"Benign","rationale":"Subtlety high but spiculation only 1.67 and margin 3.33, below malignant threshold."}  
+{"id":"5:1","answer":"Benign","rationale":"Margin below 4.0 despite subtlety and spiculation, unlikely malignant."}  
+{"id":"16:0","answer":"Malignant","rationale":"High subtlety (5.0), spiculation (3.0) and margin (3.25) suggest malignant."}  
+{"id":"20:1","answer":"Benign","rationale":"Subtlety and spiculation low; margin high but not enough."}  
+{"id":"38:0","answer":"Benign","rationale":"Spiculation only 1.25 despite high subtlety; margin borderline."}  
+{"id":"42:2","answer":"Benign","rationale":"Subtlety and spiculation modest; margin below malignant threshold."}  
+{"id":"57:2","answer":"Benign","rationale":"Subtlety moderate, spiculation low, margin high but insufficient."}  
+{"id":"71:1","answer":"Benign","rationale":"Subtlety and spiculation low; margin high but not enough."}  
+{"id":"88:1","answer":"Benign","rationale":"Subtlety and spiculation low, margin high but not enough."}  
+{"id":"96:0","answer":"Malignant","rationale":"High subtlety (5.0) and spiculation (2.75) with margin 3.75 support malignancy."}  
+{"id":"98:8","answer":"Malignant","rationale":"Subtlety 4.0, spiculation 3.33 and margin 3.67 meet malignant criteria."}  
+{"id":"107:0","answer":"Benign","rationale":"Subtlety 3.5, spiculation 1.25, margin 3.5 borderline but insufficient."}  
+{"id":"107:3","answer":"Malignant","rationale":"Subtlety 3.67, spiculation 1.33, margin 4.33 meet malignant threshold."}  
+{"id":"118:6","answer":"Benign","rationale":"Margin low; subtlety and spiculation modest."}  
+{"id":"132:0","answer":"Malignant","rationale":"High subtlety (5.0), spiculation 2.5, margin 

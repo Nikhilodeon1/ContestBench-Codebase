@@ -1,0 +1,25 @@
+{"id":"538","answer":"Malignant","rationale":"High margin score indicates irregular spiculation typical of malignancy."}
+{"id":"560","answer":"Malignant","rationale":"Margin exceeds 4.5, strongly suggesting a malignant lesion."}
+{"id":"567","answer":"Malignant","rationale":"Margin of 4.5 indicates irregularity associated with malignancy."}
+{"id":"584","answer":"Benign","rationale":"All features are low, with no high spiculation or margin."}
+{"id":"616","answer":"Malignant","rationale":"Subtlety score of 5.0 indicates a highly suspicious nodule."}
+{"id":"645","answer":"Malignant","rationale":"Spiculation above 3.0 is highly indicative of malignancy."}
+{"id":"648","answer":"Malignant","rationale":"Subtlety of 5.0 strongly favors a malignant process."}
+{"id":"653","answer":"Malignant","rationale":"Both subtlety and spiculation are high, pointing to malignancy."}
+{"id":"655","answer":"Malignant","rationale":"High subtlety and margin scores predict malignancy."}
+{"id":"655","answer":"Malignant","rationale":"High subtlety and margin scores predict malignancy."}
+{"id":"664","answer":"Malignant","rationale":"Subtlety of 5.0 signals a highly suspicious nodule."}
+{"id":"673","answer":"Benign","rationale":"All parameters are low, consistent with a benign nodule."}
+{"id":"677","answer":"Malignant","rationale":"Margin score of 5.0 indicates irregular spiculation typical of cancer."}
+{"id":"681","answer":"Benign","rationale":"No feature exceeds the malignancy threshold, suggesting benignity."}
+{"id":"694","answer":"Malignant","rationale":"High subtlety, spiculation, and margin all point to malignancy."}
+{"id":"711","answer":"Benign","rationale":"All measurements are low, favoring a benign lesion."}
+{"id":"720","answer":"Malignant","rationale":"Subtlety and margin scores are both high, indicating malignancy."}
+{"id":"758","answer":"Malignant","rationale":"Subtlety of 5.0 and spiculation above 3.0 suggest a malignant nodule."}
+{"id":"765","answer":"Malignant","rationale":"Margin greater than 4.5 is strongly associated with malignancy."}
+{"id":"778","answer":"Malignant","rationale":"High subtlety score strongly indicates a malignant lesion."}
+{"id":"780","answer":"Malignant","rationale":"Subtlety and margin scores are both high, indicating malignancy."}
+{"id":"838","answer":"Benign","rationale":"All values remain below malignant thresholds."}
+{"id":"893","answer":"Malignant","rationale":"Margin of 5.0 signals irregular spiculation typical of cancer."}
+{"id":"896","answer":"Malignant","rationale":"Subtlety of 5.0 and margin of 4.5 strongly suggest malignancy."}
+{"id":"907","answer":"Benign","rationale":"All features are moderate and below malignant thresholds

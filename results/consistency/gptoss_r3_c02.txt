@@ -1,0 +1,30 @@
+{"id":"538","answer":"Benign","rationale":"Subtlety, spiculation, and margin scores are below malignant thresholds."}
+{"id":"560","answer":"Benign","rationale":"All feature scores fall below typical malignant cutoffs."}
+{"id":"567","answer":"Benign","rationale":"Feature values are below malignant thresholds."}
+{"id":"584","answer":"Benign","rationale":"None of the scores reach malignant levels."}
+{"id":"616","answer":"Malignant","rationale":"Subtlety score of 5.00 exceeds the malignant threshold."}
+{"id":"645","answer":"Malignant","rationale":"Spiculation score of 3.75 indicates malignant potential."}
+{"id":"648","answer":"Malignant","rationale":"Subtlety score of 5.00 signals malignancy."}
+{"id":"653","answer":"Malignant","rationale":"Both subtlety (4.75) and spiculation (3.50) scores are high."}
+{"id":"655:2","answer":"Malignant","rationale":"Subtlety of 5.00 and margin of 5.00 suggest malignancy."}
+{"id":"655:4","answer":"Malignant","rationale":"Subtlety 5.00 and margin 5.00 meet malignant criteria."}
+{"id":"664","answer":"Malignant","rationale":"Subtlety score of 5.00 indicates malignancy."}
+{"id":"673","answer":"Benign","rationale":"All scores are below malignant thresholds."}
+{"id":"677","answer":"Malignant","rationale":"Margin score of 5.00 flags malignant appearance."}
+{"id":"681","answer":"Benign","rationale":"Feature scores do not reach malignant thresholds."}
+{"id":"694","answer":"Malignant","rationale":"High subtlety (4.67), spiculation (3.67), and margin (5) all indicate malignancy."}
+{"id":"711","answer":"Benign","rationale":"Scores are below malignant cutoffs."}
+{"id":"720","answer":"Malignant","rationale":"Subtlety of 4.75 and margin of 5.00 meet malignant criteria."}
+{"id":"758","answer":"Malignant","rationale":"Both subtlety (5.00) and spiculation (3.00) are high."}
+{"id":"765","answer":"Benign","rationale":"All features fall under malignant thresholds."}
+{"id":"778","answer":"Malignant","rationale":"Subtlety of 4.75 is above the malignant threshold."}
+{"id":"780","answer":"Malignant","rationale":"Subtlety 5.00 and margin 5.00 signify malignancy."}
+{"id":"838","answer":"Benign","rationale":"Feature scores are below malignant thresholds."}
+{"id":"893","answer":"Malignant","rationale":"Margin score of 5.00 indicates malignant likelihood."}
+{"id":"896","answer":"Malignant","rationale":"Subtlety of 5.00 exceeds the malignant threshold."}
+{"id":"907","answer":"Benign","rationale":"All feature values are below malignant cutoffs."}
+{"id":"908","answer":"Benign","rationale":"Feature scores do not indicate malignancy."}
+{"id":"946","answer":"Benign","rationale":"Scores are below malignant thresholds."}
+{"id":"952","answer":"Benign","rationale":"All values fall under malignant cutoffs."}
+{"id":"969","answer":"Malignant","rationale":"High subtlety (4.50) and spiculation (4.00) predict malignancy."}
+{"id":"973","answer":"Malignant","rationale":"Subtlety of 5.00 signals malignant potential."}

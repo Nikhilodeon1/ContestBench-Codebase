@@ -1,0 +1,27 @@
+{"id":"5:0","answer":"Benign","rationale":"Subtlety, spiculation, and margin are all below malignant thresholds."}  
+{"id":"5:1","answer":"Malignant","rationale":"Spiculation exceeds the malignant threshold."}  
+{"id":"16:0","answer":"Malignant","rationale":"High subtlety and spiculation strongly suggest malignancy."}  
+{"id":"20:1","answer":"Malignant","rationale":"Margin reaches the malignant threshold."}  
+{"id":"38:0","answer":"Malignant","rationale":"Both subtlety and margin meet malignant criteria."}  
+{"id":"42:2","answer":"Benign","rationale":"All features remain below malignant thresholds."}  
+{"id":"57:2","answer":"Benign","rationale":"Subtlety, spiculation, and margin are all below malignant thresholds."}  
+{"id":"71:1","answer":"Malignant","rationale":"Margin meets malignant criteria."}  
+{"id":"88:1","answer":"Benign","rationale":"All features are below malignant thresholds."}  
+{"id":"96:0","answer":"Malignant","rationale":"High subtlety and spiculation indicate malignancy."}  
+{"id":"98:8","answer":"Malignant","rationale":"Spiculation exceeds the malignant threshold."}  
+{"id":"107:0","answer":"Benign","rationale":"All features remain below malignant thresholds."}  
+{"id":"107:3","answer":"Benign","rationale":"None of the features reach malignant thresholds."}  
+{"id":"118:6","answer":"Benign","rationale":"All features are below malignant thresholds."}  
+{"id":"132:0","answer":"Malignant","rationale":"High subtlety and spiculation indicate malignancy."}  
+{"id":"159:0","answer":"Malignant","rationale":"High subtlety and spiculation strongly suggest malignancy."}  
+{"id":"164:0","answer":"Malignant","rationale":"Spiculation exceeds malignant thresholds."}  
+{"id":"178:1","answer":"Malignant","rationale":"Margin meets malignant criteria."}  
+{"id":"195:0","answer":"Malignant","rationale":"Margin meets malignant criteria."}  
+{"id":"247:1","answer":"Benign","rationale":"All features are below malignant thresholds."}  
+{"id":"253:0","answer":"Benign","rationale":"All features remain below malignant thresholds."}  
+{"id":"261:1","answer":"Malignant","rationale":"Margin exceeds malignant thresholds."}  
+{"id":"261:3","answer":"Malignant","rationale":"Margin exceeds malignant thresholds."}  
+{"id":"271:0","answer":"Malignant","rationale":"Margin exceeds malignant thresholds."}  
+{"id":"320:2","answer":"Benign","rationale":"All features are below malignant thresholds."}  
+{"id":"328:5","answer":"Malignant","rationale":"Margin exceeds malignant thresholds."}  
+{"id":"357:2","answer":"Benign","rationale

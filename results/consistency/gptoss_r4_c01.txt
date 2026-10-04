@@ -1,0 +1,2 @@
+{"id":"5:0","answer":"Malignant","rationale":"High subtlety and moderate spiculation with a moderately high margin suggest malignancy."}  
+{"id":"5:1","answer":"Malignant","rationale":"High subtlety and

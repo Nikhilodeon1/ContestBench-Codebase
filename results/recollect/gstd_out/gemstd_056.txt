@@ -1,0 +1,25 @@
+{"id": "1293:2", "answer": "Benign", "confidence": 85}
+{"id": "1294:4", "answer": "Malignant", "confidence": 80}
+{"id": "1294:5", "answer": "Malignant", "confidence": 67}
+{"id": "1295:0", "answer": "Benign", "confidence": 70}
+{"id": "1296:0", "answer": "Malignant", "confidence": 60}
+{"id": "1298:0", "answer": "Benign", "confidence": 53}
+{"id": "1298:1", "answer": "Benign", "confidence": 75}
+{"id": "1299:1", "answer": "Benign", "confidence": 85}
+{"id": "1299:2", "answer": "Malignant", "confidence": 90}
+{"id": "1299:3", "answer": "Benign", "confidence": 80}
+{"id": "1299:6", "answer": "Benign", "confidence": 85}
+{"id": "1299:7", "answer": "Benign", "confidence": 70}
+{"id": "1303:0", "answer": "Benign", "confidence": 95}
+{"id": "1303:2", "answer": "Benign", "confidence": 70}
+{"id": "1305:1", "answer": "Benign", "confidence": 93}
+{"id": "1305:2", "answer": "Benign", "confidence": 95}
+{"id": "1305:3", "answer": "Benign", "confidence": 95}
+{"id": "1305:4", "answer": "Benign", "confidence": 98}
+{"id": "1305:5", "answer": "Benign", "confidence": 85}
+{"id": "1305:6", "answer": "Benign", "confidence": 93}
+{"id": "1305:7", "answer": "Benign", "confidence": 90}
+{"id": "1305:8", "answer": "Benign", "confidence": 80}
+{"id": "1305:9", "answer": "Benign", "confidence": 90}
+{"id": "1306:0", "answer": "Benign", "confidence": 98}
+{"id": "1309:0", "answer": "

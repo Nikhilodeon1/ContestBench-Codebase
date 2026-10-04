@@ -1,0 +1,19 @@
+{"id":"1000:0","answer":"Malignant","rationale":"The combined score of subtlety, spiculation, and margin exceeds 10, indicating a high likelihood of malignancy."}  
+{"id":"1026:0","answer":"Malignant","rationale":"The combined score of subtlety, spiculation, and margin exceeds 10, indicating a high likelihood of malignancy."}  
+{"id":"1028:1","answer":"Malignant","rationale":"The combined score of subtlety, spiculation, and margin exceeds 10, indicating a high likelihood of malignancy."}  
+{"id":"1044:0","answer":"Malignant","rationale":"The combined score of subtlety, spiculation, and margin exceeds 10, indicating a high likelihood of malignancy."}  
+{"id":"1045:2","answer":"Malignant","rationale":"The combined score of subtlety, spiculation, and margin exceeds 10, indicating a high likelihood of malignancy."}  
+{"id":"1061:0","answer":"Malignant","rationale":"The combined score of subtlety, spiculation, and margin exceeds 10, indicating a high likelihood of malignancy."}  
+{"id":"1079:7","answer":"Benign","rationale":"The combined score of subtlety, spiculation, and margin is below 10, indicating a low likelihood of malignancy."}  
+{"id":"1091:6","answer":"Benign","rationale":"The combined score of subtlety, spiculation, and margin is below 10, indicating a low likelihood of malignancy."}  
+{"id":"1091:7","answer":"Malignant","rationale":"The combined score of subtlety, spiculation, and margin exceeds 10, indicating a high likelihood of malignancy."}  
+{"id":"1111:1","answer":"Benign","rationale":"The combined score of subtlety, spiculation, and margin is below 10, indicating a low likelihood of malignancy."}  
+{"id":"1122:3","answer":"Benign","rationale":"The combined score of subtlety, spiculation, and margin is below 10, indicating a low likelihood of malignancy."}  
+{"id":"1127:5","answer":"Malignant","rationale":"The combined score of subtlety, spiculation, and margin exceeds 10, indicating a high likelihood of malignancy."}  
+{"id":"1143:3","answer":"Benign","rationale":"The combined score of subtlety, spiculation, and margin is below 10, indicating a low likelihood of malignancy."}  
+{"id":"1172:1","answer":"Benign","rationale":"The combined score of subtlety, spiculation, and margin is below 10, indicating a low likelihood of malignancy."}  
+{"id":"1176:5","answer":"Benign","rationale":"The combined score of subtlety, spiculation, and margin is below 10, indicating a low likelihood of malignancy."}  
+{"id":"1177:0","answer":"Benign","rationale":"The combined score of subtlety, spiculation, and margin is below 10, indicating a low likelihood of malignancy."}  
+{"id":"1177:1","answer":"Benign","rationale":"The combined score of subtlety, spiculation, and margin is below 10, indicating a low likelihood of malignancy."}  
+{"id":"1184:2","answer":"Malignant","rationale":"The combined score of subtlety, spiculation, and margin exceeds 10, indicating a high likelihood of malignancy."}  
+{"id":"1188:0","answer":"

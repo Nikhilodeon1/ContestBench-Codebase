@@ -1,0 +1,15 @@
+```json
+{"id": "8:3", "answer": "Benign"}
+{"id": "8:8", "answer": "Malignant"}
+{"id": "16:1", "answer": "Benign"}
+{"id": "16:2", "answer": "Benign"}
+{"id": "32:0", "answer": "Benign"}
+{"id": "33:0", "answer": "Benign"}
+{"id": "36:0", "answer": "Malignant"}
+{"id": "42:0", "answer": "Malignant"}
+{"id": "42:3", "answer": "Benign"}
+{"id": "46:2", "answer": "Benign"}
+{"id": "57:0", "answer": "Benign"}
+{"id": "57:2", "answer": "Benign"}
+{"id": "82:0", "answer": "Malignant"}
+{"id": "87:0", "answer":

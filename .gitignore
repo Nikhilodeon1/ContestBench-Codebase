@@ -1,8 +1,8 @@
 # secrets — never commit (holds the live GROQ_API_KEY)
 .env
-
+#tests/
 venv/
-results/
+#results/
 data/
 .claude/
 LIDC-IDRI/
@@ -10,5 +10,5 @@ docs/
 about.pdf
 pdf.txt
 _nb.txt
-/tests
+
 .pytest_cache/

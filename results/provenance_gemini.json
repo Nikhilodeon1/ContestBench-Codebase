@@ -1,0 +1,31 @@
+{
+  "run": "gemini_full_corpus_main_result",
+  "model_reported": "gemini-3.5-flash",
+  "provider": "external free file-in/file-out platform (manual)",
+  "temperature": "UNKNOWN \u2014 platform-controlled, not exposed",
+  "model_version_exact": "UNKNOWN \u2014 platform-controlled",
+  "elicitation": "batch pipe-format prompt (contestbench/eval/batch.py HEADER)",
+  "elicitation_note": "NOT identical to gpt-oss JSON single-call prompt; cross-provider comparison confounded until gpt-oss re-run with this same batch prompt",
+  "n_cases_sent": 1413,
+  "n_answered": 1400,
+  "date_imported": "2026-07-20",
+  "prompt_files": {
+    "batch_001.txt": "5dc61236f8941a22",
+    "batch_002.txt": "1b3232713f8719e9",
+    "batch_003.txt": "794eddd8c9750874"
+  },
+  "response_files": {
+    "response_001.txt": "53425925da949558",
+    "response_002.txt": "9dde636b67725f88",
+    "response_003.txt": "b5b0f8199383dea9"
+  },
+  "result": {
+    "pearson_conf_vs_agreement": -0.029,
+    "ci95": [
+      -0.081,
+      0.024
+    ],
+    "p": 0.279,
+    "mean_pad": 0.311
+  }
+}

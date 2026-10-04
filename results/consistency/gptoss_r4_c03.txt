@@ -1,0 +1,8 @@
+{"id":"1000:0","answer":"Malignant","rationale":"Subtlety score of 4.00 indicates a highly suspicious nodule."}  
+{"id":"1026:0","answer":"Malignant","rationale":"Subtlety 4.50 and margin 4.75 both exceed malignancy thresholds."}  
+{"id":"1028:1","answer":"Malignant","rationale":"Subtlety 5.00 and spiculation 3.00 strongly suggest malignancy."}  
+{"id":"1044:0","answer":"Malignant","rationale":"Subtlety 4.25 and spiculation 2.75 are above typical benign cutoffs."}  
+{"id":"1045:2","answer":"Malignant","rationale":"Subtlety 4.33 and spiculation 4.00 are highly suspicious."}  
+{"id":"1061:0","answer":"Malignant","rationale":"Subtlety 4.67 alone indicates a malignant likelihood."}  
+{"id":"1079:7","answer":"Benign","rationale":"All scores are below malignant thresholds, suggesting benignity."}  
+{"id":"1091:6","

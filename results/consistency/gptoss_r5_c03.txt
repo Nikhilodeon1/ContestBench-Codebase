@@ -1,0 +1,30 @@
+{"id":"1000:0","answer":"Malignant","rationale":"High subtlety, spiculation, and margin scores strongly suggest malignancy."}  
+{"id":"1026:0","answer":"Malignant","rationale":"Elevated subtlety and margin values indicate a high likelihood of malignancy."}  
+{"id":"1028:1","answer":"Malignant","rationale":"Very high subtlety, spiculation, and margin scores point to malignancy."}  
+{"id":"1044:0","answer":"Malignant","rationale":"All three feature scores are above average, favoring malignancy."}  
+{"id":"1045:2","answer":"Malignant","rationale":"High subtlety and spiculation with a strong margin suggest malignancy."}  
+{"id":"1061:0","answer":"Malignant","rationale":"Subtlety and spiculation are high, and margin is moderately high, indicating malignancy."}  
+{"id":"1079:7","answer":"Benign","rationale":"Low subtlety, spiculation, and margin scores are consistent with a benign nodule."}  
+{"id":"1091:6","answer":"Benign","rationale":"Moderate subtlety but low spiculation and margin suggest benignity."}  
+{"id":"1091:7","answer":"Malignant","rationale":"High subtlety and margin outweigh the low spiculation, pointing to malignancy."}  
+{"id":"1111:1","answer":"Benign","rationale":"Low to moderate feature scores overall favor a benign diagnosis."}  
+{"id":"1122:3","answer":"Benign","rationale":"Subtlety and spiculation are modest, and margin is moderate, suggesting benign."}  
+{"id":"1127:5","answer":"Malignant","rationale":"High subtlety, spiculation, and margin all support malignancy."}  
+{"id":"1143:3","answer":"Benign","rationale":"Moderate subtlety and spiculation with a lower margin lean toward benign."}  
+{"id":"1172:1","answer":"Benign","rationale":"Very low scores across all features indicate a benign nodule."}  
+{"id":"1176:5","answer":"Benign","rationale":"All feature scores are low, consistent with a benign lesion."}  
+{"id":"1177:0","answer":"Benign","rationale":"Low subtlety, spiculation, and margin suggest benignity."}  
+{"id":"1177:1","answer":"Benign","rationale":"Scores remain low, indicating a benign nodule."}  
+{"id":"1184:2","answer":"Malignant","rationale":"High subtlety, spiculation, and a very high margin point to malignancy."}  
+{"id":"1188:0","answer":"Malignant","rationale":"Very high subtlety and margin, with moderate spiculation, support malignancy."}  
+{"id":"1198:0","answer":"Malignant","rationale":"High subtlety, spiculation, and margin all suggest malignancy."}  
+{"id":"1254:0","answer":"Malignant","rationale":"Strong subtlety and margin with moderate spiculation favor malignancy."}  
+{"id":"1268:7","answer":"Benign","rationale":"Low to moderate feature scores indicate a benign nodule."}  
+{"id":"1283:0","answer":"Malignant","rationale":"High subtlety, spiculation, and margin together point to malignancy."}  
+{"id":"1283:4","answer":"Benign","rationale":"Feature scores are below the threshold for malignancy, suggesting benign."}  
+{"id":"1299:6","answer":"Benign","rationale":"Moderate subtlety and spiculation with a high margin still lean toward benign."}  
+{"id":"1303:0","answer":"Malignant","rationale":"High subtlety and margin with moderate spiculation indicate malignancy."}  
+{"id":"1305:4","answer":"Benign","rationale":"Feature scores are low to moderate, favoring a benign diagnosis."}  
+{"id":"1312:3","answer":"Benign","rationale":"Subtlety and spiculation are moderate, margin moderate, suggesting benign."}  
+{"id":"1313:3","answer":"Malignant","rationale":"High subtlety and margin with moderate spiculation support malignancy."}  
+{"id":"1314:0","answer":"Benign","rationale":"All feature scores are relatively low, indicating a benign nodule."}

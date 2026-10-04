@@ -1,0 +1,13 @@
+{"id": "1310:0", "answer": "Benign", "confidence": 80}
+{"id": "1311:0", "answer": "Benign", "confidence": 75}
+{"id": "1312:1", "answer": "Benign", "confidence": 85}
+{"id": "1312:2", "answer": "Malignant", "confidence": 60}
+{"id": "1312:3", "answer": "Malignant", "confidence": 70}
+{"id": "1313:3", "answer": "Benign", "confidence": 70}
+{"id": "1313:4", "answer": "Malignant", "confidence": 65}
+{"id": "1313:5", "answer": "Malignant", "confidence": 60}
+{"id": "1313:6", "answer": "Malignant", "confidence": 75}
+{"id": "1313:7", "answer": "Benign", "confidence": 70}
+{"id": "1314:0", "answer": "Malignant", "confidence": 60}
+{"id": "1314:1", "answer": "Benign", "confidence": 80}
+{"id": "1315:1", "answer": "Malignant", "confidence": 90}

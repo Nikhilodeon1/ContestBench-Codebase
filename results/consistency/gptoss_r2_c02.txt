@@ -1,0 +1,29 @@
+{"id":"538","answer":"Malignant","rationale":"High margin score (4.75) suggests spiculated or irregular borders typical of malignancy."}  
+{"id":"560","answer":"Malignant","rationale":"Subtlety at 4.0 and high margin (4.75) indicate a suspicious lesion."}  
+{"id":"567","answer":"Malignant","rationale":"Margin close to 5.0 raises concern for malignancy despite lower subtlety."}  
+{"id":"584","answer":"Malignant","rationale":"Subtlety of 4.0 and elevated margin (4.0) point to a likely malignant nodule."}  
+{"id":"616","answer":"Malignant","rationale":"Subtlety at the maximum score (5.0) is highly indicative of malignancy."}  
+{"id":"645","answer":"Malignant","rationale":"Spiculation of 3.75 is strongly associated with malignant nodules."}  
+{"id":"648","answer":"Malignant","rationale":"Maximum subtlety (5.0) signals a malignant process."}  
+{"id":"653","answer":"Malignant","rationale":"High subtlety (4.75) and spiculation (3.5) strongly favor malignancy."}  
+{"id":"655","answer":"Malignant","rationale":"Both entries have subtlety 5.0 and high margins, characteristic of malignant nodules."}  
+{"id":"664","answer":"Malignant","rationale":"Subtlety 5.0 is a strong predictor of malignancy."}  
+{"id":"673","answer":"Benign","rationale":"Low subtlety (2.25) and moderate spiculation suggest a benign lesion."}  
+{"id":"677","answer":"Malignant","rationale":"Margin of 5.0 strongly indicates malignancy despite modest subtlety."}  
+{"id":"681","answer":"Malignant","rationale":"Subtlety 4.0 and elevated margin (4.33) point to a malignant nodule."}  
+{"id":"694","answer":"Malignant","rationale":"Both subtlety (4.67) and spiculation (3.67) are high, typical of malignancy."}  
+{"id":"711","answer":"Benign","rationale":"Subtlety 3.33 and moderate margins are more consistent with benign nodules."}  
+{"id":"720","answer":"Malignant","rationale":"Subtlety 4.75 and margin 5.0 strongly suggest malignancy."}  
+{"id":"758","answer":"Malignant","rationale":"Maximum subtlety (5.0) and spiculation 3.0 are highly suspicious."}  
+{"id":"765","answer":"Malignant","rationale":"Subtlety 4.0 and margin 4.67 favor a malignant interpretation."}  
+{"id":"778","answer":"Malignant","rationale":"High subtlety (4.75) and spiculation (2.25) indicate malignancy."}  
+{"id":"780","answer":"Malignant","rationale":"Maximum subtlety and margin scores make malignancy likely."}  
+{"id":"838","answer":"Malignant","rationale":"Subtlety 4.25 and spiculation 1.75 are suggestive of malignancy."}  
+{"id":"893","answer":"Malignant","rationale":"Subtlety 4.0 with a margin of 5.0 points toward malignancy."}  
+{"id":"896","answer":"Malignant","rationale":"Subtlety 5.0 is a strong indicator of malignancy."}  
+{"id":"907","answer":"Malignant","rationale":"Subtlety 4.25 and spiculation 1.75 are concerning for malignancy."}  
+{"id":"908","answer":"Benign","rationale":"Low subtlety (2.5) and modest margins are typical of benign nodules."}  
+{"id":"946","answer":"Benign","rationale":"Moderate subtlety (3.0) and spiculation (2.0) are less suspicious."}  
+{"id":"952","answer":"Benign","rationale":"Subtlety 3.5 and moderate margins lean toward benignity."}  
+{"id":"969","answer":"Malignant","rationale":"High subtlety (4.5) and spiculation (4.0) strongly indicate malignancy."}  
+{"id":"973","answer":"Malignant","rationale":"Maximum subtlety (5.0) and high margin (4.5) suggest malignancy."}

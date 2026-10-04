@@ -1,0 +1,30 @@
+{"id":"1000:0","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1026:0","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1028:1","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1044:0","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1045:2","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1061:0","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1079:7","answer":"Benign","rationale":"Combined score below the malignancy threshold suggests a benign nodule."}  
+{"id":"1091:6","answer":"Benign","rationale":"Combined score below the malignancy threshold suggests a benign nodule."}  
+{"id":"1091:7","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1111:1","answer":"Benign","rationale":"Combined score below the malignancy threshold suggests a benign nodule."}  
+{"id":"1122:3","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1127:5","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1143:3","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1172:1","answer":"Benign","rationale":"Combined score below the malignancy threshold suggests a benign nodule."}  
+{"id":"1176:5","answer":"Benign","rationale":"Combined score below the malignancy threshold suggests a benign nodule."}  
+{"id":"1177:0","answer":"Benign","rationale":"Combined score below the malignancy threshold suggests a benign nodule."}  
+{"id":"1177:1","answer":"Benign","rationale":"Combined score below the malignancy threshold suggests a benign nodule."}  
+{"id":"1184:2","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1188:0","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1198:0","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1254:0","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1268:7","answer":"Benign","rationale":"Combined score below the malignancy threshold suggests a benign nodule."}  
+{"id":"1283:0","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1283:4","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1299:6","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1303:0","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1305:4","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1312:3","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1313:3","answer":"Malignant","rationale":"High combined subtlety, spiculation, and margin scores exceed the malignancy threshold."}  
+{"id":"1314:0","answer":"Benign","rationale":"Combined score below the malignancy threshold suggests a benign nodule."}

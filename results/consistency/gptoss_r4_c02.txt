@@ -1,0 +1,30 @@
+{"id":"538","answer":"Benign","rationale":"Subtlety, spiculation, and margin scores are all below malignancy thresholds."}
+{"id":"560","answer":"Benign","rationale":"All feature scores remain below malignancy thresholds."}
+{"id":"567","answer":"Benign","rationale":"Feature scores do not reach malignancy thresholds."}
+{"id":"584","answer":"Benign","rationale":"Subtlety and spiculation are low, and margin does not reach malignancy threshold."}
+{"id":"616","answer":"Malignant","rationale":"Subtlety score of 5.0 exceeds the malignancy threshold."}
+{"id":"645","answer":"Malignant","rationale":"Spiculation score of 3.75 indicates a malignant appearance."}
+{"id":"648","answer":"Malignant","rationale":"Subtlety score of 5.0 signals malignancy."}
+{"id":"653","answer":"Malignant","rationale":"High subtlety score (4.75) suggests a malignant nodule."}
+{"id":"655","answer":"Malignant","rationale":"Subtlety score of 5.0 meets the malignancy criterion."}
+{"id":"655","answer":"Malignant","rationale":"Subtlety score of 5.0 meets the malignancy criterion."}
+{"id":"664","answer":"Malignant","rationale":"Subtlety score of 5.0 indicates malignancy."}
+{"id":"673","answer":"Benign","rationale":"All scores fall below malignancy thresholds."}
+{"id":"677","answer":"Malignant","rationale":"Margin score of 5.0 meets the malignancy threshold."}
+{"id":"681","answer":"Benign","rationale":"Feature scores are below malignancy thresholds."}
+{"id":"694","answer":"Malignant","rationale":"Both subtlety (4.67) and spiculation (3.67) scores exceed malignancy thresholds."}
+{"id":"711","answer":"Benign","rationale":"All feature scores are below malignancy thresholds."}
+{"id":"720","answer":"Malignant","rationale":"Subtlety score of 4.75 and margin of 5.0 indicate malignancy."}
+{"id":"758","answer":"Malignant","rationale":"Subtlety score of 5.0 is strongly suggestive of malignancy."}
+{"id":"765","answer":"Benign","rationale":"Feature scores do not reach malignancy thresholds."}
+{"id":"778","answer":"Malignant","rationale":"Subtlety score of 4.75 exceeds the malignancy threshold."}
+{"id":"780","answer":"Malignant","rationale":"Subtlety score of 5.0 indicates a malignant nodule."}
+{"id":"838","answer":"Benign","rationale":"All feature scores are below malignancy thresholds."}
+{"id":"893","answer":"Malignant","rationale":"Margin score of 5.0 meets the malignancy threshold."}
+{"id":"896","answer":"Malignant","rationale":"Subtlety score of 5.0 indicates malignancy."}
+{"id":"907","answer":"Benign","rationale":"Feature scores remain below malignancy thresholds."}
+{"id":"908","answer":"Benign","rationale":"All scores are below malignancy thresholds."}
+{"id":"946","answer":"Benign","rationale":"Feature scores do not meet malignancy thresholds."}
+{"id":"952","answer":"Benign","rationale":"All feature scores are below malignancy thresholds."}
+{"id":"969","answer":"Malignant","rationale":"Subtlety of 4.5 and spiculation of 4.0 exceed malignancy thresholds."}
+{"id":"973","answer":"Malignant","rationale":"Subtlety score of 5.0 strongly suggests malignancy."}

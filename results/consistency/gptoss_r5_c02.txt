@@ -1,0 +1,18 @@
+{"id":"538","answer":"Malignant","rationale":"Margin of 4.75 exceeds the benign threshold, indicating likely malignancy."}  
+{"id":"560","answer":"Malignant","rationale":"Margin of 4.75 signals a spiculated, irregular border typical of malignancy."}  
+{"id":"567","answer":"Malignant","rationale":"Margin of 4.50 meets the high‑risk cutoff, suggesting a malignant nodule."}  
+{"id":"584","answer":"Benign","rationale":"All features fall below malignant thresholds, indicating a likely benign lesion."}  
+{"id":"616","answer":"Malignant","rationale":"Subtlety of 5.00 is strongly predictive of malignancy."}  
+{"id":"645","answer":"Malignant","rationale":"Spiculation of 3.75 exceeds the malignant cutoff, pointing to a malignant nodule."}  
+{"id":"648","answer":"Malignant","rationale":"Subtlety of 5.00 signals a high probability of malignancy."}  
+{"id":"653","answer":"Malignant","rationale":"Subtlety of 4.75 is above the benign threshold, indicating malignancy."}  
+{"id":"655","answer":"Malignant","rationale":"Subtlety of 5.00 strongly suggests a malignant process."}  
+{"id":"655","answer":"Malignant","rationale":"Subtlety of 5.00 strongly suggests a malignant process."}  
+{"id":"664","answer":"Malignant","rationale":"Subtlety of 5.00 indicates a high likelihood of malignancy."}  
+{"id":"673","answer":"Benign","rationale":"All measurements are below malignant thresholds, favoring a benign nodule."}  
+{"id":"677","answer":"Malignant","rationale":"Margin of 5.00 exceeds the benign cutoff, implying malignancy."}  
+{"id":"681","answer":"Benign","rationale":"Subtlety and margin are below malignant thresholds, suggesting a benign lesion."}  
+{"id":"694","answer":"Malignant","rationale":"Spiculation of 3.67 is above the malignant cutoff, indicating a malignant nodule."}  
+{"id":"711","answer":"Benign","rationale":"All values fall below malignant criteria, pointing to a benign lesion."}  
+{"id":"720","answer":"Malignant","rationale":"Subtlety of 4.75 is above the benign threshold, indicating malignancy."}  
+{"id":"758","answer":"Malignant","rationale":"Subtlety of 5.00 is highly suggestive of

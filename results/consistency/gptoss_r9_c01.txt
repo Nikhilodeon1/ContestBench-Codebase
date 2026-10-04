@@ -1,0 +1,25 @@
+{"id":"5:0","answer":"Benign","rationale":"All feature scores are below the malignant thresholds (subtlety 4.33, spiculation 1.67, margin 3.33)."}  
+{"id":"5:1","answer":"Malignant","rationale":"Spiculation score of 2.0 meets the malignant threshold."}  
+{"id":"16:0","answer":"Malignant","rationale":"Subtlety score of 5.0 exceeds the malignant threshold."}  
+{"id":"20:1","answer":"Benign","rationale":"All feature scores remain below malignant thresholds (subtlety 3.5, spiculation 1.25, margin 4.5)."}  
+{"id":"38:0","answer":"Malignant","rationale":"Subtlety score of 4.5 meets the malignant threshold."}  
+{"id":"42:2","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 3.75, spiculation 1.25, margin 3.5)." }  
+{"id":"57:2","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 3.33, spiculation 1.0, margin 4.33)." }  
+{"id":"71:1","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 3.25, spiculation 1.25, margin 4.5)." }  
+{"id":"88:1","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 3.25, spiculation 1.0, margin 4.25)." }  
+{"id":"96:0","answer":"Malignant","rationale":"Subtlety score of 5.0 exceeds the malignant threshold."}  
+{"id":"98:8","answer":"Malignant","rationale":"Spiculation score of 3.33 exceeds the malignant threshold."}  
+{"id":"107:0","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 3.5, spiculation 1.25, margin 3.5)." }  
+{"id":"107:3","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 3.67, spiculation 1.33, margin 4.33)." }  
+{"id":"118:6","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 3.25, spiculation 1.25, margin 2.5)." }  
+{"id":"132:0","answer":"Malignant","rationale":"Subtlety score of 5.0 exceeds the malignant threshold."}  
+{"id":"159:0","answer":"Malignant","rationale":"Both subtlety and spiculation scores exceed malignant thresholds (subtlety 5.0, spiculation 4.33)." }  
+{"id":"164:0","answer":"Malignant","rationale":"Spiculation score of 2.25 meets the malignant threshold."}  
+{"id":"178:1","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 2.5, spiculation 1.5, margin 4.5)." }  
+{"id":"195:0","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 4.25, spiculation 1.5, margin 4.5)." }  
+{"id":"247:1","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 3.0, spiculation 1.33, margin 2.33)." }  
+{"id":"253:0","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 3.33, spiculation 1.33, margin 3.67)." }  
+{"id":"261:1","answer":"Malignant","rationale":"Margin score of 5.0 meets the malignant threshold."}  
+{"id":"261:3","answer":"Malignant","rationale":"Margin score of 5.0 meets the malignant threshold."}  
+{"id":"271:0","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 4.0, spiculation 1.0, margin 4.75)." }  
+{"id":"320:2","answer":"Benign","rationale":"All feature scores are below malignant thresholds (subtlety 3.67, spiculation 1.33, margin 4.33

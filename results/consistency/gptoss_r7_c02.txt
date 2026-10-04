@@ -1,0 +1,30 @@
+{"id":"538","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"560","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"567","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"584","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"616","answer":"Benign","rationale":"Margin is slightly less than the malignant threshold."}  
+{"id":"645","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"648","answer":"Malignant","rationale":"All three features exceed their malignant thresholds."}  
+{"id":"653","answer":"Benign","rationale":"Margin is below the malignant threshold."}  
+{"id":"655","answer":"Malignant","rationale":"All three features exceed their malignant thresholds."}  
+{"id":"655","answer":"Malignant","rationale":"All three features exceed their malignant thresholds."}  
+{"id":"664","answer":"Malignant","rationale":"All three features exceed their malignant thresholds."}  
+{"id":"673","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"677","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"681","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"694","answer":"Malignant","rationale":"All three features exceed their malignant thresholds."}  
+{"id":"711","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"720","answer":"Benign","rationale":"Spiculation is below the malignant threshold."}  
+{"id":"758","answer":"Malignant","rationale":"All three features exceed their malignant thresholds."}  
+{"id":"765","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"778","answer":"Malignant","rationale":"All three features exceed their malignant thresholds."}  
+{"id":"780","answer":"Benign","rationale":"Spiculation is below the malignant threshold."}  
+{"id":"838","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"893","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"896","answer":"Benign","rationale":"Spiculation is below the malignant threshold."}  
+{"id":"907","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"908","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"946","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"952","answer":"Benign","rationale":"Subtlety is below the malignant threshold."}  
+{"id":"969","answer":"Malignant","rationale":"All three features exceed their malignant thresholds."}  
+{"id":"973","answer":"Benign","rationale":"Spiculation is below the malignant threshold."}
