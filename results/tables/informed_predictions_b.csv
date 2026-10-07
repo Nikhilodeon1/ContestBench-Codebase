@@ -1,0 +1,4 @@
+prediction,held,rule
+P1_scales_still_worse,True,"cond=scales, t=3: gap CI lower bound > 0 for every standard config"
+P2_rate_halves_gap,False,"cond=scales_rate, t=3: gap <= 0.5 * original gap for every standard config"
+P3_prompt_dependent,False,"cond=scales_rate, t=3: any gap CI upper bound < 0 (headline becomes prompt-dependent)"

@@ -1,0 +1,52 @@
+30 prompt files written; hashes -> results\informed\prompt_hashes.json
+sonnet:standard scales 1 parsed 100/100 2784
+sonnet:standard scales 2 parsed 100/100 2794
+sonnet:standard scales 3 parsed 100/100 2779
+sonnet:standard scales 4 parsed 100/100 2780
+sonnet:standard scales 5 parsed 100/100 2714
+sonnet:standard scales 6 parsed 100/100 2793
+sonnet:standard scales 7 parsed 100/100 2780
+sonnet:standard scales 8 parsed 100/100 2786
+sonnet:standard scales 9 parsed 100/100 2790
+sonnet:standard scales 10 parsed 100/100 2800
+sonnet:standard scales 11 parsed 100/100 2885
+sonnet:standard scales 12 parsed 100/100 2886
+sonnet:standard scales 13 parsed 100/100 2882
+sonnet:standard scales 14 parsed 100/100 2905
+sonnet:standard scales 15 parsed 13/13 366
+sonnet:standard scales_rate 1 parsed 100/100 2783
+sonnet:standard scales_rate 2 parsed 100/100 2797
+sonnet:standard scales_rate 3 parsed 100/100 2784
+sonnet:standard scales_rate 4 parsed 100/100 2795
+sonnet:standard scales_rate 5 parsed 100/100 2717
+sonnet:standard scales_rate 6 parsed 100/100 2773
+sonnet:standard scales_rate 7 parsed 100/100 2794
+sonnet:standard scales_rate 8 parsed 100/100 2782
+sonnet:standard scales_rate 9 parsed 100/100 2783
+sonnet:standard scales_rate 10 parsed 100/100 2806
+Traceback (most recent call last):
+  File "C:\Users\nikhi\Codes\RES\src\ContestBench-Codebase\results\informed\run_informed.py", line 69, in <module>
+    r = s.get_final_message()
+  File "C:\Users\nikhi\AppData\Roaming\Python\Python314\site-packages\anthropic\lib\streaming\_messages.py", line 93, in get_final_message
+    self.until_done()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\nikhi\AppData\Roaming\Python\Python314\site-packages\anthropic\lib\streaming\_messages.py", line 120, in until_done
+    consume_sync_iterator(self)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\nikhi\AppData\Roaming\Python\Python314\site-packages\anthropic\_utils\_streams.py", line 6, in consume_sync_iterator
+    for _ in iterator:
+             ^^^^^^^^
+  File "C:\Users\nikhi\AppData\Roaming\Python\Python314\site-packages\anthropic\lib\streaming\_messages.py", line 67, in __iter__
+    for item in self._iterator:
+                ^^^^^^^^^^^^^^
+  File "C:\Users\nikhi\AppData\Roaming\Python\Python314\site-packages\anthropic\lib\streaming\_messages.py", line 129, in __stream__
+    for sse_event in self._raw_stream:
+                     ^^^^^^^^^^^^^^^^
+  File "C:\Users\nikhi\AppData\Roaming\Python\Python314\site-packages\anthropic\_streaming.py", line 71, in __iter__
+    for item in self._iterator:
+                ^^^^^^^^^^^^^^
+  File "C:\Users\nikhi\AppData\Roaming\Python\Python314\site-packages\anthropic\_streaming.py", line 163, in __stream__
+    raise self._client._make_status_error(
+    ...<3 lines>...
+    )
+anthropic.APIStatusError: {'type': 'error', 'error': {'details': None, 'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CfnB8swnKCowSKJLEBCbg'}
