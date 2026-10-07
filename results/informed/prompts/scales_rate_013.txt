@@ -1,0 +1,117 @@
+You are a radiologist evaluating lung nodules. For EACH case below, decide whether
+the nodule is Malignant or Benign and state your confidence (0-100) in that answer.
+
+Each feature is the mean over several radiologists, so values are decimals between 1 and 5:
+- subtlety: 1 = extremely subtle, 5 = obvious (how easy the nodule is to see)
+- spiculation: 1 = none, 5 = marked (higher = more spiculated = more suspicious)
+- margin: 1 = poorly defined, 5 = sharp (higher = sharper edge = LESS suspicious; poorly defined or irregular margins are MORE suspicious)
+
+"Malignant" means you expect most radiologists would rate the nodule suspicious (3 or higher on the 1-5 malignancy scale).
+For reference, about 65% of the nodules in this set are rated suspicious by the average radiologist.
+
+Your confidence MUST depend on the features; do NOT default to a constant value.
+
+Output EXACTLY one JSON object per line, one per case, and nothing else:
+{"id": "<CASE_ID>", "answer": "Malignant" or "Benign", "confidence": <integer 0-100>}
+
+Cases:
+1153:0 | subtlety 5.00 | spiculation 2.75 | margin 3.00
+1154:1 | subtlety 4.00 | spiculation 4.00 | margin 4.50
+1155:0 | subtlety 4.33 | spiculation 1.00 | margin 4.33
+1155:1 | subtlety 4.00 | spiculation 1.00 | margin 4.50
+1158:0 | subtlety 5.00 | spiculation 1.00 | margin 5.00
+1160:0 | subtlety 3.75 | spiculation 1.25 | margin 3.00
+1161:0 | subtlety 3.75 | spiculation 1.50 | margin 3.00
+1161:3 | subtlety 3.75 | spiculation 1.50 | margin 1.75
+1164:0 | subtlety 3.75 | spiculation 1.50 | margin 3.75
+1164:2 | subtlety 3.50 | spiculation 1.25 | margin 3.75
+1164:3 | subtlety 3.25 | spiculation 1.25 | margin 3.25
+1164:5 | subtlety 5.00 | spiculation 2.75 | margin 2.50
+1164:6 | subtlety 3.00 | spiculation 1.00 | margin 3.67
+1164:7 | subtlety 3.75 | spiculation 1.00 | margin 3.00
+1170:0 | subtlety 2.33 | spiculation 1.00 | margin 2.67
+1172:0 | subtlety 2.00 | spiculation 1.00 | margin 2.00
+1172:1 | subtlety 1.33 | spiculation 1.00 | margin 2.33
+1172:2 | subtlety 3.00 | spiculation 1.00 | margin 3.75
+1172:3 | subtlety 2.33 | spiculation 1.00 | margin 2.00
+1172:5 | subtlety 1.00 | spiculation 1.00 | margin 2.25
+1173:0 | subtlety 2.00 | spiculation 1.00 | margin 2.00
+1173:1 | subtlety 1.33 | spiculation 1.00 | margin 2.33
+1173:2 | subtlety 3.00 | spiculation 1.00 | margin 3.75
+1173:3 | subtlety 2.33 | spiculation 1.00 | margin 2.00
+1173:5 | subtlety 1.00 | spiculation 1.00 | margin 2.25
+1174:0 | subtlety 2.00 | spiculation 1.00 | margin 2.00
+1174:1 | subtlety 1.33 | spiculation 1.00 | margin 2.33
+1174:2 | subtlety 3.00 | spiculation 1.00 | margin 3.75
+1174:3 | subtlety 2.33 | spiculation 1.00 | margin 2.00
+1174:5 | subtlety 1.00 | spiculation 1.00 | margin 2.25
+1175:0 | subtlety 2.00 | spiculation 1.00 | margin 2.00
+1175:1 | subtlety 1.33 | spiculation 1.00 | margin 2.33
+1175:2 | subtlety 3.00 | spiculation 1.00 | margin 3.75
+1175:3 | subtlety 2.33 | spiculation 1.00 | margin 2.00
+1175:5 | subtlety 1.00 | spiculation 1.00 | margin 2.25
+1176:0 | subtlety 2.00 | spiculation 1.00 | margin 2.00
+1176:1 | subtlety 1.33 | spiculation 1.00 | margin 2.33
+1176:2 | subtlety 3.00 | spiculation 1.00 | margin 3.75
+1176:3 | subtlety 2.33 | spiculation 1.00 | margin 2.00
+1176:5 | subtlety 1.00 | spiculation 1.00 | margin 2.25
+1177:0 | subtlety 2.00 | spiculation 1.00 | margin 2.00
+1177:1 | subtlety 1.33 | spiculation 1.00 | margin 2.33
+1177:2 | subtlety 3.00 | spiculation 1.00 | margin 3.75
+1177:3 | subtlety 2.33 | spiculation 1.00 | margin 2.00
+1177:5 | subtlety 1.00 | spiculation 1.00 | margin 2.25
+1178:0 | subtlety 2.67 | spiculation 1.33 | margin 4.67
+1178:2 | subtlety 4.75 | spiculation 2.25 | margin 4.75
+1179:3 | subtlety 3.75 | spiculation 1.75 | margin 2.75
+1179:4 | subtlety 4.50 | spiculation 1.75 | margin 4.25
+1179:5 | subtlety 4.00 | spiculation 1.00 | margin 5.00
+1179:6 | subtlety 4.00 | spiculation 1.00 | margin 4.75
+1179:8 | subtlety 3.33 | spiculation 1.33 | margin 3.33
+1179:9 | subtlety 5.00 | spiculation 3.00 | margin 4.33
+1179:10 | subtlety 3.75 | spiculation 1.00 | margin 4.50
+1181:0 | subtlety 5.00 | spiculation 2.67 | margin 3.00
+1181:4 | subtlety 4.00 | spiculation 1.25 | margin 4.00
+1182:0 | subtlety 5.00 | spiculation 3.33 | margin 4.33
+1182:1 | subtlety 5.00 | spiculation 4.25 | margin 4.00
+1183:0 | subtlety 4.00 | spiculation 1.25 | margin 4.25
+1184:2 | subtlety 4.50 | spiculation 1.50 | margin 5.00
+1184:4 | subtlety 3.50 | spiculation 1.75 | margin 4.00
+1184:5 | subtlety 4.25 | spiculation 2.00 | margin 4.00
+1184:6 | subtlety 4.25 | spiculation 2.25 | margin 3.50
+1184:7 | subtlety 3.75 | spiculation 1.25 | margin 4.75
+1186:0 | subtlety 4.00 | spiculation 1.25 | margin 4.25
+1188:0 | subtlety 5.00 | spiculation 1.25 | margin 4.50
+1191:1 | subtlety 3.25 | spiculation 1.00 | margin 5.00
+1192:6 | subtlety 4.33 | spiculation 1.00 | margin 3.67
+1193:0 | subtlety 3.33 | spiculation 1.00 | margin 3.67
+1193:2 | subtlety 4.25 | spiculation 1.00 | margin 4.50
+1195:0 | subtlety 3.75 | spiculation 2.25 | margin 3.00
+1195:2 | subtlety 4.50 | spiculation 2.75 | margin 4.75
+1198:0 | subtlety 5.00 | spiculation 2.33 | margin 3.33
+1202:0 | subtlety 2.00 | spiculation 1.33 | margin 1.67
+1202:1 | subtlety 4.00 | spiculation 1.25 | margin 4.50
+1203:0 | subtlety 5.00 | spiculation 3.50 | margin 3.00
+1203:1 | subtlety 3.25 | spiculation 1.00 | margin 3.00
+1203:2 | subtlety 5.00 | spiculation 3.75 | margin 3.25
+1203:3 | subtlety 5.00 | spiculation 2.67 | margin 4.00
+1203:5 | subtlety 3.50 | spiculation 1.00 | margin 3.75
+1203:6 | subtlety 2.33 | spiculation 1.00 | margin 3.00
+1205:0 | subtlety 5.00 | spiculation 1.75 | margin 4.50
+1205:1 | subtlety 4.50 | spiculation 1.25 | margin 3.75
+1205:2 | subtlety 4.00 | spiculation 1.00 | margin 4.75
+1205:3 | subtlety 4.00 | spiculation 1.00 | margin 4.75
+1205:5 | subtlety 5.00 | spiculation 1.25 | margin 5.00
+1206:0 | subtlety 3.75 | spiculation 1.00 | margin 4.75
+1206:1 | subtlety 3.00 | spiculation 1.00 | margin 4.33
+1206:2 | subtlety 3.25 | spiculation 1.00 | margin 4.75
+1210:1 | subtlety 4.00 | spiculation 1.50 | margin 4.00
+1211:1 | subtlety 2.33 | spiculation 1.33 | margin 4.00
+1212:6 | subtlety 4.00 | spiculation 1.33 | margin 4.67
+1212:11 | subtlety 4.00 | spiculation 1.67 | margin 4.33
+1212:13 | subtlety 4.67 | spiculation 1.00 | margin 4.33
+1213:0 | subtlety 3.67 | spiculation 1.33 | margin 3.33
+1213:2 | subtlety 2.50 | spiculation 1.75 | margin 2.50
+1213:4 | subtlety 4.50 | spiculation 2.00 | margin 2.75
+1214:0 | subtlety 4.25 | spiculation 3.50 | margin 3.25
+1215:0 | subtlety 3.67 | spiculation 1.00 | margin 4.67
+1218:0 | subtlety 3.00 | spiculation 1.67 | margin 3.67

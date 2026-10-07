@@ -185,3 +185,12 @@ c4b43cd26f3f46b84ae5fca27ebee968133212d490531612b4fc8bbd0a174087 *results/confir
 f42d8bb3045b66b64b5d2af22eb99c1c0ef25a799be09c98179ba954ffb29dd5 *results/confirmatory/raw_extra/qwen38_27b_15.txt
 0b0e074cd16e5cb611c9f2e1dc902a58a3ca4a350aae56438f899f1474895c29 *data/corpus_reader_features.parquet
 2026-10-04T19:34:07Z pod run 3 FROZEN: 41 *_b.csv (incl. final-round A-D and 7-model confirmatory) + data_manifest.json (239 files) + raw_extra (45) + corpus_reader_features.parquet; pod = source of truth; supersedes the laptop-preview hashes
+a3eb2a3157ce3e0caa85f9e487fdc50579e38ca63bc4b2d0aa74e95b95c7585b *results/informed/prespec.md
+160cb19315779fc683779970f5bd5506c9feff5bc706a473df1c13cf97b96b7d *results/informed/prompt_hashes.json
+2026-10-06T08:36:42Z informed-prompt prespec + prompt hashes FROZEN before any informed call (rule: results/informed/prespec.md)
+a3eb2a3157ce3e0caa85f9e487fdc50579e38ca63bc4b2d0aa74e95b95c7585b *results/informed/prespec.md
+160cb19315779fc683779970f5bd5506c9feff5bc706a473df1c13cf97b96b7d *results/informed/prompt_hashes.json
+2026-10-06T08:36:56Z informed-prompt prompts rewritten with LF endings (CRLF on Windows would change hashes on the pod); the two lines above this one supersede the previous informed entries; still before any informed call
+a3eb2a3157ce3e0caa85f9e487fdc50579e38ca63bc4b2d0aa74e95b95c7585b *results/informed/prespec.md
+926d4d5ee6882ff858618b3dbd5ed330fee06b41d82048d9fd1efee3f3ea1635 *results/informed/prompt_hashes.json
+2026-10-06T08:37:18Z CORRECTION: the LF rewrite did not apply at the previous entry; the two hashes directly above are the authoritative informed-prompt freeze (prompts written with LF endings); still before any informed call
